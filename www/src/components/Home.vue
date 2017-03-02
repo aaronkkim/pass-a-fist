@@ -55,8 +55,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 img{
-    height: 300px;
-    width:200px;
+    height: 250px;
+    /*width:150px;*/
 }
     
 </style>
