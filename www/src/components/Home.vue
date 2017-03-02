@@ -11,7 +11,7 @@
             <li>If an Attack card lands on a player, and that player can't (or won't) play a Counter card, then the Attack card is successful, and the player receives an Injury card.</li>
             <li> If an Attack card results in an injury, the player that originally played the Attack gets to draw an additional Fight card as a bonus. </li>
             <li>If a player is knocked out by an attack card on your turn, you get their entire hand as a bonus, instead of drawing an additional fight card</li>
-            <li>IF YOU GET 3 INJURY CARDS, YOU'RE OUT OF THE GAME.</li>
+            <li class="redtext">IF YOU GET 3 INJURY CARDS, YOU'RE OUT OF THE GAME.</li>
             </ul>
 
 
