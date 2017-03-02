@@ -44,6 +44,7 @@ let gameStore = {
                 password:password
             }).then(res => {
                 state.activeUser = res.data.data
+                state.loading = false
             }).catch(handleError)
         },
         register(username, email, password, age) {
@@ -66,6 +67,7 @@ let gameStore = {
             api('http://localhost:3000/authenticate').then(res => {
                 if(res.data.data) {
                     state.activeUser = res.data.data
+                    state.loading = false
                 }
             }).catch(handleError)
         },
