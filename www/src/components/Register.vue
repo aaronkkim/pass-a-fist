@@ -1,11 +1,11 @@
 <template>
-  <div class="register">
+  <div class="register container">
     <form @submit.prevent="registerUser">
       <input type="text" v-model="username" placeholder="Username" required>
       <input type="email" v-model="email" placeholder="Email" required>
       <input type="number" v-model="age" placeholder="Age" required>
       <input type="password" v-model="password" placeholder="Password" reqiured>
-      <button>Register</button>
+      <button class="waves-effect waves-light btn">Register</button>
     </form>
     <!--<list></list>-->
   </div>

@@ -1,9 +1,9 @@
 <template>
-  <div class="login">
+  <div class="login container">
     <form @submit.prevent="loginUser">
       <input type="email" v-model="username" placeholder="Email" required >
       <input type="password" v-model="password" placeholder="Password" required>
-      <button>Login</button>
+      <button class="waves-effect waves-light btn">Login</button>
     </form>
     <!--<list></list>-->
   </div>
