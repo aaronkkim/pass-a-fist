@@ -4,13 +4,13 @@
 
         <div v-if="user.name">
             Welcome, {{user.name}}
-            <div v-for="card in cards"> 
-                {{card.name}} {{card.type}} 
+            <div class="card" v-for="card in cards"> 
+               <!-- {{card.name}} {{card.type}} -->
             <img v-if="card.imgUrl" :src="card.imgUrl"> 
             </div>
 
-            <div v-for="injury in injuries"> 
-                {{injury}}
+            <div class="card" v-for="injury in injuries"> 
+                 <!-- {{injury}} -->
                 <img v-if="injury.imgUrl" :src="injury.imgUrl">
             </div>
         </div>
@@ -54,6 +54,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.card{
+    display:inline-flex;
+}
 img{
     height: 300px;
     width:200px;
