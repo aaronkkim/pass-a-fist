@@ -12,7 +12,7 @@ let schema = new Schema({
   password: { type: String, required: true },
   age: { type: Number, required: true },
   created: { type: Number, required: true, default: Date.now() },
-  currentGameSessionId: { type: ObjectId },
+  currentGameSessionId: { type: ObjectId, ref: 'Game' },
   //RELATION
   cards: [{ type: ObjectId, ref: 'Card' }],
   injuries: [{ type: ObjectId, ref: 'Injury' }]

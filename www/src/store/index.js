@@ -1,4 +1,6 @@
 import axios from 'axios'
+import io from 'socket.io-client'
+
 
 let api = axios.create({
     baseURL: 'http://localhost:3000/api/',
@@ -6,6 +8,15 @@ let api = axios.create({
     withCredentials: true
 })
 
+
+let client = io.connect('http://localhost:3000/');
+
+client.on('message', function (data) {
+    console.log(data);
+    if(data.name && data.text) {
+        state.chat.push(data)
+    }
+});
 
 let state = {
     activeUser: {},
@@ -56,6 +67,13 @@ let gameStore = {
                     state.activeUser = res.data.data
                 }
             }).catch(handleError)
+        },
+        // CHAT SYSTEM
+        submitText(name, text) {
+            client.emit('message', {
+                name: name,
+                text: text
+            });
         }
     }
 

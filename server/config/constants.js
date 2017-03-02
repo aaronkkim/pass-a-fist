@@ -13,23 +13,29 @@ const models = {
     preventDefaultApi: true
     // useCustomRoutes: true
   },
-    fight: {
+  fight: {
     name: 'Fight',
     endpoint: 'fights',
     preventDefaultApi: true
     // useCustomRoutes: true
   },
-    injury: {
+  injury: {
     name: 'Injury',
     endpoint: 'injuries',
     preventDefaultApi: true
     // useCustomRoutes: true
+  },
+  game: {
+    name: 'Game',
+    endpoint: 'games',
+    preventDefaultApi: true,
+    useCustomRoutes: true
   }
   // More models here in future
 }
 
 
-export  {
+export {
   actions,
   models
 }

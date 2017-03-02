@@ -123,7 +123,7 @@ let injuries = [
     },
     {
         name: "Hypochondria",
-        damage: 1,
+        damage: 0,
         imgUrl: injuryIcons.hypochondria__injury
     },
     {
