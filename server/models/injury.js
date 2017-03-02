@@ -8,6 +8,7 @@ let ObjectId = Schema.Types.ObjectId
 
 let schema = new Schema({
     name: { type: String, required: true },
+    index: { type: Number, required: true},
     imgUrl: { type: String, required: true },
     damage: {type: Number, required: true}
     // userId:{type: ObjectId, ref: models.user.name}
