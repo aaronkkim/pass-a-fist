@@ -11,7 +11,11 @@ let schema = new Schema({
   email: { type: String, required: true, unique: true, dropDups: true },
   password: { type: String, required: true },
   age: { type: Number, required: true },
-  created: { type: Number, required: true, default: Date.now() }
+  created: { type: Number, required: true, default: Date.now() },
+  currentGameSessionId: { type: ObjectId },
+  //RELATION
+  cards: [{ type: ObjectId, ref: 'Card' }],
+  injuries: [{ type: ObjectId, ref: 'Injury' }]
 })
 
 // cool weird mongoose hooks/event listeners

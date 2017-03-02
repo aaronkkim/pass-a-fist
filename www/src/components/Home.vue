@@ -7,6 +7,20 @@
             <router-link :to="'game/'">Game!!! </router-link>
             <div class="card" v-for="card in cards"> 
                <!-- {{card.name}} {{card.type}} -->
+            <h1>Welcome, {{user.name}} </h1>
+            <h2>How to play:</h2>
+            <ul>
+            <li> To start turn, a player always draws 1 card from the top of the Fight deck. That player can then play an Attack card from their hand on another player.</li>
+            <li>If an Attack card lands on a player at any time, that player can play a Counter card to stap or redirect the attack.</li>
+            <li>If an Attack card lands on a player, and that player can't (or won't) play a Counter card, then the Attack card is successful, and the player receives an Injury card.</li>
+            <li> If an Attack card results in an injury, the player that originally played the Attack gets to draw an additional Fight card as a bonus. </li>
+            <li>If a player is knocked out by an attack card on your turn, you get their entire hand as a bonus, instead of drawing an additional fight card</li>
+            <li>IF YOU GET 3 INJURY CARDS, YOU'RE OUT OF THE GAME.</li>
+            </ul>
+
+
+            <div v-for="card in cards"> 
+                <!-- {{card.name}} {{card.type}}-->
             <img v-if="card.imgUrl" :src="card.imgUrl"> 
             </div>
 
@@ -59,8 +73,8 @@
     display:inline-flex;
 }
 img{
-    height: 300px;
-    width:200px;
+    height: 250px;
+    /*width:150px;*/
 }
     
 </style>
