@@ -18,6 +18,8 @@ export default {
 <style>
 #app {
   color: black;
+  height: 100%;
+  width:100%
 }
 h1, h2{
   color: #11ABB0;
@@ -29,5 +31,19 @@ font-family: 'Montserrat', sans-serif;
 .inline-flex {
   display: inline-flex;
   flex-direction: row-reverse;
+}
+.btn{
+  background-color: #fea;
+  color: black;
+}
+.btn:hover{
+  background-color: #fea;
+}
+.btn:focus{
+  background-color: #fea;
+}
+html, body{
+  height:  100%;
+  width:100%
 }
 </style>
