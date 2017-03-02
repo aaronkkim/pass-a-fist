@@ -17,7 +17,6 @@ export default {
   name: 'game',
   data() {
       return {
-          name: 'Dain bramage',
           text: ''
       }
   },
@@ -31,8 +30,10 @@ export default {
   },
   methods: {
     submitText() {
-      this.$root.$data.store.actions.submitText(this.name, this.text)
-      this.text = ''
+      if(this.user.name) {
+        this.$root.$data.store.actions.submitText(this.user.name, this.text)
+        this.text = ''
+      }
     }
   }
 }
