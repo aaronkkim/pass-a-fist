@@ -1,11 +1,15 @@
-#Vue-Kanban
+#Pass-a-Fist
 
-A non trivial application utilizing vuejs and node
+A completely bonkers game where you give people life-altering injuries with magnificent fight cards. 
 
 
 ###The Setup N-tier
 
 ***NOTE:*** This project is going to take a while
+
+***NOTE:*** **This project is going to take a while**
+
+##***NOTE:*** **This project is going to take a while**
 
 Perhaps on of the most important skills to obtain on your road to becoming a Software Engineer is the ability to work on large projects. Especially when those larger projects have a code scaffolding that has been set up by someone other than yourself. It is important to be able to jump into the mix of a development teams build and disect what everything is doing. 
 
@@ -29,17 +33,16 @@ The Web client has been setup to utilize one of the shiney new javascript framew
 
 ###Feature Requests (AKA your tasks)
 
-Kanban is a simple enough application. Users have the request to be able to create and manage boards, lists, and tasks. Tasks should also have the ability to add notes or comments and should be assigned to individual users. This setup will take a while to get all ironed out but we have some time to work on it so don't fret.
+Pass-a-Fist has so many things going for it, which means there are going to be a ton of features. 
 
-A board manages several lists. Once created lists can not be transfered between boards but they can be removed. If a list is removed go ahead and remove all of the tasks and comments on the list as well.
+We will start with the simple stuff, like having players login, connect to a game session and have cards in their hand, then we will move to implementing game mechanics, such as figuring out how to sync players with a turn-based system that cannot be abused on the front-end. 
 
-A task should be able to move between any of the lists on whatever board it was created. Tasks can be removed individually. 
 
-Comments always belong to a task and will transfer with the task when moved. This should not require any effort on your part. If a comment is created only the user who created the comment should be able to edit/remove it unless of course the task, list, or board is removed. 
+If you aren't logged in, the page will redirect you to a login page, which also has a link to register. Each user will have a name, email, age, password, and *choice of badge* for others to see in-game. 
 
-It will probably be helpful to start on the backend of this application first. Utilize a tool like postman to create a user and start creating and editing your boards and lists which has been setup for you already. Then move onto the other collections. 
+A user/player should be able to join, leave, and create game sessions. A game should know all players in its session, when to start the game, and how to manage each player's turn. Within a game session, all players will be synced up to socket.io chat. Players will also be able to chat with eachother in the game session (unless they give you the cold shoulder), and each time an event is recorded, it will be logged in the chat. 
 
-The active user is always stored on the server side via sessions so you should be able to enforce some of the security concerns using something like `req.session.uid`
 
-For now all users can see all collections and anyone can create boards, lists, tasks, or comments. Once  we have all of the features working we will move to an invite only board setup that will have boards belonging to a primary user and having contributors.
-"# pass-a-fist" 
+There are two different types of cards: Fighting cards and injury cards. When the game starts, it should shuffle the deck and give all players 5 fight cards. A player should be able to draw a fight card on their turn by default, play **Attack** cards on their turn by default, and have the option to play a **Counter** card or take an **Injury** by default. An injury card should change the player's total injury count by default. A player with 3 injuries will no longer be able to play, but can still remain in the game session (unless you rage-quit). 
+
+When one player remains, the game will know to end itself and declare a winner. Wins are stored in the database for players. Other things will also be stored for the player (like how many times they were beat with the ugly stick). 
