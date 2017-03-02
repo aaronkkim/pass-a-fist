@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import gameService from '../services/game-service'
 export default {
   name: 'game',
   data() {
@@ -32,7 +31,7 @@ export default {
   },
   methods: {
     submitText() {
-      gameService.submitText(this.name, this.text)
+      this.$root.$data.store.actions.submitText(this.name, this.text)
       this.text = ''
     }
   }
