@@ -18,7 +18,7 @@
             </ul>
 
 
-            <div v-for="card in cards"> 
+            <div class="card" v-for="card in cards"> 
                 <!-- {{card.name}} {{card.type}}-->
             <img v-if="card.imgUrl" :src="card.imgUrl"> 
             </div>
