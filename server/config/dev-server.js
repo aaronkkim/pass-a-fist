@@ -49,6 +49,10 @@ io.on('connection', function (socket) {
   socket.on('update', function(data) {
       console.log(data)
   })
+  socket.on('message', (d)=>{
+      debugger
+    socket.emit('message', d)
+  })
 });
 
 export default server

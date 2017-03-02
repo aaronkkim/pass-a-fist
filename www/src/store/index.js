@@ -10,6 +10,7 @@ let api = axios.create({
 let state = {
     activeUser: {},
     isLoading: false,
+    chat: [],
     error: {}
 }
 

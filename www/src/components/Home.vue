@@ -4,6 +4,7 @@
 
         <div v-if="user.name">
             Welcome, {{user.name}}
+            <router-link :to="'game/'">Game!!! </router-link>
             <div class="card" v-for="card in cards"> 
                <!-- {{card.name}} {{card.type}} -->
             <img v-if="card.imgUrl" :src="card.imgUrl"> 
