@@ -30,12 +30,18 @@ export default {
           text: ''
       }
   },
+  mounted() {
+    this.$root.$data.store.actions.getGame()
+  },
   computed: {
     user() {
         return this.$root.$data.store.state.activeUser
     },
     chat() {
         return this.$root.$data.store.state.chat
+    },
+    game() {
+        return this.$root.$data.store.state.gameSession
     }
   },
   methods: {
