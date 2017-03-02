@@ -21,7 +21,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #ddd;
+  color: black;
   background-image: url('./assets/retinawood.png')
 }
 h1, h2{
