@@ -3,6 +3,9 @@
         <h2>{{msg}}</h2>
 
         <div v-if="user.name">
+            Welcome, {{user.name}}
+            <router-link :to="'game/'">Game!!! </router-link>
+
             <h1>Welcome, {{user.name}} </h1>
             <h2>How to play:</h2>
             <ul>
@@ -16,12 +19,12 @@
 
 
             <div v-for="card in cards"> 
-                {{card.name}} {{card.type}} 
+                <!-- {{card.name}} {{card.type}}-->
             <img v-if="card.imgUrl" :src="card.imgUrl"> 
             </div>
 
-            <div v-for="injury in injuries"> 
-                {{injury}}
+            <div class="card" v-for="injury in injuries"> 
+                 <!-- {{injury}} -->
                 <img v-if="injury.imgUrl" :src="injury.imgUrl">
             </div>
         </div>
@@ -65,6 +68,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.card{
+    display:inline-flex;
+}
 img{
     height: 250px;
     /*width:150px;*/
