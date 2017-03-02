@@ -83,6 +83,13 @@ let gameStore = {
                 text: text
             });
         }
+        
+        // goCrazy(card, index) {
+        //     card.index = index
+        //     api.post('/injuries', card).then(res => {
+        //         console.log(res.data.data)
+        //     }).catch(handleError)
+        // }
     }
 
 }

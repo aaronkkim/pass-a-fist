@@ -16,13 +16,13 @@ const models = {
   fight: {
     name: 'Fight',
     endpoint: 'fights',
-    preventDefaultApi: true
+    // preventDefaultApi: true
     // useCustomRoutes: true
   },
   injury: {
     name: 'Injury',
     endpoint: 'injuries',
-    preventDefaultApi: true
+    // preventDefaultApi: true
     // useCustomRoutes: true
   },
   game: {

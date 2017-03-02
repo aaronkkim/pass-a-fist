@@ -61,6 +61,11 @@
                 cards: cardService.getSomeFakeCards(),
                 injuries: injuryService.getSomeFakeInjuries()
             }
+        },
+        methods: {
+            // goCrazy(card, index) {
+            //     this.$root.$data.store.actions.goCrazy(card, index)
+            // }
         }
     }
 
