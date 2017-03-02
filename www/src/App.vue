@@ -21,8 +21,15 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  background-color: lightyellow;
+  color: #ddd;
+  background-image: url('./assets/retinawood.png')
+}
+h1, h2{
+  color: #11ABB0;
+font-family: 'Montserrat', sans-serif;
+}
+.redtext{
+  color: #eb0606
 }
 .inline-flex {
   display: inline-flex;

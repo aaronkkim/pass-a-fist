@@ -1,17 +1,31 @@
 <template>
-    <nav class="main">
-        <div v-if="loading">
-            <p>One sec...</p>
-        </div>
-        <div v-else-if="!user.name">
-            <router-link :to="'login/'">Login </router-link>
-            <router-link :to="'register/'">Register </router-link>
-        </div>
-        <div v-else>
-            <p v-if="user.name">Welcome, {{user.name}}! <a href='#' @click="logout">Logout</a></p>
-        </div>
-        
-    </nav>
+
+
+<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo ">Pass-a-Fist</a>
+      <div v-if="loading">
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li>one sec...</li>
+      </ul>
+      </div>
+      <div v-else-if="!user.name">
+       <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li> <router-link :to="'login/'">Login </router-link> </li>
+            <li><router-link :to="'register/'">Register </router-link> </li>
+      </ul>
+      </div>
+      <div v-else>
+       <ul id="nav-mobile" class="right hide-on-med-and-down" >
+        <li> Welcome, {{user.name}}!</li>
+        <li><a href='#' @click="logout">Logout</a></li>
+      </ul>
+      </div>
+    </div>
+  </nav>
+
+
+    
 </template>
 
 <script>
@@ -42,5 +56,12 @@
     .main {
         text-align: right;
         padding-right: 5%;
+    }
+    nav{
+        background-color: black;
+        font-family:'Montserrat', sans-serif;
+    }
+    a{
+       color: #11abb0
     }
 </style>
