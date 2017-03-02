@@ -5,8 +5,7 @@
         <div v-if="user.name">
             Welcome, {{user.name}}
             <router-link :to="'game/'">Game!!! </router-link>
-            <div class="card" v-for="card in cards"> 
-               <!-- {{card.name}} {{card.type}} -->
+
             <h1>Welcome, {{user.name}} </h1>
             <h2>How to play:</h2>
             <ul>
