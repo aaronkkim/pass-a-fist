@@ -13,6 +13,7 @@ let schema = new Schema({
   age: { type: Number, required: true },
   created: { type: Number, required: true, default: Date.now() },
   currentGameSessionId: { type: ObjectId, ref: 'Game' },
+  badgeUrl: { type: String },
   //RELATION
   cards: [{ type: ObjectId, ref: 'Card' }],
   injuries: [{ type: ObjectId, ref: 'Injury' }]
