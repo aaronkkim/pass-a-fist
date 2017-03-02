@@ -12,6 +12,18 @@ const models = {
     endpoint: 'users',
     preventDefaultApi: true
     // useCustomRoutes: true
+  },
+    fight: {
+    name: 'Fight',
+    endpoint: 'fights',
+    preventDefaultApi: true
+    // useCustomRoutes: true
+  },
+    injury: {
+    name: 'Injury',
+    endpoint: 'injuries',
+    preventDefaultApi: true
+    // useCustomRoutes: true
   }
   // More models here in future
 }
