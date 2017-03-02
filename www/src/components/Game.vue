@@ -1,14 +1,24 @@
 <template>
-  <div class="container">
+
+<div class="bgpic">
+
+<div class="flex-container">
+
+  <div class="container textbox">
+    <ul v-for="message in chat" >
+        <li>{{message.name}} : {{message.text}}</li>
+    </ul>
     <form @submit.prevent="submitText">
         <input type="text" v-model="text">
         <button type="submit" class="waves-effect waves-light btn">Chat</button>
     </form>
-    <h3>Chat should be below here</h3>
-    <ul v-for="message in chat">
-        <li>{{message.name}} : {{message.text}}</li>
-    </ul>
   </div>
+
+</div>
+
+</div>
+  
+
   
 </template>
 
@@ -44,3 +54,30 @@ export default {
   }
 }
 </script>
+
+<style>
+.bgpic{
+  background-image: url(https://northendorg.files.wordpress.com/2016/09/freakalley.jpg?w=4000&h=&crop=1);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: absolute;
+  height: 100%;
+}
+.textbox{
+  background: rgba(205, 210, 216, .7);
+  width: 300px;
+  overflow: auto;
+  max-height: 300px;
+  position: fixed;
+  bottom: 0;
+  right:0;
+}
+/*.flex-container{
+  display: flex;
+  align-content: flex-end;
+  
+  
+  height: 100%;
+  width: 100%;
+}*/
+</style>
