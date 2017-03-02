@@ -50,7 +50,6 @@ io.on('connection', function (socket) {
       console.log(data)
   })
   socket.on('message', (d)=>{
-      debugger
     socket.emit('message', d)
   })
 });
