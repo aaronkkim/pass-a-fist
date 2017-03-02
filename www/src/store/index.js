@@ -20,6 +20,7 @@ client.on('message', function (data) {
 
 let state = {
     activeUser: {},
+    gameSession: {},
     isLoading: false,
     chat: [],
     error: {}
@@ -69,6 +70,11 @@ let gameStore = {
             }).catch(handleError)
         },
         // CHAT SYSTEM
+        getGame() {
+            api('/games').then(res => {
+                state.gameSession = res.data.data[0]
+            })
+        },
         submitText(name, text) {
             client.emit('message', {
                 name: name,
