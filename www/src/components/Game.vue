@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="container">
     <form @submit.prevent="submitText">
         <input type="text" v-model="text">
-        <button type="submit">Chat</button>
+        <button type="submit" class="waves-effect waves-light btn">Chat</button>
     </form>
     <h3>Chat should be below here</h3>
     <ul v-for="message in chat">
