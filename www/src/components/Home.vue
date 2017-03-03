@@ -4,11 +4,10 @@
 
         <div v-if="user.name">
             Welcome, {{user.name}}
-<<<<<<< HEAD
+
             <router-link :to="'game'">Create Game!!!! </router-link>
-=======
-            <router-link :to="'game/'+gameName">Game!!! </router-link>
->>>>>>> 78c9088452f4de8c1344371da49095663e29d36f
+
+
 
             <h1>Welcome, {{user.name}} </h1>
             <h2>How to play:</h2>

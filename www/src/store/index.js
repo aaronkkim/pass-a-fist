@@ -77,8 +77,8 @@ let gameStore = {
             }).catch(handleError)
         },
         // CHAT SYSTEM
-        getGame(gameId) {
-            axe('api/game/' + gameId).then(res => {
+        getGame(gameName) {
+            axe('api/game/' + gameName).then(res => {
                 state.gameSession = res.data.data
                 console.log(state.gameSession)
                 if (state.activeUser) {
@@ -86,13 +86,18 @@ let gameStore = {
                 }
             }).catch(handleError)
         },
-        createGame(user, gameName) {
+        createGame(user, gameName, maxPlayers) {
             let game = {
                 name:gameName,
                 creatorId:user._id,
+                maxPlayers: maxPlayers
             }
-            axe.post('api/game', game).then(res => {
+            axe.post('api/games', game).then(res => {
                 console.log(res)
+                if(res.data.data.gameName){
+                    this.getGame(res.data.data.gameName)
+                }
+
             }).catch(handleError)
         },
         submitText(name, text) {

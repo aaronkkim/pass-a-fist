@@ -36,10 +36,10 @@ export default {
           text: '',
       }
   },
-  mounted() {
-    this.$root.$data.store.actions.getGame('The Game')
+  // mounted() {
+    // this.$root.$data.store.actions.getGame(this.game.gameName)
     
-  },
+  // },
   computed: {
     user() {
         return this.$root.$data.store.state.activeUser
