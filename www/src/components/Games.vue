@@ -1,6 +1,10 @@
 <template>
 
 <div class="bgpic">
+<form @submit.prevent= "createGame">
+<input type="text" placeholder= "name" v-model="gameName" required>
+<input type="number" placeholder= "max players" v-model="maxPlayers" required>
+</form>
 <button @click = "createGame">Create Game</button>
   </div>
 
@@ -18,7 +22,8 @@ export default {
   data() {
       return {
           text: '',
-          name:'',
+          gameName:'',
+          maxPlayers:8
       }
   },
   mounted() {
@@ -60,7 +65,8 @@ export default {
       this.$root.$data.store.actions.drawCard()
     },
     createGame(){
-      this.$root.$data.store.actions.createGame(this.user)
+      this.$root.$data.store.actions.createGame(this.user, this.gameName, this.maxPlayers)
+      this.$router.push({path:'/game/'+ this.gameName})
     }
   }
 }

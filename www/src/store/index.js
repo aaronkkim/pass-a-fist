@@ -28,7 +28,9 @@ let state = {
     deck: {},
     hand: []
 }
+let generateId = function(){
 
+}
 let handleError = (err) => {
     state.error = err
     state.isLoading = false
@@ -84,10 +86,10 @@ let gameStore = {
                 }
             }).catch(handleError)
         },
-        createGame(user) {
+        createGame(user, gameName) {
             let game = {
-                name:user.name+ "\'s game!",
-                creatorId:user._id
+                name:gameName,
+                creatorId:user._id,
             }
             axe.post('api/game', game).then(res => {
                 console.log(res)
