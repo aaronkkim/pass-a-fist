@@ -49,9 +49,12 @@
         text: '',
 
       }
-    },
+
+  },
+ 
+ 
     mounted() {
-      this.$root.$data.store.actions.getGame('1234')
+       this.$root.$data.store.actions.getGame('The Game')
 
       this.$root.$data.store.actions.getDeck()
 

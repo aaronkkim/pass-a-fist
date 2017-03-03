@@ -30,7 +30,9 @@ let state = {
     injuryDeck: {},
     injuryHand: []
 }
+let generateId = function(){
 
+}
 let handleError = (err) => {
     state.error = err
     state.isLoading = false
@@ -84,6 +86,15 @@ let gameStore = {
                 if (state.activeUser) {
                     state.activeUser.hand = []
                 }
+            }).catch(handleError)
+        },
+        createGame(user, gameName) {
+            let game = {
+                name:gameName,
+                creatorId:user._id,
+            }
+            axe.post('api/game', game).then(res => {
+                console.log(res)
             }).catch(handleError)
         },
         submitText(name, text) {

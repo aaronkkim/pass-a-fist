@@ -6,11 +6,13 @@ let ObjectId = Schema.Types.ObjectId
 
 
 let schema = new Schema({
-  name: { type: String, required: true },
-  gameId: { type: String, required: true },
+  name: { type: String, required: true, unique: true, dropDeps: true},
   created: { type: Number, required: true, default: Date.now() },
-  playersInGameSession: { type: Object }
+  playersInGameSession: [{ type: ObjectId, ref: models.user.name }],
   //RELATION
+  creatorId: { type: ObjectId, ref: models.user.name },
+  active: { type: Boolean, required: true, default: false},
+  maxPlayers: { type: Number, required: true },
 })
 
 

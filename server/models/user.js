@@ -7,12 +7,12 @@ let bcrypt = require('bcryptjs')
 const SALT_FACTOR = 15
 
 let schema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true,  },
   email: { type: String, required: true, unique: true, dropDups: true },
   password: { type: String, required: true },
   age: { type: Number, required: true },
   created: { type: Number, required: true, default: Date.now() },
-  currentGameSessionId: { type: ObjectId, ref: 'Game' },
+  activeGame: { type: ObjectId, ref: 'Game' },
   badgeUrl: { type: String },
   //RELATION
   cards: [{ type: ObjectId, ref: 'Card' }],
