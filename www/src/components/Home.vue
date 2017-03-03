@@ -4,7 +4,7 @@
 
         <div v-if="user.name">
             Welcome, {{user.name}}
-            <router-link :to="'game/'+gameSessionId">Game!!! </router-link>
+            <router-link :to="'game'">Create Game!!!! </router-link>
 
             <h1>Welcome, {{user.name}} </h1>
             <h2>How to play:</h2>
