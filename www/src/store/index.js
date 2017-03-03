@@ -2,8 +2,8 @@ import axios from 'axios'
 import io from 'socket.io-client'
 
 
-let api = axios.create({
-    baseURL: 'http://localhost:3000/api/',
+let axe = axios.create({
+    baseURL: 'http://localhost:3000/',
     timeout: 30000,
     withCredentials: true
 })
@@ -39,7 +39,7 @@ let gameStore = {
         // USER AUTHENTICATION
         login(email, password) {
             state.isLoading = true
-            api.post('http://localhost:3000/login',{
+            axe.post('login',{
                 email:email,
                 password:password
             }).then(res => {
@@ -49,7 +49,7 @@ let gameStore = {
         },
         register(username, email, password, age) {
             state.isLoading = true
-            api.post('http://localhost:3000/register',{
+            axe.post('register',{
                 name:username,
                 email:email,
                 password:password,
@@ -59,12 +59,12 @@ let gameStore = {
             }).catch(handleError)
         },
         logout() {
-            api.delete('http://localhost:3000/logout').then(res => {
+            axe.delete('logout').then(res => {
                 state.activeUser = {}
             }).catch(handleError)
         },
         authenticate() {
-            api('http://localhost:3000/authenticate').then(res => {
+            axe('authenticate').then(res => {
                 if(res.data.data) {
                     state.activeUser = res.data.data
                     state.loading = false
@@ -72,10 +72,11 @@ let gameStore = {
             }).catch(handleError)
         },
         // CHAT SYSTEM
-        getGame() {
-            api('/games').then(res => {
-                state.gameSession = res.data.data[0]
-            })
+        getGame(gameId) {
+            axe('api/game/' + gameId).then(res => {
+                state.gameSession = res.data.data
+                console.log(state.gameSession)
+            }).catch(handleError)
         },
         submitText(name, text) {
             client.emit('message', {
@@ -86,7 +87,7 @@ let gameStore = {
         
         // goCrazy(card, index) {
         //     card.index = index
-        //     api.post('/injuries', card).then(res => {
+        //     axe.post('/injuries', card).then(res => {
         //         console.log(res.data.data)
         //     }).catch(handleError)
         // }

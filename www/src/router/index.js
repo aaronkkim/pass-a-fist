@@ -25,7 +25,7 @@ export default new Router({
       component: Register
     },
     {
-      path: '/game',
+      path: '/game/:id',
       name: 'Game',
       component: Game
     }

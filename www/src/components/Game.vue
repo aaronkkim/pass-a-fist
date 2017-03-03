@@ -31,7 +31,7 @@ export default {
       }
   },
   mounted() {
-    this.$root.$data.store.actions.getGame()
+    this.$root.$data.store.actions.getGame('1234')
   },
   computed: {
     user() {

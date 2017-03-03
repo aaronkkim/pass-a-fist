@@ -28,8 +28,8 @@ const models = {
   game: {
     name: 'Game',
     endpoint: 'games',
-    // preventDefaultApi: true,
-    // useCustomRoutes: true
+    preventDefaultApi: true,
+    useCustomRoutes: true
   }
   // More models here in future
 }
