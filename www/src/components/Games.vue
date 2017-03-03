@@ -26,10 +26,10 @@ export default {
           maxPlayers:8
       }
   },
-  mounted() {
-    this.$root.$data.store.actions.getGame('1234')
-    this.getDeck()
-  },
+  // mounted() {
+  //   this.$root.$data.store.actions.getGame()
+  //   this.getDeck()
+  // },
   computed: {
     user() {
         return this.$root.$data.store.state.activeUser

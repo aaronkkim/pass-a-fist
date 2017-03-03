@@ -51,6 +51,7 @@
       }
 
   },
+
  
  
     mounted() {
@@ -60,6 +61,11 @@
 
       this.$root.$data.store.actions.getInjuryDeck()
 
+
+    },
+  computed: {
+    user() {
+        return this.$root.$data.store.state.activeUser
 
     },
     computed: {
