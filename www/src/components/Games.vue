@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'game',
+  name: 'games',
   data() {
       return {
           text: '',
