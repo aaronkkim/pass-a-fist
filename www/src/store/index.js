@@ -14,7 +14,7 @@ let client = io.connect('http://localhost:3000/');
 
 client.on('message', function (data) {
     console.log(data);
-    if(data.name && data.text) {
+    if (data.name && data.text) {
         state.chat.push(data)
     }
 });
@@ -26,7 +26,9 @@ let state = {
     chat: [],
     error: {},
     deck: {},
-    hand: []
+    hand: [],
+    injuryDeck: {},
+    injuryHand: []
 }
 
 let handleError = (err) => {
@@ -42,9 +44,9 @@ let gameStore = {
         // USER AUTHENTICATION
         login(email, password) {
             state.isLoading = true
-            axe.post('login',{
-                email:email,
-                password:password
+            axe.post('login', {
+                email: email,
+                password: password
             }).then(res => {
                 state.activeUser = res.data.data
                 state.loading = false
@@ -52,11 +54,11 @@ let gameStore = {
         },
         register(username, email, password, age) {
             state.isLoading = true
-            axe.post('register',{
-                name:username,
-                email:email,
-                password:password,
-                age:age
+            axe.post('register', {
+                name: username,
+                email: email,
+                password: password,
+                age: age
             }).then(res => {
                 this.login(email, password)
             }).catch(handleError)
@@ -68,7 +70,7 @@ let gameStore = {
         },
         authenticate() {
             axe('authenticate').then(res => {
-                if(res.data.data) {
+                if (res.data.data) {
                     state.activeUser = res.data.data
                     state.loading = false
                 }
@@ -79,7 +81,7 @@ let gameStore = {
             axe('api/game/' + gameId).then(res => {
                 state.gameSession = res.data.data
                 console.log(state.gameSession)
-                if(state.activeUser) {
+                if (state.activeUser) {
                     state.activeUser.hand = []
                 }
             }).catch(handleError)
@@ -92,17 +94,18 @@ let gameStore = {
         },
         getDeck() {
             axe('api/fights').then(res => {
-                let deck = Shuffle.shuffle({deck: res.data.data})
+                let deck = Shuffle.shuffle({ deck: res.data.data })
                 state.deck = deck
+                this.drawHand()
                 console.log(state.deck)
-             }).catch(handleError)
+            }).catch(handleError)
         },
         drawHand() {
-            if(state.activeUser) {
+            if (state.activeUser) {
                 let hand = state.deck.draw(5)
 
                 console.log(hand)
-                for(let card of hand) {
+                for (let card of hand) {
                     console.log(card)
                     state.hand.push(card)
                 }
@@ -111,10 +114,26 @@ let gameStore = {
         }
         ,
         drawCard() {
-            if(state.activeUser) {
+            if (state.activeUser) {
                 let hand = state.deck.draw()
                 state.hand.push(hand)
                 console.log(state.hand)
+            }
+        },
+        getInjuryDeck() {
+            axe('api/injuries').then(res => {
+                let injuryDeck = Shuffle.shuffle({ deck: res.data.data })
+                state.injuryDeck = injuryDeck
+                console.log(state.injury)
+            }).catch(handleError)
+        },
+
+        drawInjury() {
+            if (state.activeUser) {
+                let injuryHand = state.injuryDeck.draw()
+                state.injuryHand.push(injuryHand)
+                console.log(injuryHand)
+            
             }
         }
         // goCrazy(card, index) {
