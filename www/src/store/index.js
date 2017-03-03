@@ -86,6 +86,9 @@ let gameStore = {
                 if (state.activeUser) {
                     state.activeUser.hand = []
                 }
+            }).then(res => { 
+                this.getDeck()
+                this.getInjuryDeck()
             }).catch(handleError)
         },
         createGame(user, gameName, maxPlayers) {

@@ -49,23 +49,9 @@
         text: '',
 
       }
-
-  },
-
- 
- 
-    mounted() {
-       this.$root.$data.store.actions.getGame('The Game')
-
-      this.$root.$data.store.actions.getDeck()
-
-      this.$root.$data.store.actions.getInjuryDeck()
-
-
     },
-  computed: {
-    user() {
-        return this.$root.$data.store.state.activeUser
+    mounted() {
+      this.$root.$data.store.actions.getGame(this.$route.params.id)
 
     },
     computed: {
