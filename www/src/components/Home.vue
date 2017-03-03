@@ -4,7 +4,7 @@
 
         <div v-if="user.name">
             Welcome, {{user.name}}
-            <router-link :to="'game/'+gameSessionId">Game!!! </router-link>
+            <router-link :to="'game/'+gameName">Game!!! </router-link>
 
             <h1>Welcome, {{user.name}} </h1>
             <h2>How to play:</h2>
@@ -58,7 +58,7 @@
         data() {
             return {
                 msg: 'Pass-a-fist',
-                gameSessionId: 1234,
+                gameName: "The Game",
                 cards: cardService.getSomeFakeCards(),
                 injuries: injuryService.getSomeFakeInjuries()
             }
