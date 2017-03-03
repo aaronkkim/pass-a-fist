@@ -86,8 +86,9 @@ let gameStore = {
             });
         },
         getDeck() {
-            api('api/fights').then(res => {
+            axe('api/fights').then(res => {
                 state.deck = res.data.data
+                // Shuffle.shuffle
              }).catch(handleError)
         }
         
@@ -100,6 +101,7 @@ let gameStore = {
     }
 
 }
+
 
 
 export default gameStore

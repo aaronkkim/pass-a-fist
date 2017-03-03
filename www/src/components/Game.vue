@@ -1,7 +1,7 @@
 <template>
 
 <div class="bgpic">
-<button v-for="" @click="deck"> Get Cards</button>
+<button @click="getDeck"> Get Cards</button>
 {{ deck.name }}
 <div class="flex-container">
   <div class="container textbox">
@@ -28,7 +28,6 @@ export default {
   data() {
       return {
           text: '',
-          deck: []
       }
   },
   mounted() {
@@ -43,6 +42,9 @@ export default {
     },
     game() {
         return this.$root.$data.store.state.gameSession
+    },
+    deck() {
+      return this.$root.$data.store.state.deck
     }
   },
   methods: {
@@ -52,9 +54,8 @@ export default {
         this.text = ''
       }
     },
-    
-    deck() {
-      return this.$root.$data.store.actions.getDeck()
+    getDeck() {
+      this.$root.$data.store.actions.getDeck()
     }
   }
 }
