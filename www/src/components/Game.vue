@@ -1,9 +1,9 @@
 <template>
 
 <div class="bgpic">
-
+<button v-for="" @click="deck"> Get Cards</button>
+{{ deck.name }}
 <div class="flex-container">
-
   <div class="container textbox">
     <ul v-for="message in chat" >
         <li>{{message.name}} : {{message.text}}</li>
@@ -27,7 +27,8 @@ export default {
   name: 'game',
   data() {
       return {
-          text: ''
+          text: '',
+          deck: []
       }
   },
   mounted() {
@@ -50,6 +51,10 @@ export default {
         this.$root.$data.store.actions.submitText(this.user.name, this.text)
         this.text = ''
       }
+    },
+    
+    deck() {
+      return this.$root.$data.store.actions.getDeck()
     }
   }
 }
