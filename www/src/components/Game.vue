@@ -2,7 +2,13 @@
 
 <div class="bgpic">
 <button @click="getDeck"> Get Cards</button>
-{{ deck.name }}
+<button @click="drawHand"> Draw Hand</button>
+<button @click="drawCard"> Draw Card</button>
+
+<div class="card" v-for="card in hand">
+  <img v-if="card.imgUrl" :src="card.imgUrl"> 
+</div>
+
 <div class="flex-container">
   <div class="container textbox">
     <ul v-for="message in chat" >
@@ -32,6 +38,7 @@ export default {
   },
   mounted() {
     this.$root.$data.store.actions.getGame('1234')
+    
   },
   computed: {
     user() {
@@ -45,6 +52,9 @@ export default {
     },
     deck() {
       return this.$root.$data.store.state.deck
+    },
+    hand() {
+      return this.$root.$data.store.state.activeUser.hand
     }
   },
   methods: {
@@ -56,6 +66,13 @@ export default {
     },
     getDeck() {
       this.$root.$data.store.actions.getDeck()
+      
+    },
+    drawHand() {
+      this.$root.$data.store.actions.drawHand()
+    },
+    drawCard() {
+      this.$root.$data.store.actions.drawCard()
     }
   }
 }
@@ -77,6 +94,13 @@ export default {
   position: fixed;
   bottom: 0;
   right:0;
+}
+.card{
+    display:inline-flex;
+}
+img{
+    height: 250px;
+    /*width:150px;*/
 }
 /*.flex-container{
   display: flex;

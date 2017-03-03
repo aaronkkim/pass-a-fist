@@ -1,5 +1,6 @@
 import axios from 'axios'
 import io from 'socket.io-client'
+import Shuffle from 'shuffle'
 
 
 let axe = axios.create({
@@ -24,7 +25,7 @@ let state = {
     isLoading: false,
     chat: [],
     error: {},
-    deck: []
+    deck: {}
 }
 
 let handleError = (err) => {
@@ -77,6 +78,9 @@ let gameStore = {
             axe('api/game/' + gameId).then(res => {
                 state.gameSession = res.data.data
                 console.log(state.gameSession)
+                if(state.activeUser) {
+                    state.activeUser.hand = []
+                }
             }).catch(handleError)
         },
         submitText(name, text) {
@@ -87,11 +91,31 @@ let gameStore = {
         },
         getDeck() {
             axe('api/fights').then(res => {
-                state.deck = res.data.data
-                // Shuffle.shuffle
+                let deck = Shuffle.shuffle({deck: res.data.data})
+                state.deck = deck
+                console.log(state.deck)
              }).catch(handleError)
+        },
+        drawHand() {
+            if(state.activeUser) {
+                let hand = state.deck.draw(5)
+
+                console.log(hand)
+                for(let card of hand) {
+                    console.log(card)
+                    state.activeUser.hand.push(card)
+                }
+                console.log(state.activeUser.hand)
+            }
         }
-        
+        ,
+        drawCard() {
+            if(state.activeUser) {
+                let hand = state.deck.draw()
+                state.activeUser.hand.push(hand)
+                console.log(state.activeUser.hand)
+            }
+        }
         // goCrazy(card, index) {
         //     card.index = index
         //     axe.post('/injuries', card).then(res => {
