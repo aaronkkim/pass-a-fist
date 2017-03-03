@@ -3,7 +3,7 @@
 
 <nav>
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo ">Pass-a-Fist</a>
+      <a href="#" class="brand-logo">Pass-a-Fist</a>
       <div v-if="loading">
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li>one sec...</li>
@@ -11,8 +11,8 @@
       </div>
       <div v-else-if="!user.name">
        <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li> <router-link :to="'login/'">Login </router-link> </li>
-            <li><router-link :to="'register/'">Register </router-link> </li>
+            <li><router-link to="login">Login </router-link> </li>
+            <li><router-link to="register">Register </router-link> </li>
       </ul>
       </div>
       <div v-else>

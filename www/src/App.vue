@@ -17,12 +17,9 @@ export default {
 
 <style>
 #app {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: black;
-  background-image: url('./assets/retinawood.png')
+  height: 100%;
+  width:100%
 }
 h1, h2{
   color: #11ABB0;
@@ -34,5 +31,19 @@ font-family: 'Montserrat', sans-serif;
 .inline-flex {
   display: inline-flex;
   flex-direction: row-reverse;
+}
+.btn{
+  background-color: #fea;
+  color: black;
+}
+.btn:hover{
+  background-color: #fea;
+}
+.btn:focus{
+  background-color: #fea;
+}
+html, body{
+  height:  100%;
+  width:100%
 }
 </style>
