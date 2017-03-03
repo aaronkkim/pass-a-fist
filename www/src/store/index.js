@@ -86,7 +86,7 @@ let gameStore = {
             });
         },
         getDeck() {
-            api('/fights').then(res => {
+            api('api/fights').then(res => {
                 state.deck = res.data.data
              }).catch(handleError)
         }
