@@ -23,7 +23,8 @@ let state = {
     gameSession: {},
     isLoading: false,
     chat: [],
-    error: {}
+    error: {},
+    deck: []
 }
 
 let handleError = (err) => {
@@ -83,6 +84,11 @@ let gameStore = {
                 name: name,
                 text: text
             });
+        },
+        getDeck() {
+            api('/fights').then(res => {
+                state.deck = res.data.data
+             }).catch(handleError)
         }
         
         // goCrazy(card, index) {
