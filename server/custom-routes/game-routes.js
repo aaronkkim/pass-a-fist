@@ -6,7 +6,7 @@ export default {
     reqType: 'get',
     method(req, res, next){
       let action = 'Get game session by custom game id'
-      Games.findOne({gameId: req.params.id})
+      Games.findOne({name: req.params.id})
         .then(game => {
           res.send(handleResponse(action, game))
         }).catch(error => {
