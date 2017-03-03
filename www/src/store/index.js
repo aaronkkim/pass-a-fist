@@ -25,7 +25,8 @@ let state = {
     isLoading: false,
     chat: [],
     error: {},
-    deck: {}
+    deck: {},
+    hand: []
 }
 
 let handleError = (err) => {
@@ -103,17 +104,17 @@ let gameStore = {
                 console.log(hand)
                 for(let card of hand) {
                     console.log(card)
-                    state.activeUser.hand.push(card)
+                    state.hand.push(card)
                 }
-                console.log(state.activeUser.hand)
+                console.log(state.hand)
             }
         }
         ,
         drawCard() {
             if(state.activeUser) {
                 let hand = state.deck.draw()
-                state.activeUser.hand.push(hand)
-                console.log(state.activeUser.hand)
+                state.hand.push(hand)
+                console.log(state.hand)
             }
         }
         // goCrazy(card, index) {

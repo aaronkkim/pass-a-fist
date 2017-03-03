@@ -38,7 +38,7 @@ export default {
   },
   mounted() {
     this.$root.$data.store.actions.getGame('1234')
-    
+    this.getDeck()
   },
   computed: {
     user() {
