@@ -1,23 +1,7 @@
 <template>
 
 <div class="bgpic">
-<button @click="getDeck"> Get Cards</button>
-<button @click="drawHand"> Draw Hand</button>
-<button @click="drawCard"> Draw Card</button>
-
-<div class="card" v-for="card in hand">
-  <img v-if="card.imgUrl" :src="card.imgUrl"> 
-</div>
-
-<div class="flex-container">
-  <div class="container textbox">
-    <ul v-for="message in chat" >
-        <li>{{message.name}} : {{message.text}}</li>
-    </ul>
-    <form @submit.prevent="submitText">
-        <input type="text" v-model="text">
-        <button type="submit" class="waves-effect waves-light btn">Chat</button>
-    </form>
+<button @click = "createGame">Create Game</button>
   </div>
 
 </div>
@@ -34,6 +18,7 @@ export default {
   data() {
       return {
           text: '',
+          name:'',
       }
   },
   mounted() {
@@ -73,6 +58,9 @@ export default {
     },
     drawCard() {
       this.$root.$data.store.actions.drawCard()
+    },
+    createGame(){
+      this.$root.$data.store.actions.createGame(this.user)
     }
   }
 }

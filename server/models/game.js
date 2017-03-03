@@ -11,7 +11,7 @@ let schema = new Schema({
   created: { type: Number, required: true, default: Date.now() },
   playersInGameSession: { type: Object },
   //RELATION
-  creatorId: { type: String, ref: models.user.name }
+  creatorId: { type: ObjectId, ref: models.user.name }
 })
 
 
