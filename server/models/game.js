@@ -11,7 +11,7 @@ let schema = new Schema({
   playersInGameSession: [{ type: ObjectId, ref: models.user.name }],
   //RELATION
   creatorId: { type: ObjectId, ref: models.user.name },
-  active: { type: Boolean, required: true },
+  active: { type: Boolean, required: true, default: false},
   maxPlayers: { type: Number, required: true },
 })
 

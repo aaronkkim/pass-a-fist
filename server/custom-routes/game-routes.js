@@ -14,7 +14,7 @@ export default {
         })
     }
   },
-    newGame: {
+  newGame: {
     path: '/game',
     reqType: 'post',
     method(req, res, next){
