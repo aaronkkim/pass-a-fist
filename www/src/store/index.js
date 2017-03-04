@@ -88,7 +88,6 @@ let gameStore = {
         getGame(gameName) {
             axe('api/game/' + gameName).then(res => {
                 state.gameSession = res.data.data
-                console.log(state.gameSession)
                 if (state.activeUser) {
                     state.activeUser.hand = []
                 }
@@ -104,7 +103,6 @@ let gameStore = {
                 maxPlayers: maxPlayers
             }
             axe.post('api/games', game).then(res => {
-                console.log(res)
                 if(res.data.data.gameName){
                     this.getGame(res.data.data.gameName)
                 }
@@ -122,19 +120,15 @@ let gameStore = {
                 let deck = Shuffle.shuffle({ deck: res.data.data })
                 state.deck = deck
                 this.drawHand()
-                console.log(state.deck)
             }).catch(handleError)
         },
         drawHand() {
             if (state.activeUser) {
                 let hand = state.deck.draw(5)
 
-                console.log(hand)
                 for (let card of hand) {
-                    console.log(card)
                     state.hand.push(card)
                 }
-                console.log(state.hand)
             }
         }
         ,
@@ -142,23 +136,19 @@ let gameStore = {
             if (state.activeUser) {
                 let hand = state.deck.draw()
                 state.hand.push(hand)
-                console.log(state.hand)
             }
         },
         getInjuryDeck() {
             axe('api/injuries').then(res => {
                 let injuryDeck = Shuffle.shuffle({ deck: res.data.data })
                 state.injuryDeck = injuryDeck
-                console.log(state.injury)
             }).catch(handleError)
         },
 
         drawInjury() {
             if (state.activeUser) {
                 let injuryHand = state.injuryDeck.draw()
-                state.injuryHand.push(injuryHand)
-                console.log(injuryHand)
-            
+                state.injuryHand.push(injuryHand)            
             }
         }
         // goCrazy(card, index) {
