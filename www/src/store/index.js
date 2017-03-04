@@ -21,6 +21,7 @@ client.on('message', function (data) {
 
 let state = {
     activeUser: {},
+    games: [],
     gameSession: {},
     isLoading: false,
     chat: [],
@@ -78,7 +79,12 @@ let gameStore = {
                 }
             }).catch(handleError)
         },
-        // CHAT SYSTEM
+        // GET GAMES
+        getGames() {
+            axe('api/games').then(res => {
+                state.games = res.data.data
+            }).catch(handleError)
+        },
         getGame(gameName) {
             axe('api/game/' + gameName).then(res => {
                 state.gameSession = res.data.data

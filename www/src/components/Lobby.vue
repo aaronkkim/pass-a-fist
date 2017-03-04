@@ -1,26 +1,27 @@
 <template>
-  <div class="bgpic">
-    <form @submit.prevent="createGame">
-      <input type="text" placeholder="name" v-model="gameName" required>
-      <input type="number" placeholder="max players" v-model="maxPlayers" required>
-    </form>
-    <button @click="createGame">Create Game</button>
-    <lobby></lobby>
+  <div class="container">
+    <div class="row">
+        <div class="col s4 card" v-for="game in lobby"> 
+            <div>
+                <div class="card-head">
+                    <div class="card-title">{{game.name}}</div>
+                </div>
+                <div class="card-content">
+                    <p>Current Players: 0/{{game.maxPlayers}}</p>
+                </div>
+                <div class="card-action">
+                    <router-link :to="'/games/' + game.name">Join Game</router-link>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
+
 </template>
 
 <script>
-import Lobby from "./Lobby"
 export default {
-  name: 'games',
-  data() {
-      return {
-          text: '',
-          gameName:'',
-          maxPlayers:8
-      }
-  },
-  components: { Lobby },
+  name: 'lobby',
   computed: {
     user() {
         return this.$root.$data.store.state.activeUser
@@ -36,7 +37,13 @@ export default {
     },
     hand() {
       return this.$root.$data.store.state.hand
+    },
+    lobby() {
+      return this.$root.$data.store.state.games
     }
+  },
+  mounted() {
+      this.$root.$data.store.actions.getGames()
   },
   methods: {
     submitText() {
@@ -57,7 +64,7 @@ export default {
     },
     createGame(){
       this.$root.$data.store.actions.createGame(this.user, this.gameName, this.maxPlayers)
-      this.$router.push({path:'/games/'+ this.gameName})
+      this.$router.push({path:'/game/'+ this.gameName})
     }
   }
 }
