@@ -3,26 +3,34 @@
   <div class="bgpic">
     <!--<button @click="getDeck"> Get Cards</button>
     <button @click="drawHand"> Draw Hand</button>-->
-    <div class="flex-container">  
+    <div class="flex-container">
 
-    <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard"></button>
-    <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury"></button>
-
-    </div>
-
-
-    <div >
-      <div class="container textbox">
-        <ul v-for="message in chat">
-          <li>{{message.name}} : {{message.text}}</li>
-        </ul>
-        <form @submit.prevent="submitText">
-          <input type="text" v-model="text">
-          <button type="submit" class="waves-effect waves-light btn">Chat</button>
-        </form>
-      </div>
+      <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard"></button>
+      <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury"></button>
 
     </div>
+    <div class="fixed-action-btn   click-to-toggle">
+      <a class="btn-floating btn-large red" >
+        <i class="material-icons">menu</i>
+      </a>
+
+      <ul>
+        <div class="container textbox">
+          <ul>
+          <li v-for="message in chat">
+            <span>{{message.name}} : {{message.text}}</span>
+          </li>
+
+          </ul>
+          <form @submit.prevent="submitText">
+            <textarea type="text" v-model="text"></textarea>
+            <button type="submit" class="waves-effect waves-light btn">Chat</button>
+          </form>
+        </div>
+
+      </ul>
+    </div>
+
     <div class="flex-injury" @mouseover="handleCardHover">
       <div class="injuryHand" v-for="injury in injuryHand">
         <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
@@ -50,24 +58,17 @@
 
       }
 
-  },
+    },
 
- 
- 
+
+
     mounted() {
-       this.$root.$data.store.actions.getGame('The Game')
-
+      this.$root.$data.store.actions.getGame('The Game')
       this.$root.$data.store.actions.getDeck()
-
       this.$root.$data.store.actions.getInjuryDeck()
-
-
+      $('.fixed-action-btn').closeFAB();
     },
-  computed: {
-    user() {
-        return this.$root.$data.store.state.activeUser
 
-    },
     computed: {
       cardPosition() {
         let marginLeft = 5 - this.hand.length * 5
@@ -112,27 +113,34 @@
           this.text = ''
         }
       },
-
-
       drawCard() {
         this.$root.$data.store.actions.drawCard()
       },
       drawInjury() {
         this.$root.$data.store.actions.drawInjury()
+      },
+      openChat() {
+        $('.fixed-action-btn').openFAB();
+        debugger
+
       }
+
     }
   }
 
 </script>
 
 <style>
-  .flex-container{
+  .flex-container {
     display: flex;
     justify-content: center;
-    align-items:center;
+    align-items: center;
     height: 100%;
     width: 100%
   }
+
+
+
   .bgpic {
     background-image: url(https://northendorg.files.wordpress.com/2016/09/freakalley.jpg?w=4000&h=&crop=1);
     background-repeat: no-repeat;
@@ -144,11 +152,14 @@
 
 
 
+
+
+
   .textbox {
     background: rgba(205, 210, 216, .7);
-    width: 300px;
+    width: 20%;
     overflow: auto;
-    max-height: 300px;
+    height: 80%;
     position: fixed;
     bottom: 0;
     right: 0;
@@ -161,6 +172,9 @@
 
 
 
+
+
+
   .hand:hover {
     transform: scale(1.25) translateY(0);
     padding-bottom: 100px;
@@ -168,6 +182,9 @@
     margin-right: 100px;*/
     z-index: 1;
   }
+
+
+
 
 
 
@@ -185,6 +202,9 @@
     padding-left: 50px;
   }
 
+
+
+
   .flex-injury {
     display: flex;
     justify-content: flex-end;
@@ -192,6 +212,9 @@
     position: fixed;
     bottom: 0;
   }
+
+
+
 
 
 
@@ -204,6 +227,9 @@
   }
 
 
+
+
+
   .injury {
     height: 200px;
     z-index: 0;
@@ -212,10 +238,16 @@
     transform: scale(1) translateY(0);
   }
 
+
+
+
   .injury:hover {
 
     z-index: 1;
   }
+
+
+
 
 
   .injuryHand {
@@ -226,12 +258,18 @@
 
 
 
+
+
+
   .card:hover {
     /*transform: scale(1.25) translateY(-200px);*/
     /*margin-left: 100px;
     margin-right: 100px;*/
     z-index: 1;
   }
+
+
+
 
 
 

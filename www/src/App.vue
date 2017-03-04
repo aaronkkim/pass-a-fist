@@ -33,14 +33,14 @@ font-family: 'Montserrat', sans-serif;
   flex-direction: row-reverse;
 }
 .btn{
-  background-color: #fea;
+  background-color: #10999e;
   color: black;
 }
 .btn:hover{
-  background-color: #fea;
+  background-color: #10999e;
 }
 .btn:focus{
-  background-color: #fea;
+  background-color: #10999e;
 }
 html, body{
   height:  100%;

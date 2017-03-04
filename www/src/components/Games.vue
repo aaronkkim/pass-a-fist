@@ -80,15 +80,7 @@ export default {
   background-position: absolute;
   height: 100%;
 }
-.textbox{
-  background: rgba(205, 210, 216, .7);
-  width: 300px;
-  overflow: auto;
-  max-height: 300px;
-  position: fixed;
-  bottom: 0;
-  right:0;
-}
+
 .card{
     display:inline-flex;
 }
