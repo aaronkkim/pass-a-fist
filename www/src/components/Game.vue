@@ -11,7 +11,7 @@
     </div>
 
 
-    <div >
+    <div>
       <div class="container textbox">
         <ul v-for="message in chat">
           <li>{{message.name}} : {{message.text}}</li>
@@ -27,13 +27,11 @@
       <div class="injuryHand" v-for="injury in injuryHand">
         <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
       </div>
-
     </div>
     <div class="flex-hand" @mouseover="handleCardHover">
       <div class="hand" :style="cardPosition" v-for="card in hand">
         <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
       </div>
-
     </div>
   </div>
 
@@ -121,14 +119,12 @@
   }
   .bgpic {
     background-image: url(https://northendorg.files.wordpress.com/2016/09/freakalley.jpg?w=4000&h=&crop=1);
+    background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: absolute;
     height: 100%;
   }
-
-
-
 
   .textbox {
     background: rgba(205, 210, 216, .7);
@@ -139,16 +135,17 @@
     bottom: 0;
     right: 0;
   }
+
+
   /*.hand {
     /*display: inline-flex;*/
   /*transition: transform 500ms ease-out;*/
   /*transform: scale(1) translateY(0);*/
   /*}*/
 
-
-
   .hand:hover {
-    transform: scale(1.25) translateY(0);
+    transition: transform 150ms ease-out;
+    transform: scale(1.75) translateY(0);
     padding-bottom: 100px;
     /*margin-left: 100px;
     margin-right: 100px;*/
@@ -194,12 +191,11 @@
     height: 200px;
     z-index: 0;
     /*margin-bottom: -50px;*/
-    transition: transform 500ms ease-out;
-    transform: scale(1) translateY(0);
+    transition: transform 150ms ease-out;
+    transform: scale(1.75) translateY(0);
   }
 
   .injury:hover {
-
     z-index: 1;
   }
 
