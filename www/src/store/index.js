@@ -3,8 +3,8 @@ import io from 'socket.io-client'
 import Shuffle from 'shuffle'
 
 
-let axe = axios.create({
-    baseURL: 'http://localhost:3000/',
+let api = axios.create({
+    baseURL: 'http://localhost:3000/api/',
     timeout: 30000,
     withCredentials: true
 })
@@ -47,7 +47,7 @@ let gameStore = {
         // USER AUTHENTICATION
         login(email, password) {
             state.isLoading = true
-            axe.post('login', {
+            api.post('login', {
                 email: email,
                 password: password
             }).then(res => {
@@ -57,7 +57,7 @@ let gameStore = {
         },
         register(username, email, password, age) {
             state.isLoading = true
-            axe.post('register', {
+            api.post('register', {
                 name: username,
                 email: email,
                 password: password,
@@ -67,12 +67,12 @@ let gameStore = {
             }).catch(handleError)
         },
         logout() {
-            axe.delete('logout').then(res => {
+            api.delete('logout').then(res => {
                 state.activeUser = {}
             }).catch(handleError)
         },
         authenticate() {
-            axe('authenticate').then(res => {
+            api('authenticate').then(res => {
                 if (res.data.data) {
                     state.activeUser = res.data.data
                     state.loading = false
@@ -81,12 +81,12 @@ let gameStore = {
         },
         // GET GAMES
         getGames() {
-            axe('api/games').then(res => {
+            api('games').then(res => {
                 state.games = res.data.data
             }).catch(handleError)
         },
         getGame(gameName) {
-            axe('api/game/' + gameName).then(res => {
+            api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
                 if (state.activeUser) {
                     state.activeUser.hand = []
@@ -102,7 +102,7 @@ let gameStore = {
                 creatorId:user._id,
                 maxPlayers: maxPlayers
             }
-            axe.post('api/games', game).then(res => {
+            api.post('games', game).then(res => {
                 if(res.data.data.gameName){
                     this.getGame(res.data.data.gameName)
                 }
@@ -116,7 +116,7 @@ let gameStore = {
             });
         },
         getDeck() {
-            axe('api/fights').then(res => {
+            api('fights').then(res => {
                 let deck = Shuffle.shuffle({ deck: res.data.data })
                 state.deck = deck
                 this.drawHand()
@@ -130,8 +130,7 @@ let gameStore = {
                     state.hand.push(card)
                 }
             }
-        }
-        ,
+        },
         drawCard() {
             if (state.activeUser) {
                 let hand = state.deck.draw()
@@ -139,21 +138,23 @@ let gameStore = {
             }
         },
         getInjuryDeck() {
-            axe('api/injuries').then(res => {
+            api('injuries').then(res => {
                 let injuryDeck = Shuffle.shuffle({ deck: res.data.data })
                 state.injuryDeck = injuryDeck
             }).catch(handleError)
         },
-
         drawInjury() {
             if (state.activeUser) {
                 let injuryHand = state.injuryDeck.draw()
                 state.injuryHand.push(injuryHand)            
             }
         }
+        // joinGame(user, game) {
+        //     api.put('game/')
+        // }
         // goCrazy(card, index) {
         //     card.index = index
-        //     axe.post('/injuries', card).then(res => {
+        //     api.post('/injuries', card).then(res => {
         //         console.log(res.data.data)
         //     }).catch(handleError)
         // }
