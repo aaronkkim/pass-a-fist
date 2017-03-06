@@ -1,11 +1,22 @@
 <template>
   <div class="bgpic">
-    <form @submit.prevent="createGame">
-      <input type="text"  max="20" placeholder="name" v-model="gameName" required>
-      <input type="number" placeholder="max players" v-model="maxPlayers" required>
-    </form>
-    <button @click="createGame">Create Game</button>
-    <lobby></lobby>
+    <div class="container">
+      <div class="row">
+        <div class="col s7 card">
+          <div class="card-head">
+            <div class="card-title">Create a new game</div>
+            <form @submit.prevent="createGame">
+              <input type="text"  max="20" placeholder="name" v-model="gameName" required>
+              <input type="number" min="2" max="20" placeholder="max players" v-model="maxPlayers" required>
+            </form>
+          </div>
+          <div class="card-action">
+            <a href="#/games" @click="createGame">Create Game</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+        <lobby></lobby>
   </div>
 </template>
 
