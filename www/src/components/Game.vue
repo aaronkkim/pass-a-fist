@@ -10,9 +10,9 @@
       <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
 
     </div>
-    <div class="fixed-action-btn   click-to-toggle">
+    <div class="fixed-action-btn click-to-toggle">
       <a class="btn-floating btn-large red" >
-        <i class="material-icons">menu</i>
+        <i class="material-icons">chat_bubble</i>
       </a>
 
       <ul>
@@ -62,7 +62,7 @@
       this.$root.$data.store.actions.getGame(this.$route.params.id)
       this.$root.$data.store.actions.getDeck()
       this.$root.$data.store.actions.getInjuryDeck()
-      $('.fixed-action-btn').closeFAB();
+      
     },
     computed: {
       cardPosition() {
@@ -112,17 +112,13 @@
       drawInjury() {
         this.$root.$data.store.actions.drawInjury()
       },
-<<<<<<< HEAD
+
       leaveGame(){
         this.$root.$data.store.state.gameSession = {}
         this.$root.$data.store.state.activeUser.activeGameId = ''
         this.$router.push({path: '/'})
-=======
-      openChat() {
-        $('.fixed-action-btn').openFAB();
-        debugger
->>>>>>> d873dfcf175a56de8837caed158d4849640ab595
       }
+  
     }
   }
 </script>
