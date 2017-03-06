@@ -26,12 +26,12 @@ export default new Router({
       component: Register
     },
     {
-      path: '/game',
+      path: '/games',
       name: 'Games',
       component: Games
     },
     {
-      path: '/game/:id',
+      path: '/games/:id',
       name: 'Game',
       component: Game
     }

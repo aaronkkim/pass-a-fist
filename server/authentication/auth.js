@@ -1,7 +1,7 @@
 let router = require('express').Router()
 let Users = require('../models/user')
 
-router.post('/register', (req, res) => {
+router.post('/api/register', (req, res) => {
   Users.create(req.body)
     .then((user) => {
       req.session.uid = user._id
@@ -19,7 +19,7 @@ router.post('/register', (req, res) => {
 })
 
 
-router.post('/login', (req, res) => {
+router.post('/api/login', (req, res) => {
   Users.findOne({ email: req.body.email })
     .then(user => {
       user.validatePassword(req.body.password)
@@ -48,7 +48,7 @@ router.post('/login', (req, res) => {
     })
 })
 
-router.delete('/logout', (req, res) => {
+router.delete('/api/logout', (req, res) => {
   req.session.destroy()
   res.send({
     message: 'You have successfully been logged out. Please come back soon!'
@@ -56,7 +56,7 @@ router.delete('/logout', (req, res) => {
 })
 
 
-router.get('/authenticate', (req,res) => {
+router.get('/api/authenticate', (req,res) => {
   Users.findById(req.session.uid).then(user => {
     return res.send ({
       data: user

@@ -3,8 +3,8 @@ import io from 'socket.io-client'
 import Shuffle from 'shuffle'
 
 
-let axe = axios.create({
-    baseURL: 'http://localhost:3000/',
+let api = axios.create({
+    baseURL: 'http://localhost:3000/api/',
     timeout: 30000,
     withCredentials: true
 })
@@ -21,6 +21,7 @@ client.on('message', function (data) {
 
 let state = {
     activeUser: {},
+    games: [],
     gameSession: {},
     isLoading: false,
     chat: [],
@@ -46,7 +47,7 @@ let gameStore = {
         // USER AUTHENTICATION
         login(email, password) {
             state.isLoading = true
-            axe.post('login', {
+            api.post('login', {
                 email: email,
                 password: password
             }).then(res => {
@@ -56,7 +57,7 @@ let gameStore = {
         },
         register(username, email, password, age) {
             state.isLoading = true
-            axe.post('register', {
+            api.post('register', {
                 name: username,
                 email: email,
                 password: password,
@@ -66,40 +67,53 @@ let gameStore = {
             }).catch(handleError)
         },
         logout() {
-            axe.delete('logout').then(res => {
+            api.delete('logout').then(res => {
                 state.activeUser = {}
             }).catch(handleError)
         },
         authenticate() {
-            axe('authenticate').then(res => {
+            api('authenticate').then(res => {
                 if (res.data.data) {
                     state.activeUser = res.data.data
                     state.loading = false
                 }
             }).catch(handleError)
         },
-        // CHAT SYSTEM
+        // GET GAMES
+        getGames() {
+            api('games').then(res => {
+                state.games = res.data.data
+            }).catch(handleError)
+        },
         getGame(gameName) {
-            axe('api/game/' + gameName).then(res => {
+            api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
-                console.log(state.gameSession)
                 if (state.activeUser) {
                     state.activeUser.hand = []
                 }
+            }).then(res => { 
+                this.getDeck()
+                this.getInjuryDeck()
             }).catch(handleError)
         },
-        createGame(user, gameName, maxPlayers) {
+        createGame(user, gameName, maxPlayers, cb) {
             let game = {
                 name:gameName,
                 creatorId:user._id,
                 maxPlayers: maxPlayers
             }
-            axe.post('api/games', game).then(res => {
-                console.log(res)
-                if(res.data.data.gameName){
-                    this.getGame(res.data.data.gameName)
+            api.post('games', game).then(res => {
+                if(res.data.data.name){
+                    this.getGame(res.data.data.name)
+                    cb(gameName)
                 }
 
+            }).catch(handleError)
+        },
+        joinGame(user, gameName, cb) {
+            api.post('joingame', {user: user, name: gameName}).then( res => {
+                console.log(res.data.data)
+                cb(gameName)
             }).catch(handleError)
         },
         submitText(name, text) {
@@ -109,52 +123,42 @@ let gameStore = {
             });
         },
         getDeck() {
-            axe('api/fights').then(res => {
+            api('fights').then(res => {
                 let deck = Shuffle.shuffle({ deck: res.data.data })
                 state.deck = deck
                 this.drawHand()
-                console.log(state.deck)
             }).catch(handleError)
         },
         drawHand() {
             if (state.activeUser) {
                 let hand = state.deck.draw(5)
 
-                console.log(hand)
                 for (let card of hand) {
-                    console.log(card)
                     state.hand.push(card)
                 }
-                console.log(state.hand)
             }
-        }
-        ,
+        },
         drawCard() {
             if (state.activeUser) {
                 let hand = state.deck.draw()
                 state.hand.push(hand)
-                console.log(state.hand)
             }
         },
         getInjuryDeck() {
-            axe('api/injuries').then(res => {
+            api('injuries').then(res => {
                 let injuryDeck = Shuffle.shuffle({ deck: res.data.data })
                 state.injuryDeck = injuryDeck
-                console.log(state.injury)
             }).catch(handleError)
         },
-
         drawInjury() {
             if (state.activeUser) {
                 let injuryHand = state.injuryDeck.draw()
-                state.injuryHand.push(injuryHand)
-                console.log(injuryHand)
-            
+                state.injuryHand.push(injuryHand)            
             }
         }
         // goCrazy(card, index) {
         //     card.index = index
-        //     axe.post('/injuries', card).then(res => {
+        //     api.post('/injuries', card).then(res => {
         //         console.log(res.data.data)
         //     }).catch(handleError)
         // }

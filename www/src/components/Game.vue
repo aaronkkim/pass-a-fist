@@ -9,6 +9,7 @@
       <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury"></button>
 
     </div>
+
     <div class="fixed-action-btn   click-to-toggle">
       <a class="btn-floating btn-large red" >
         <i class="material-icons">menu</i>
@@ -29,19 +30,32 @@
         </div>
 
       </ul>
+
+
+
+    <div>
+      <div class="container textbox">
+        <ul v-for="message in chat">
+          <li>{{message.name}} : {{message.text}}</li>
+        </ul>
+        <form @submit.prevent="submitText">
+          <input type="text" v-model="text">
+          <button type="submit" class="waves-effect waves-light btn">Chat</button>
+        </form>
+      </div>
+
+
     </div>
 
     <div class="flex-injury" @mouseover="handleCardHover">
       <div class="injuryHand" v-for="injury in injuryHand">
         <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
       </div>
-
     </div>
     <div class="flex-hand" @mouseover="handleCardHover">
       <div class="hand" :style="cardPosition" v-for="card in hand">
         <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
       </div>
-
     </div>
   </div>
 
@@ -58,16 +72,19 @@
 
       }
 
+
     },
 
 
 
     mounted() {
-      this.$root.$data.store.actions.getGame('The Game')
+      this.$root.$data.store.actions.getGame(this.$route.params.id)
       this.$root.$data.store.actions.getDeck()
       this.$root.$data.store.actions.getInjuryDeck()
       $('.fixed-action-btn').closeFAB();
     },
+
+    
 
     computed: {
       cardPosition() {
@@ -143,11 +160,14 @@
 
   .bgpic {
     background-image: url(https://northendorg.files.wordpress.com/2016/09/freakalley.jpg?w=4000&h=&crop=1);
+    background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: absolute;
     height: 100%;
   }
+
+
 
 
 
@@ -164,6 +184,8 @@
     bottom: 0;
     right: 0;
   }
+
+
   /*.hand {
     /*display: inline-flex;*/
   /*transition: transform 500ms ease-out;*/
@@ -175,8 +197,10 @@
 
 
 
+
   .hand:hover {
-    transform: scale(1.25) translateY(0);
+    transition: transform 150ms ease-out;
+    transform: scale(1.75) translateY(0);
     padding-bottom: 100px;
     /*margin-left: 100px;
     margin-right: 100px;*/
@@ -234,15 +258,14 @@
     height: 200px;
     z-index: 0;
     /*margin-bottom: -50px;*/
-    transition: transform 500ms ease-out;
-    transform: scale(1) translateY(0);
+    transition: transform 150ms ease-out;
+    transform: scale(1.75) translateY(0);
   }
 
 
 
 
   .injury:hover {
-
     z-index: 1;
   }
 
