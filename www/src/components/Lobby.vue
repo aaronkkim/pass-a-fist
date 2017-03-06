@@ -9,6 +9,7 @@
                 </div>
                 <div class="card-content">
                     <p>Current Players: {{game.playersInGameSession.length}}/{{game.maxPlayers}}</p>
+                   
                 </div>
                 <div class="card-action">
                     <a href="#/games" @click="joinGame(game)">Join Game</a>
@@ -68,9 +69,9 @@ export default {
 }
 .textbox{
   background: rgba(205, 210, 216, .7);
-  width: 300px;
+  width: 20%;
   overflow: auto;
-  max-height: 300px;
+  height: 90%;
   position: fixed;
   bottom: 0;
   right:0;
