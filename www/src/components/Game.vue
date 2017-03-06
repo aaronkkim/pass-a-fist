@@ -1,9 +1,10 @@
 <template>
 
   <div class="bgpic">
-    <!--<button @click="getDeck"> Get Cards</button>
-    <button @click="drawHand"> Draw Hand</button>-->
-    <div class="flex-container">
+
+   <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
+    <div class="flex-container">  
+
 
       <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard">
       <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
@@ -111,9 +112,16 @@
       drawInjury() {
         this.$root.$data.store.actions.drawInjury()
       },
+<<<<<<< HEAD
+      leaveGame(){
+        this.$root.$data.store.state.gameSession = {}
+        this.$root.$data.store.state.activeUser.activeGameId = ''
+        this.$router.push({path: '/'})
+=======
       openChat() {
         $('.fixed-action-btn').openFAB();
         debugger
+>>>>>>> d873dfcf175a56de8837caed158d4849640ab595
       }
     }
   }
