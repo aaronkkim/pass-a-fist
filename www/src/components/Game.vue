@@ -5,8 +5,8 @@
     <button @click="drawHand"> Draw Hand</button>-->
     <div class="flex-container">
 
-      <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard"></button>
-      <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury"></button>
+      <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard">
+      <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
 
     </div>
 
@@ -138,7 +138,7 @@
       },
       openChat() {
         $('.fixed-action-btn').openFAB();
-        debugger
+       
 
       }
 
@@ -166,15 +166,6 @@
     background-position: absolute;
     height: 100%;
   }
-
-
-
-
-
-
-
-
-
   .textbox {
     background: rgba(205, 210, 216, .7);
     width: 20%;
