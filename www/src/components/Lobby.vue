@@ -64,9 +64,9 @@ export default {
 }
 .textbox{
   background: rgba(205, 210, 216, .7);
-  width: 300px;
+  width: 20%;
   overflow: auto;
-  max-height: 300px;
+  height: 90%;
   position: fixed;
   bottom: 0;
   right:0;
