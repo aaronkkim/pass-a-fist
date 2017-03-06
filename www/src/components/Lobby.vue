@@ -8,6 +8,7 @@
                 </div>
                 <div class="card-content">
                     <p>Current Players: {{game.playersInGameSession.length}}/{{game.maxPlayers}}</p>
+                   
                 </div>
                 <div class="card-action">
                     <a href="#/games" @click="joinGame(game)">Join Game</a>

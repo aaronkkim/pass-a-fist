@@ -15,6 +15,14 @@
             <li><router-link to="register">Register </router-link> </li>
       </ul>
       </div>
+      <div v-else-if="user.activeGameId">
+       <ul id="nav-mobile" class="right hide-on-med-and-down" >
+       
+        <li><router-link :to="'games/'+game.name">Current Game</router-link></li>
+        <li> Welcome, {{user.name}}!</li>
+        <li><a href='#' @click="logout">Logout</a></li>
+      </ul>
+      </div>
       <div v-else>
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
         <li> Welcome, {{user.name}}!</li>
@@ -46,7 +54,10 @@
             },
             loading() {
                 return this.$root.$data.store.state.isLoading
-            }
+            },
+             game() {
+        return this.$root.$data.store.state.gameSession
+    },
         }
     }
 </script>
