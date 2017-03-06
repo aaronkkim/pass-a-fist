@@ -7,10 +7,10 @@
                     <div class="card-title">{{game.name}}</div>
                 </div>
                 <div class="card-content">
-                    <p>Current Players: 0/{{game.maxPlayers}}</p>
+                    <p>Current Players: {{game.playersInGameSession.length}}/{{game.maxPlayers}}</p>
                 </div>
                 <div class="card-action">
-                    <router-link :to="'/games/' + game.name">Join Game</router-link>
+                    <a href="#/games" @click="joinGame(game)">Join Game</a>
                 </div>
             </div>
         </div>
@@ -26,17 +26,8 @@ export default {
     user() {
         return this.$root.$data.store.state.activeUser
     },
-    chat() {
-        return this.$root.$data.store.state.chat
-    },
     game() {
         return this.$root.$data.store.state.gameSession
-    },
-    deck() {
-      return this.$root.$data.store.state.deck
-    },
-    hand() {
-      return this.$root.$data.store.state.hand
     },
     lobby() {
       return this.$root.$data.store.state.games
@@ -46,25 +37,18 @@ export default {
       this.$root.$data.store.actions.getGames()
   },
   methods: {
-    submitText() {
-      if(this.user.name) {
-        this.$root.$data.store.actions.submitText(this.user.name, this.text)
-        this.text = ''
-      }
+    joinGame(game) {
+        if(this.user.name && game.name) {
+            if(!this.user.activeGameId || this.user.activeGameId === game._id) {
+                this.$root.$data.store.actions.joinGame(this.user, game.name, this.linkToGame);
+            }
+            else {
+                console.log(this.user.name + " is already in a game")
+            }
+        }
     },
-    getDeck() {
-      this.$root.$data.store.actions.getDeck()
-      
-    },
-    drawHand() {
-      this.$root.$data.store.actions.drawHand()
-    },
-    drawCard() {
-      this.$root.$data.store.actions.drawCard()
-    },
-    createGame(){
-      this.$root.$data.store.actions.createGame(this.user, this.gameName, this.maxPlayers)
-      this.$router.push({path:'/game/'+ this.gameName})
+    linkToGame(gameName){
+        this.$router.push({path: '/games/' + gameName})
     }
   }
 }

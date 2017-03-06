@@ -1,7 +1,7 @@
 <template>
   <div class="bgpic">
     <form @submit.prevent="createGame">
-      <input type="text" placeholder="name" v-model="gameName" required>
+      <input type="text"  max="20" placeholder="name" v-model="gameName" required>
       <input type="number" placeholder="max players" v-model="maxPlayers" required>
     </form>
     <button @click="createGame">Create Game</button>
@@ -56,8 +56,11 @@ export default {
       this.$root.$data.store.actions.drawCard()
     },
     createGame(){
-      this.$root.$data.store.actions.createGame(this.user, this.gameName, this.maxPlayers)
-      this.$router.push({path:'/games/'+ this.gameName})
+      let gameName = this.gameName.replace(/[^\w\s!?]/g,'');
+      this.$root.$data.store.actions.createGame(this.user, gameName, this.maxPlayers, this.linkToGame)
+    },
+    linkToGame(gameName) {
+      this.$router.push({path:'/games/'+ gameName})
     }
   }
 }

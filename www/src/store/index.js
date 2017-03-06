@@ -96,17 +96,24 @@ let gameStore = {
                 this.getInjuryDeck()
             }).catch(handleError)
         },
-        createGame(user, gameName, maxPlayers) {
+        createGame(user, gameName, maxPlayers, cb) {
             let game = {
                 name:gameName,
                 creatorId:user._id,
                 maxPlayers: maxPlayers
             }
             api.post('games', game).then(res => {
-                if(res.data.data.gameName){
-                    this.getGame(res.data.data.gameName)
+                if(res.data.data.name){
+                    this.getGame(res.data.data.name)
+                    cb(gameName)
                 }
 
+            }).catch(handleError)
+        },
+        joinGame(user, gameName, cb) {
+            api.post('joingame', {user: user, name: gameName}).then( res => {
+                console.log(res.data.data)
+                cb(gameName)
             }).catch(handleError)
         },
         submitText(name, text) {
@@ -149,9 +156,6 @@ let gameStore = {
                 state.injuryHand.push(injuryHand)            
             }
         }
-        // joinGame(user, game) {
-        //     api.put('game/')
-        // }
         // goCrazy(card, index) {
         //     card.index = index
         //     api.post('/injuries', card).then(res => {
