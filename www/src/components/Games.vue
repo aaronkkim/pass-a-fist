@@ -5,10 +5,12 @@
         <div class="col s7 card">
           <div class="card-head">
             <div class="card-title">Create a new game</div>
-            <form @submit.prevent="createGame">
-              <input type="text"  max="20" placeholder="name" v-model="gameName" required>
-              <input type="number" min="2" max="20" placeholder="max players" v-model="maxPlayers" required>
-            </form>
+            <div class="card-content">
+              <form @submit.prevent="createGame">
+                <input type="text"  max="20" placeholder="name" v-model="gameName" required>
+                <input type="number" min="2" max="20" placeholder="max players" v-model="maxPlayers" required>
+              </form>
+            </div>
           </div>
           <div class="card-action">
             <a href="#/games" @click="createGame">Create Game</button></a>
@@ -85,15 +87,7 @@ export default {
   background-position: absolute;
   height: 100%;
 }
-.textbox{
-  background: rgba(205, 210, 216, .7);
-  width: 300px;
-  overflow: auto;
-  max-height: 300px;
-  position: fixed;
-  bottom: 0;
-  right:0;
-}
+
 .card{
     display:inline-flex;
 }

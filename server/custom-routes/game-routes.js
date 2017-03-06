@@ -3,11 +3,11 @@ let Users = require('../models/user')
 
 export default {
   gameSession: {
-    path: '/game/:id',
+    path: '/game/:name',
     reqType: 'get',
     method(req, res, next) {
-      let action = 'Get game session by custom game id'
-      Games.findOne({ name: req.params.id })
+      let action = 'Get game session by custom game name'
+      Games.findOne({ name: req.params.name })
         .then(game => {
           res.send(handleResponse(action, game))
         }).catch(error => {
@@ -25,8 +25,8 @@ export default {
         { $addToSet: { playersInGameSession: req.body.user } },
         { safe: true, upsert: true, new: false })
         .then(game => {
-          Users.findByIdAndUpdate(req.body.user._id, {$set: {activeGameId: game._id}}, {new: true}).then(user => {
-            res.send(handleResponse(action, {activeGameId: user.activeGameId, game: game}))
+          Users.findByIdAndUpdate(req.body.user._id, {$set: {activeGame: game.name}}, {new: true}).then(user => {
+            res.send(handleResponse(action, {activeGame: user.activeGame, game: game}))
           })
         }).catch(error => {
           return next(handleResponse(action, null, error))
