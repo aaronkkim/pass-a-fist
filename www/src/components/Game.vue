@@ -11,16 +11,16 @@
     </div>
 
     <div class="fixed-action-btn   click-to-toggle">
-      <a class="btn-floating btn-large red" >
+      <a class="btn-floating btn-large red">
         <i class="material-icons">menu</i>
       </a>
 
       <ul>
         <div class="container textbox">
           <ul>
-          <li v-for="message in chat">
-            <span>{{message.name}} : {{message.text}}</span>
-          </li>
+            <li v-for="message in chat">
+              <span>{{message.name}} : {{message.text}}</span>
+            </li>
 
           </ul>
           <form @submit.prevent="submitText">
@@ -31,35 +31,19 @@
 
       </ul>
 
-
-
-    <div>
-      <div class="container textbox">
-        <ul v-for="message in chat">
-          <li>{{message.name}} : {{message.text}}</li>
-        </ul>
-        <form @submit.prevent="submitText">
-          <input type="text" v-model="text">
-          <button type="submit" class="waves-effect waves-light btn">Chat</button>
-        </form>
+      <div class="flex-injury" @mouseover="handleCardHover">
+        <div class="injuryHand" v-for="injury in injuryHand">
+          <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
+        </div>
       </div>
-
-
-    </div>
-
-    <div class="flex-injury" @mouseover="handleCardHover">
-      <div class="injuryHand" v-for="injury in injuryHand">
-        <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
+      <div class="flex-hand" @mouseover="handleCardHover">
+        <div class="hand" :style="cardPosition" v-for="card in hand">
+          <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
+        </div>
       </div>
     </div>
-    <div class="flex-hand" @mouseover="handleCardHover">
-      <div class="hand" :style="cardPosition" v-for="card in hand">
-        <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
-      </div>
-    </div>
+
   </div>
-
-
 
 </template>
 
@@ -84,7 +68,7 @@
       $('.fixed-action-btn').closeFAB();
     },
 
-    
+
 
     computed: {
       cardPosition() {
@@ -138,7 +122,7 @@
       },
       openChat() {
         $('.fixed-action-btn').openFAB();
-       
+
 
       }
 
@@ -158,6 +142,8 @@
 
 
 
+
+
   .bgpic {
     background-image: url(https://northendorg.files.wordpress.com/2016/09/freakalley.jpg?w=4000&h=&crop=1);
     background-attachment: fixed;
@@ -166,6 +152,8 @@
     background-position: absolute;
     height: 100%;
   }
+
+
   .textbox {
     background: rgba(205, 210, 216, .7);
     width: 20%;
@@ -175,13 +163,13 @@
     bottom: 0;
     right: 0;
   }
-
-
   /*.hand {
     /*display: inline-flex;*/
   /*transition: transform 500ms ease-out;*/
   /*transform: scale(1) translateY(0);*/
   /*}*/
+
+
 
 
 
@@ -197,6 +185,8 @@
     margin-right: 100px;*/
     z-index: 1;
   }
+
+
 
 
 
@@ -220,6 +210,8 @@
 
 
 
+
+
   .flex-injury {
     display: flex;
     justify-content: flex-end;
@@ -227,6 +219,8 @@
     position: fixed;
     bottom: 0;
   }
+
+
 
 
 
@@ -245,6 +239,8 @@
 
 
 
+
+
   .injury {
     height: 200px;
     z-index: 0;
@@ -256,9 +252,13 @@
 
 
 
+
+
   .injury:hover {
     z-index: 1;
   }
+
+
 
 
 
@@ -275,12 +275,16 @@
 
 
 
+
+
   .card:hover {
     /*transform: scale(1.25) translateY(-200px);*/
     /*margin-left: 100px;
     margin-right: 100px;*/
     z-index: 1;
   }
+
+
 
 
 
