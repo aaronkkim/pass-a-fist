@@ -4,8 +4,7 @@
 
    <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
    <div v-for="player in players">
-   
-   <p> {{player}}</p>
+    <p> {{player.name}}</p>
    </div>
     <div class="flex-container">  
 
@@ -64,8 +63,9 @@
         },
         mounted() {
             this.$root.$data.store.actions.getGame(this.$route.params.id)
-            this.$root.$data.store.actions.getDeck()
-            this.$root.$data.store.actions.getInjuryDeck()
+            this.$root.$data.store.actions.getPlayers(this.$route.params.id)
+            // this.$root.$data.store.actions.getDeck()
+            // this.$root.$data.store.actions.getInjuryDeck()
 
         },
         computed: {
@@ -99,7 +99,7 @@
                 return this.$root.$data.store.state.injuryHand
             },
             players() {
-                return this.$root.$data.store.state.gameSession.playersInGameSession
+                return this.$root.$data.store.state.players
             }
         },
         methods: {

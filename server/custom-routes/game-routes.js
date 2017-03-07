@@ -32,6 +32,19 @@ export default {
           return next(handleResponse(action, null, error))
         })
     }
+  },
+  getPlayers: {
+    path: '/game/:name/players',
+    reqType: 'get',
+    method(req, res, next) {
+      let action = 'Get game session by custom game name'
+      Games.findOne({ name: req.params.name }).populate('playersInGameSession')
+      .then(game => {
+         res.send(handleResponse(action, game.playersInGameSession))
+      }).catch(error => {
+         return next(handleResponse(action, null, error))
+      })
+    }
   }
 }
 

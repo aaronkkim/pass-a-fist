@@ -23,6 +23,7 @@ let state = {
     activeUser: {},
     games: [],
     gameSession: {},
+    players: [],
     isLoading: false,
     chat: [],
     error: {},
@@ -112,6 +113,12 @@ let gameStore = {
                 console.log(res.data.data)
                 cb(gameName)
             }).catch(handleError)
+        },
+        getPlayers(gameName) {
+            api('game/' + gameName + '/players').then(res => {
+                state.players = res.data.data
+                console.log(res.data.data)
+            })
         },
         submitText(name, text) {
             client.emit('message', {
