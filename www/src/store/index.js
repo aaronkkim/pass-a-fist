@@ -114,6 +114,12 @@ let gameStore = {
                 cb(gameName)
             }).catch(handleError)
         },
+        leaveGame(user, gameName) {
+            api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
+                console.log(res.data)
+                state.gameSession = res.data.data
+            }).catch(handleError)
+        },
         getPlayers(gameName) {
             api('game/' + gameName + '/players').then(res => {
                 state.players = res.data.data

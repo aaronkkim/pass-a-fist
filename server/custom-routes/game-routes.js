@@ -25,12 +25,31 @@ export default {
         { $addToSet: { playersInGameSession: req.body.user } },
         { safe: true, upsert: true, new: false })
         .then(game => {
-          Users.findByIdAndUpdate(req.body.user._id, {$set: {activeGameId: game._id}}, {new: true}).then(user => {
-            res.send(handleResponse(action, {activeGameId: user.activeGameId, game: game}))
+          Users.findByIdAndUpdate(req.body.user._id, { $set: { activeGameId: game._id } }, { new: true }).then(user => {
+            res.send(handleResponse(action, { activeGameId: user.activeGameId, game: game }))
           })
         }).catch(error => {
           return next(handleResponse(action, null, error))
         })
+    }
+  },
+  leaveGame: {
+    path: '/leavegame',
+    reqType: 'post',
+    method(req, res, next) {
+      let action = 'Leave a game'
+      let userId = req.body.userId
+      Games.findOne({ name: req.body.name }).then(game => {
+          game.playersInGameSession.pull(userId)
+          game.save()
+          Users.findById(userId).then(user => {
+            user.activeGameId = {}
+            user.save()
+            res.send(handleResponse(action, {}))
+        }).catch(error => {
+          return next(handleResponse(action, null, error))
+        })
+      })
     }
   },
   getPlayers: {
@@ -39,11 +58,11 @@ export default {
     method(req, res, next) {
       let action = 'Get game session by custom game name'
       Games.findOne({ name: req.params.name }).populate('playersInGameSession')
-      .then(game => {
-         res.send(handleResponse(action, game.playersInGameSession))
-      }).catch(error => {
-         return next(handleResponse(action, null, error))
-      })
+        .then(game => {
+          res.send(handleResponse(action, game.playersInGameSession))
+        }).catch(error => {
+          return next(handleResponse(action, null, error))
+        })
     }
   }
 }

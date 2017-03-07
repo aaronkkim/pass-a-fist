@@ -121,13 +121,10 @@
             },
 
             leaveGame() {
-                this.$root.$data.store.state.gameSession = {}
-                this.$root.$data.store.state.activeUser.activeGameId = ''
+                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
                 this.$router.push({
-                        path: '/'
-                    })
-                    // I started trying to take them out of the array but it is def not right - rachel
-                this.$root.$data.store.state.game.playersInGameSession.splice(i, 1)
+                    path: '/'
+                })
             }
 
         }
