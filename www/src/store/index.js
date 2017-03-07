@@ -31,9 +31,6 @@ let state = {
     injuryDeck: {},
     injuryHand: []
 }
-let generateId = function(){
-
-}
 let handleError = (err) => {
     state.error = err
     state.isLoading = false

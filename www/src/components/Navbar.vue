@@ -15,7 +15,7 @@
             <li><router-link to="register">Register </router-link> </li>
       </ul>
       </div>
-      <div v-else-if="user.activeGameId">
+      <div v-else-if="game.name">
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
        
         <li><router-link :to="'games/'+game.name">Current Game</router-link></li>
@@ -55,9 +55,9 @@
             loading() {
                 return this.$root.$data.store.state.isLoading
             },
-             game() {
-        return this.$root.$data.store.state.gameSession
-    },
+            game() {
+                return this.$root.$data.store.state.gameSession
+            },
         }
     }
 </script>
