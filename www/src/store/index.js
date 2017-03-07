@@ -12,7 +12,7 @@ let api = axios.create({
 
 let client = io.connect('http://localhost:3000/');
 
-client.on('message', function (data) {
+client.on('message', function(data) {
     console.log(data);
     if (data.name && data.text) {
         state.chat.push(data)
@@ -31,7 +31,7 @@ let state = {
     injuryDeck: {},
     injuryHand: []
 }
-let generateId = function(){
+let generateId = function() {
 
 }
 let handleError = (err) => {
@@ -91,19 +91,19 @@ let gameStore = {
                 if (state.activeUser) {
                     state.activeUser.hand = []
                 }
-            }).then(res => { 
+            }).then(res => {
                 this.getDeck()
                 this.getInjuryDeck()
             }).catch(handleError)
         },
         createGame(user, gameName, maxPlayers, cb) {
             let game = {
-                name:gameName,
-                creatorId:user._id,
+                name: gameName,
+                creatorId: user._id,
                 maxPlayers: maxPlayers
             }
             api.post('games', game).then(res => {
-                if(res.data.data.name){
+                if (res.data.data.name) {
                     this.getGame(res.data.data.name)
                     cb(gameName)
                 }
@@ -111,7 +111,7 @@ let gameStore = {
             }).catch(handleError)
         },
         joinGame(user, gameName, cb) {
-            api.post('joingame', {user: user, name: gameName}).then( res => {
+            api.post('joingame', { user: user, name: gameName }).then(res => {
                 console.log(res.data.data)
                 cb(gameName)
             }).catch(handleError)
@@ -153,7 +153,7 @@ let gameStore = {
         drawInjury() {
             if (state.activeUser) {
                 let injuryHand = state.injuryDeck.draw()
-                state.injuryHand.push(injuryHand)            
+                state.injuryHand.push(injuryHand)
             }
         }
         // goCrazy(card, index) {
