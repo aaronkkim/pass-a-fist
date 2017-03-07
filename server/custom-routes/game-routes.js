@@ -25,7 +25,7 @@ export default {
         { $addToSet: { playersInGameSession: req.body.user } },
         { safe: true, upsert: true, new: false })
         .then(game => {
-          Users.findByIdAndUpdate(req.body.user._id, {$set: {activeGame: game._id}}, {new: true}).then(user => {
+          Users.findByIdAndUpdate(req.body.user._id, {$set: {activeGameId: game._id}}, {new: true}).then(user => {
             res.send(handleResponse(action, {activeGameId: user.activeGameId, game: game}))
           })
         }).catch(error => {

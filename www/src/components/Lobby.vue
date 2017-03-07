@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+  <button class = "waves-effect waves-light btn" @click="refreshGame">Refresh</button>
     <div class="row">
         <div class="col s4 card" v-for="game in lobby"> 
             <div>
@@ -50,6 +51,9 @@ export default {
     },
     linkToGame(gameName){
         this.$router.push({path: '/games/' + gameName})
+    },
+    refreshGame(){
+        this.$root.$data.store.actions.getGames()
     }
   }
 }
