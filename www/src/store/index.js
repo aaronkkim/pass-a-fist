@@ -32,12 +32,6 @@ let state = {
     injuryDeck: {},
     injuryHand: []
 }
-<<<<<<< HEAD
-let generateId = function() {
-
-}
-=======
->>>>>>> 068819ed33d16a54e328f0b9aee3f402342eabce
 let handleError = (err) => {
     state.error = err
     state.isLoading = false
