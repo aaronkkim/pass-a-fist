@@ -83,6 +83,7 @@
         z-index: 2;
         overflow: hidden;
         position: fixed;
+       
     }
     a{
        color: #11abb0

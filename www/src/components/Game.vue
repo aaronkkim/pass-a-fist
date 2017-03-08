@@ -3,10 +3,13 @@
     <div class="bgpic bggame">
 
         <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
-        
+
         <div class="players-in-game">
+
             <ul v-for="player in players">
-                <li> {{player.name}}</li>
+
+                <li class="card-panel cardStyles"> {{player.name}}</li>
+
             </ul>
         </div>
         <div class="flex-container">
@@ -136,6 +139,16 @@
 </script>
 
 <style>
+    .cardStyles {
+        background-color: rgba(16, 153, 158, .7);
+        width: 200px;
+        text-align: center;
+        border-radius: 15px 50px;
+        padding: 20px;
+        width: 200px;
+        height: 100px;
+    }
+    
     .flex-container {
         display: flex;
         justify-content: center;
@@ -153,7 +166,8 @@
         overflow-y: scroll;
         padding-top: 5rem;
     }
-    .bggame{
+    
+    .bggame {
         position: fixed;
         top: 0;
         bottom: 0;
@@ -246,11 +260,9 @@
         height: 100px;
         margin: 10px;
     }
-
-    .players-in-game{
+    
+    .players-in-game {
         display: flex;
         justify-content: space-around;
     }
-  
- 
 </style>
