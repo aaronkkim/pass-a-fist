@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="background">
-          <h2>{{msg}}</h2>
+          <h2> <strong> <u>{{msg}}</u></strong></h2>
 
           <div v-if="user.name">
 
@@ -83,6 +83,7 @@ img{
   background-size: cover;
   background-position: absolute;
   height: 100%;
+  padding-top: 45px;
 }
 
 
