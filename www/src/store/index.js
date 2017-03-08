@@ -116,9 +116,7 @@ let gameStore = {
         },
         leaveGame(user, gameName) {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-                console.log(res.data)
-                state.activeUser.activeGameId = null
-                state.gameSession = res.data.data
+                state.gameSession = {}
             }).catch(handleError)
         },
         getPlayers(gameName) {

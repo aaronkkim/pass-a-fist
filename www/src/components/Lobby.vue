@@ -40,8 +40,10 @@ export default {
   },
   methods: {
     joinGame(game) {
+        console.log(this.game._id)
+        console.log(game._id)
         if(this.user.name && game.name) {
-            if(!this.user.activeGameId || this.user.activeGameId === game._id) {
+            if(!this.game._id || this.game._id === game._id) {
                 this.$root.$data.store.actions.joinGame(this.user, game.name, this.linkToGame);
             }
             else {
