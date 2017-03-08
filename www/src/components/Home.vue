@@ -21,15 +21,7 @@
             </ul>
 
 
-            <div class="card" v-for="card in cards"> 
-                <!-- {{card.name}} {{card.type}}-->
-            <img v-if="card.imgUrl" :src="card.imgUrl"> 
-            </div>
-
-            <div class="card" v-for="injury in injuries"> 
-                 <!-- {{injury}} -->
-                <img v-if="injury.imgUrl" :src="injury.imgUrl">
-            </div>
+           
         </div>
         <div v-else-if="loading">
             Loading...
@@ -83,6 +75,9 @@
 img{
     height: 250px;
     /*width:150px;*/
+}
+.container{
+    text-align: center;
 }
     
 </style>

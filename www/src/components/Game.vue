@@ -30,7 +30,7 @@
 
                     </ul>
                     <form @submit.prevent="submitText">
-                        <textarea type="text" v-model="text"></textarea>
+                        <input type="text" v-model="text"></input>
                         <button type="submit" class="waves-effect waves-light btn">Chat</button>
                     </form>
                 </div>
