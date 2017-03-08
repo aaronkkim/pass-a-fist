@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  
+  <div class="container" id="app">
     <!--<error></error>-->
     <navbar></navbar>
     <!--<img src="./assets/logo.png">-->
@@ -45,5 +46,8 @@ font-family: 'Montserrat', sans-serif;
 html, body{
   height:  100%;
   width:100%
+}
+body{
+  overflow-y: hidden;
 }
 </style>

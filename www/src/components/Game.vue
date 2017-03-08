@@ -1,53 +1,56 @@
 <template>
 
-  <div class="bgpic">
+    <div class="bgpic">
 
-   <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
-   <div v-for="player in players">
-    <p> {{player.name}}</p>
-   </div>
-    <div class="flex-container">  
+        <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
+        
+        <div class="players-in-game">
+            <ul v-for="player in players">
+                <li> {{player.name}}</li>
+            </ul>
+        </div>
+        <div class="flex-container">
 
 
-      <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard">
-      <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
+            <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard">
+            <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
 
-    </div>
-    <div class="fixed-action-btn click-to-toggle">
-      <a class="btn-floating btn-large red" >
-        <i class="material-icons">chat_bubble</i>
-      </a>
+        </div>
+        <div class="fixed-action-btn click-to-toggle">
+            <a class="btn-floating btn-large red">
+                <i class="material-icons">chat_bubble</i>
+            </a>
 
-      <ul>
-        <div class="container textbox">
-          <ul>
-          <li v-for="message in chat">
-            <span>{{message.name}} : {{message.text}}</span>
-          </li>
+            <ul>
+                <div class="container textbox">
+                    <ul>
+                        <li v-for="message in chat">
+                            <span>{{message.name}} : {{message.text}}</span>
+                        </li>
 
-          </ul>
-          <form @submit.prevent="submitText">
-            <textarea type="text" v-model="text"></textarea>
-            <button type="submit" class="waves-effect waves-light btn">Chat</button>
-          </form>
+                    </ul>
+                    <form @submit.prevent="submitText">
+                        <textarea type="text" v-model="text"></textarea>
+                        <button type="submit" class="waves-effect waves-light btn">Chat</button>
+                    </form>
+                </div>
+
+            </ul>
         </div>
 
-      </ul>
-    </div>
+        <div class="flex-injury" @mouseover="handleCardHover">
+            <div class="injuryHand" v-for="injury in injuryHand">
+                <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
+            </div>
 
-    <div class="flex-injury" @mouseover="handleCardHover">
-      <div class="injuryHand" v-for="injury in injuryHand">
-        <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
-      </div>
+        </div>
+        <div class="flex-hand" @mouseover="handleCardHover">
+            <div class="hand" :style="cardPosition" v-for="card in hand">
+                <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
+            </div>
 
+        </div>
     </div>
-    <div class="flex-hand" @mouseover="handleCardHover">
-      <div class="hand" :style="cardPosition" v-for="card in hand">
-        <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
-      </div>
-
-    </div>
-  </div>
 
 
 
@@ -129,6 +132,7 @@
 
         }
     }
+
 </script>
 
 <style>
@@ -230,5 +234,10 @@
         border-radius: 25px;
         height: 100px;
         margin: 10px;
+    }
+
+    .players-in-game{
+        display: flex;
+        justify-content: space-around;
     }
 </style>

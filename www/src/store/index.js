@@ -50,7 +50,7 @@ let gameStore = {
                 password: password
             }).then(res => {
                 state.activeUser = res.data.data
-                state.loading = false
+                state.isLoading = false
             }).catch(handleError)
         },
         register(username, email, password, age) {
