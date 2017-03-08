@@ -2,14 +2,14 @@
   <div class="container game-lobby">
   <button class = "waves-effect waves-light btn" @click="refreshGame">Refresh</button>
     <div class="row">
-        <div class="col s4 card" v-for="game in lobby"> 
+        <div class="col s4 card" v-for="game in lobby" v-if="lobby.length"> 
             <div>
                 <div class="card-head">
                     <div class="card-title">{{game.name}}</div>
                 </div>
                 <div class="card-content">
                     <p>Current Players: {{game.playersInGameSession.length}}/{{game.maxPlayers}}</p>
-                   
+                    <p>Created By: {{game.creatorId.name}}</p>
                 </div>
                 <div class="card-action">
                     <a href="#/games" @click="joinGame(game)">Join Game</a>
@@ -28,11 +28,13 @@ export default {
     user() {
         return this.$root.$data.store.state.activeUser
     },
-    game() {
+    activeGame() {
         return this.$root.$data.store.state.gameSession
     },
     lobby() {
-      return this.$root.$data.store.state.games
+      return this.$root.$data.store.state.games.filter(function(game){
+          return game.creatorId
+      })
     }
   },
   mounted() {

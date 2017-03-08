@@ -7,7 +7,7 @@ export default {
     reqType: 'get',
     method(req, res, next) {
       let action = 'Get game session by custom game name'
-      Games.findOne({ name: req.params.name })
+      Games.findOne({ name: req.params.name }).populate('creatorId')
         .then(game => {
           res.send(handleResponse(action, game))
         }).catch(error => {
@@ -40,12 +40,12 @@ export default {
       let action = 'Leave a game'
       let userId = req.body.userId
       Games.findOne({ name: req.body.name }).then(game => {
-          game.playersInGameSession.pull(userId)
-          game.save()
-          Users.findById(userId).then(user => {
-            user.activeGameId = {}
-            user.save()
-            res.send(handleResponse(action, {}))
+        game.playersInGameSession.pull(userId)
+        game.save()
+        Users.findById(userId).then(user => {
+          user.activeGameId = {}
+          user.save()
+          res.send(handleResponse(action, {}))
         }).catch(error => {
           return next(handleResponse(action, null, error))
         })
@@ -64,8 +64,23 @@ export default {
           return next(handleResponse(action, null, error))
         })
     }
+  },
+  getLobby: {
+    path: '/lobby',
+    reqType: 'get',
+    method(req, res, next) {
+      let action = 'Get all the games'
+      Games.find().populate('creatorId')
+        .then(lobby => {
+          res.send(handleResponse(action, lobby))
+        }).catch(error => {
+          return next(handleResponse(action, null, error))
+        })
+    }
   }
 }
+
+
 
 function handleResponse(action, data, error) {
   var response = {
@@ -77,6 +92,7 @@ function handleResponse(action, data, error) {
   }
   return response
 }
+
 
 // router.get('/game/:id', function(req, res) {
 //     Games.find({gameId: req.params.id}).then(game => {

@@ -79,7 +79,7 @@ let gameStore = {
         },
         // GET GAMES
         getGames() {
-            api('games').then(res => {
+            api('lobby/').then(res => {
                 state.games = res.data.data
             }).catch(handleError)
         },

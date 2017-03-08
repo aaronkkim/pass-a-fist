@@ -147,6 +147,7 @@
         padding: 20px;
         width: 200px;
         height: 100px;
+     
     }
     
     .flex-container {
