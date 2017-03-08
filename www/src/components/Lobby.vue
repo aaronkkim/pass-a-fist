@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container game-lobby">
   <button class = "waves-effect waves-light btn" @click="refreshGame">Refresh</button>
     <div class="row">
         <div class="col s4 card" v-for="game in lobby"> 
@@ -66,7 +66,7 @@ export default {
   background-image: url(https://northendorg.files.wordpress.com/2016/09/freakalley.jpg?w=4000&h=&crop=1);
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: absolute;
+  background-position: fixed;
   height: 100%;
 }
 .textbox{
@@ -85,6 +85,7 @@ img{
     height: 250px;
     /*width:150px;*/
 }
+.game-lobby{}
 /*.flex-container{
   display: flex;
   align-content: flex-end;

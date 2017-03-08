@@ -1,6 +1,6 @@
 <template>
 
-    <div class="bgpic">
+    <div class="bgpic bggame">
 
         <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
         
@@ -150,6 +150,17 @@
         background-size: cover;
         background-position: fixed;
         height: 100vh;
+        overflow-y: scroll;
+        padding-top: 5rem;
+    }
+    .bggame{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        overflow-y: hidden;
+        z-index: 1;
     }
     
     .textbox {
@@ -240,5 +251,6 @@
         display: flex;
         justify-content: space-around;
     }
+  
  
 </style>
