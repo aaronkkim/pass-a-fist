@@ -73,7 +73,7 @@ export default {
   background: rgba(205, 210, 216, .7);
   width: 20%;
   overflow: auto;
-  height: 90%;
+  height: 70%;
   position: fixed;
   bottom: 0;
   right:0;

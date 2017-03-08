@@ -156,7 +156,7 @@
         background: rgba(205, 210, 216, .7);
         width: 20%;
         overflow: auto;
-        height: 80%;
+        height: 70%;
         position: fixed;
         bottom: 0;
         right: 0;
@@ -177,7 +177,7 @@
     
     .flex-hand {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: flex-end;
         bottom: 0;
         position: fixed;
@@ -240,4 +240,5 @@
         display: flex;
         justify-content: space-around;
     }
+ 
 </style>
