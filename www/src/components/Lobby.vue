@@ -7,12 +7,15 @@
                 <div class="card-head">
                     <div class="card-title">{{game.name}}</div>
                 </div>
-                <div class="card-content">
+                <div class="card-content" >
                     <p>Current Players: {{game.playersInGameSession.length}}/{{game.maxPlayers}}</p>
                     <p>Created By: {{game.creatorId.name}}</p>
                 </div>
-                <div class="card-action">
-                    <a href="#/games" @click="joinGame(game)">Join Game</a>
+                <div class="card-action" v-if="game.playersInGameSession.length < game.maxPlayers">
+                    <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn">Join Game</a>
+                </div>
+                 <div class="card-action" v-if="game.playersInGameSession.length >= game.maxPlayers">
+                    <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn disabled">Join Game</a>
                 </div>
             </div>
         </div>

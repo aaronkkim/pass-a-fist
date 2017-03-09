@@ -9,6 +9,7 @@
             <ul v-for="player in players">
 
                 <li class="card-panel cardStyles"> {{player.name}}</li>
+                
 
             </ul>
         </div>
