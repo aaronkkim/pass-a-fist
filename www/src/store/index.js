@@ -12,6 +12,12 @@ let api = axios.create({
 
 let client = io.connect('http://localhost:3000/');
 
+client.on('CONNECTED', function(data) {
+    console.log(data);
+    state.chat.push(data)
+    debugger
+});
+
 client.on('message', function(data) {
     console.log(data);
     if (data.name && data.text) {
@@ -32,13 +38,7 @@ let state = {
     injuryDeck: {},
     injuryHand: []
 }
-<<<<<<< HEAD
 
-let generateId = function() {
-
-}
-=======
->>>>>>> fae4dd6c20917c420642fc7e38407c78bb8651e9
 let handleError = (err) => {
     state.error = err
     state.isLoading = false
