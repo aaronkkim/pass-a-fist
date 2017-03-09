@@ -15,7 +15,7 @@ let client = io.connect('http://localhost:3000/');
 client.on('CONNECTED', function(data) {
     console.log(data);
     state.chat.push(data)
-    debugger
+
 });
 
 client.on('message', function(data) {
