@@ -15,7 +15,7 @@ let client = io.connect('http://localhost:3000/');
 client.on('CONNECTED', function(data) {
     console.log(data);
     state.chat.push(data)
-    debugger
+
 });
 
 client.on('message', function(data) {
@@ -38,12 +38,17 @@ let state = {
     injuryDeck: {},
     injuryHand: []
 }
+<<<<<<< HEAD
+
+=======
+>>>>>>> f73ebb89e50c594468fd1dbd6b461702ea3afbf1
 
 
-let generateId = function() {
 
-}
+<<<<<<< HEAD
+=======
 
+>>>>>>> f73ebb89e50c594468fd1dbd6b461702ea3afbf1
 let handleError = (err) => {
     state.error = err
     state.isLoading = false
