@@ -28,7 +28,7 @@ export default {
     user() {
         return this.$root.$data.store.state.activeUser
     },
-    activeGame() {
+    game() {
         return this.$root.$data.store.state.gameSession
     },
     lobby() {
