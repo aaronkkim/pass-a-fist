@@ -1,14 +1,19 @@
 <template>
-    <div class="container">
-        <div class="background">
-          <h2> <strong> <u>{{msg}}</u></strong></h2>
+    <div>
+    <div class="bgpicture">
+        <div class="flex-con">
+        <div class="elevated-box">
+            <div v-if="user.name">
+                <p>Welcome, {{user.name}} </p>
+                <router-link class="waves-effect waves-light btn-flat" :to="'games'">FIND A GAME! </router-link>
 
-          <div v-if="user.name">
+                </div>
 
-                <h1>Welcome, {{user.name}} </h1>
+        </div>
 
-                <router-link class="waves-effect waves-light btn" :to="'games'">FIND A GAME! </router-link>
-
+        </div>
+    </div>
+        <div>
                 <h2>How to play:</h2>
                 <ul>
                 <li> To start turn, a player always draws 1 card from the top of the Fight deck. That player can then play an Attack card from their hand on another player.</li>
@@ -21,14 +26,15 @@
 
 
            
-            </div>
-            <div v-else-if="loading">
+           
+            <div v-if="loading">
                 Loading...
             </div>
             <div v-else>
                 Please login or register to play Pass-a-fist.
             </div>
-        </div>
+       </div>
+    
     </div>
 </template>
 
@@ -38,7 +44,9 @@
     import injuryService from '../services/injury-service'
     export default {
         name: 'home',
-        components: { Error },
+        components: {
+            Error
+        },
         // mounted() {
         //     this.$root.$data.store.actions.()
         // },
@@ -64,27 +72,48 @@
             // }
         }
     }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.card{
-    display:inline-flex;
-}
-img{
-    height: 250px;
-    /*width:150px;*/
-}
-.container{
-  text-align: center;
-  background-image: url("../assets/retinawood.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: absolute;
-  height: 100%;
-  padding-top: 45px;
-}
-
-
+    .btn-flat {
+        outline: 2px solid white;
+        color: white;
+    }
+    
+    .card {
+        display: inline-flex;
+    }
+    
+    img {
+        height: 250px;
+        /*width:150px;*/
+    }
+    
+    .bgpicture {
+        background-image: url("../assets/mainpic.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        height: 100vh;
+        padding-top: 45px;
+    }
+    
+    .flex-con {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .elevated-box {
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        background: rgba(8, 17, 40, 0.45);
+        color: #fafafa;
+        width: 30vw;
+        height: 15vh;
+        padding: 15px;
+        border-radius: 4px;
+        text-align: center;
+        margin-top: 477px;
+    }
 </style>
