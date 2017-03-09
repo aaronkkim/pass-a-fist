@@ -23,6 +23,7 @@ let state = {
     activeUser: {},
     games: [],
     gameSession: {},
+    players: [],
     isLoading: false,
     chat: [],
     error: {},
@@ -31,10 +32,13 @@ let state = {
     injuryDeck: {},
     injuryHand: []
 }
+<<<<<<< HEAD
 
 let generateId = function() {
 
 }
+=======
+>>>>>>> fae4dd6c20917c420642fc7e38407c78bb8651e9
 let handleError = (err) => {
     state.error = err
     state.isLoading = false
@@ -53,7 +57,7 @@ let gameStore = {
                 password: password
             }).then(res => {
                 state.activeUser = res.data.data
-                state.loading = false
+                state.isLoading = false
             }).catch(handleError)
         },
         register(username, email, password, age) {
@@ -82,7 +86,7 @@ let gameStore = {
         },
         // GET GAMES
         getGames() {
-            api('games').then(res => {
+            api('lobby/').then(res => {
                 state.games = res.data.data
             }).catch(handleError)
         },
@@ -116,6 +120,17 @@ let gameStore = {
                 console.log(res.data.data)
                 cb(gameName)
             }).catch(handleError)
+        },
+        leaveGame(user, gameName) {
+            api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
+                state.gameSession = {}
+            }).catch(handleError)
+        },
+        getPlayers(gameName) {
+            api('game/' + gameName + '/players').then(res => {
+                state.players = res.data.data
+                console.log(res.data.data)
+            })
         },
         submitText(name, text) {
             client.emit('message', {

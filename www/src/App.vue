@@ -1,7 +1,14 @@
 <template>
+  
   <div id="app">
     <!--<error></error>-->
+  
+      
+
     <navbar></navbar>
+
+      
+    
     <!--<img src="./assets/logo.png">-->
     <router-view></router-view>
   </div>

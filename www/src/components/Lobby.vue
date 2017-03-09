@@ -1,15 +1,15 @@
 <template>
-  <div class="container">
+  <div class="container game-lobby">
   <button class = "waves-effect waves-light btn" @click="refreshGame">Refresh</button>
     <div class="row">
-        <div class="col s4 card" v-for="game in lobby"> 
+        <div class="col s4 card" v-for="game in lobby" v-if="lobby.length"> 
             <div>
                 <div class="card-head">
                     <div class="card-title">{{game.name}}</div>
                 </div>
                 <div class="card-content">
                     <p>Current Players: {{game.playersInGameSession.length}}/{{game.maxPlayers}}</p>
-                   
+                    <p>Created By: {{game.creatorId.name}}</p>
                 </div>
                 <div class="card-action">
                     <a href="#/games" @click="joinGame(game)">Join Game</a>
@@ -32,7 +32,9 @@ export default {
         return this.$root.$data.store.state.gameSession
     },
     lobby() {
-      return this.$root.$data.store.state.games
+      return this.$root.$data.store.state.games.filter(function(game){
+          return game.creatorId
+      })
     }
   },
   mounted() {
@@ -40,8 +42,10 @@ export default {
   },
   methods: {
     joinGame(game) {
+        console.log(this.game._id)
+        console.log(game._id)
         if(this.user.name && game.name) {
-            if(!this.user.activeGameId || this.user.activeGameId === game._id) {
+            if(!this.game._id || this.game._id === game._id) {
                 this.$root.$data.store.actions.joinGame(this.user, game.name, this.linkToGame);
             }
             else {
@@ -64,14 +68,14 @@ export default {
   background-image: url(https://northendorg.files.wordpress.com/2016/09/freakalley.jpg?w=4000&h=&crop=1);
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: absolute;
+  background-position: fixed;
   height: 100%;
 }
 .textbox{
   background: rgba(205, 210, 216, .7);
   width: 20%;
   overflow: auto;
-  height: 90%;
+  height: 70%;
   position: fixed;
   bottom: 0;
   right:0;
@@ -83,6 +87,7 @@ img{
     height: 250px;
     /*width:150px;*/
 }
+.game-lobby{}
 /*.flex-container{
   display: flex;
   align-content: flex-end;

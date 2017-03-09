@@ -1,54 +1,59 @@
 <template>
 
-  <div class="bgpic">
+    <div class="bgpic bggame">
 
-   <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
-   <div v-for="player in players">
-   
-   <p> {{player}}</p>
-   </div>
-    <div class="flex-container">  
+        <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
+
+        <div class="players-in-game">
+
+            <ul v-for="player in players">
+
+                <li class="card-panel cardStyles"> {{player.name}}</li>
+
+            </ul>
+        </div>
+        <div class="flex-container">
 
 
-      <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard">
-      <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
+            <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard">
+            <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
 
-    </div>
-    <div class="fixed-action-btn click-to-toggle">
-      <a class="btn-floating btn-large red" >
-        <i class="material-icons">chat_bubble</i>
-      </a>
+        </div>
+        <div class="fixed-action-btn click-to-toggle">
+            <a class="btn-floating btn-large red">
+                <i class="material-icons">chat_bubble</i>
+            </a>
 
-      <ul>
-        <div class="container textbox">
-          <ul>
-          <li v-for="message in chat">
-            <span>{{message.name}} : {{message.text}}</span>
-          </li>
+            <ul>
+                <div class="container textbox">
+                    <ul>
+                        <li v-for="message in chat">
+                            <span>{{message.name}} : {{message.text}}</span>
+                        </li>
 
-          </ul>
-          <form @submit.prevent="submitText">
-            <textarea type="text" v-model="text"></textarea>
-            <button type="submit" class="waves-effect waves-light btn">Chat</button>
-          </form>
+                    </ul>
+                    <form @submit.prevent="submitText">
+                        <input type="text" v-model="text"></input>
+                        <button type="submit" class="waves-effect waves-light btn">Chat</button>
+                    </form>
+                </div>
+
+            </ul>
         </div>
 
-      </ul>
-    </div>
+        <div class="flex-injury" @mouseover="handleCardHover">
+            <div class="injuryHand" v-for="injury in injuryHand">
+                <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
+            </div>
 
-    <div class="flex-injury" @mouseover="handleCardHover">
-      <div class="injuryHand" v-for="injury in injuryHand">
-        <img class="injury" v-if="injury.imgUrl" :src="injury.imgUrl">
-      </div>
+        </div>
+        <div class="flex-hand" @mouseover="handleCardHover">
+            <div class="hand" :style="cardPosition" v-for="card in hand">
+                <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
+            </div>
 
+        </div>
     </div>
-    <div class="flex-hand" @mouseover="handleCardHover">
-      <div class="hand" :style="cardPosition" v-for="card in hand">
-        <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
-      </div>
-
-    </div>
-  </div>
 
 
 
@@ -64,8 +69,9 @@
         },
         mounted() {
             this.$root.$data.store.actions.getGame(this.$route.params.id)
-            this.$root.$data.store.actions.getDeck()
-            this.$root.$data.store.actions.getInjuryDeck()
+            this.$root.$data.store.actions.getPlayers(this.$route.params.id)
+            // this.$root.$data.store.actions.getDeck()
+            // this.$root.$data.store.actions.getInjuryDeck()
 
         },
         computed: {
@@ -99,7 +105,7 @@
                 return this.$root.$data.store.state.injuryHand
             },
             players() {
-                return this.$root.$data.store.state.gameSession.playersInGameSession
+                return this.$root.$data.store.state.players
             }
         },
         methods: {
@@ -121,20 +127,29 @@
             },
 
             leaveGame() {
-                this.$root.$data.store.state.gameSession = {}
-                this.$root.$data.store.state.activeUser.activeGameId = ''
+                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
                 this.$router.push({
-                        path: '/'
-                    })
-                    // I started trying to take them out of the array but it is def not right - rachel
-                this.$root.$data.store.state.game.playersInGameSession.splice(i, 1)
+                    path: '/'
+                })
             }
 
         }
     }
+
 </script>
 
 <style>
+    .cardStyles {
+        background-color: rgba(16, 153, 158, .7);
+        width: 200px;
+        text-align: center;
+        border-radius: 15px 50px;
+        padding: 20px;
+        width: 200px;
+        height: 100px;
+     
+    }
+    
     .flex-container {
         display: flex;
         justify-content: center;
@@ -149,13 +164,25 @@
         background-size: cover;
         background-position: fixed;
         height: 100vh;
+        overflow-y: scroll;
+        padding-top: 5rem;
+    }
+    
+    .bggame {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        overflow-y: hidden;
+        z-index: 1;
     }
     
     .textbox {
         background: rgba(205, 210, 216, .7);
         width: 20%;
         overflow: auto;
-        height: 80%;
+        height: 70%;
         position: fixed;
         bottom: 0;
         right: 0;
@@ -176,7 +203,7 @@
     
     .flex-hand {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: flex-end;
         bottom: 0;
         position: fixed;
@@ -233,5 +260,10 @@
         border-radius: 25px;
         height: 100px;
         margin: 10px;
+    }
+    
+    .players-in-game {
+        display: flex;
+        justify-content: space-around;
     }
 </style>

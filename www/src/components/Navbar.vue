@@ -18,7 +18,7 @@
       <div v-else-if="game.name">
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
        
-        <li><router-link :to="'games/'+game.name">Current Game</router-link></li>
+        <li><router-link v-show="!hideGame" :to="'games/'+game.name">Current Game</router-link></li>
         <li> Welcome, {{user.name}}!</li>
         <li><a href='#' @click="logout">Logout</a></li>
       </ul>
@@ -58,6 +58,15 @@
             game() {
                 return this.$root.$data.store.state.gameSession
             },
+            hideGame(){
+                console.log(this.$route.path)
+                if (this.$route.path === '/games/' + this.game.name){
+                return true
+
+                } else {
+                    return false
+                }
+            } 
         }
     }
 </script>
@@ -71,6 +80,10 @@
     nav{
         background-color: black;
         font-family:'Montserrat', sans-serif;
+        z-index: 2;
+        overflow: hidden;
+        position: fixed;
+       
     }
     a{
        color: #11abb0
