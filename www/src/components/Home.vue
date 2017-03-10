@@ -23,7 +23,7 @@
            
             </div>
             <div v-else-if="loading">
-                Loading...
+               <img src="../assets/preloader.gif" alt="">
             </div>
             <div v-else>
                 Please login or register to play Pass-a-fist.
