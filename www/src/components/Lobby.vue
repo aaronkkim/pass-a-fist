@@ -1,7 +1,7 @@
 <template>
   <div class="container game-lobby">
   <button class = "waves-effect waves-light btn" @click="refreshGame">Refresh</button>
-    <div class="row">
+    <div class="row flex-card">
         <div class="col s4 card" v-for="game in lobby" v-if="lobby.length"> 
             <div>
                 <div class="card-head">
@@ -85,6 +85,11 @@ export default {
 }
 .card{
     display:inline-flex;
+}
+.flex-card{
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse;
 }
 img{
     height: 250px;

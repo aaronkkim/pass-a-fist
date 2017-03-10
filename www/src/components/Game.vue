@@ -9,15 +9,15 @@
             <ul v-for="player in players">
 
                 <li class="card-panel cardStyles"> {{player.name}}</li>
-                
+
 
             </ul>
         </div>
         <div class="flex-container">
 
 
-            <img src="../assets/cards/main-fight.png" class="deck" @click="drawCard">
-            <img src="../assets/cards/main-injury.png" class="deck" @click="drawInjury">
+            <img src="../assets/cards/main-fight.png" class="deck-fight" @click="drawCard">
+            <img src="../assets/cards/main-injury.png" class="deck-injury" @click="drawInjury">
 
         </div>
         <div class="fixed-action-btn click-to-toggle">
@@ -148,7 +148,6 @@
         padding: 20px;
         width: 200px;
         height: 100px;
-     
     }
     
     .flex-container {
@@ -257,10 +256,38 @@
         z-index: 1;
     }
     
-    .deck {
+    .deck-fight {
         border-radius: 25px;
         height: 100px;
         margin: 10px;
+        -webkit-filter: drop-shadow(0px 0px 0px rgba(255,255,255,0.80));
+	-webkit-transition: all 0.5s linear;
+	-o-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+    }
+    
+    .deck-injury {
+        border-radius: 25px;
+        height: 100px;
+        margin: 10px;
+        -webkit-filter: drop-shadow(0px 0px 0px rgba(255,255,255,0.80));
+	-webkit-transition: all 0.5s linear;
+	-o-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+    }
+    
+    .deck-fight:hover {
+        border-radius: 25px;
+        height: 100px;
+        margin: 10px;
+        -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
+    }
+    
+    .deck-injury:hover {
+        border-radius: 25px;
+        height: 100px;
+        margin: 10px;
+        -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
     }
     
     .players-in-game {
