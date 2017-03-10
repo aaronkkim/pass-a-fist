@@ -8,7 +8,7 @@
 
             <ul v-for="player in players">
 
-                <li class="card-panel cardStyles"> {{player.name}} <img src="https://boardgamegeek.com/camo/e4da45f0fc606ba803bfedaabc4bb61c23375126/687474703a2f2f7061737361666973742e6e65742f696d616765732f6865726f2d696d6167652d636f70792e706e67" alt="" class="img-opp"></li>
+                <li class="card-panel cardStyles"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
 
 
             </ul>
