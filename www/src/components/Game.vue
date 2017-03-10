@@ -2,13 +2,13 @@
 
     <div class="bgpic bggame">
 
-        <button class="waves-effect waves-light btn" @click="leaveGame">leave game</button>
+        <button class="waves-effect waves-light btn orange-btn" @click="leaveGame">leave game</button>
 
         <div class="players-in-game">
 
             <ul v-for="player in players">
 
-                <li class="card-panel cardStyles"> {{player.name}}</li>
+                <li class="card-panel cardStyles"> {{player.name}} <img src="https://boardgamegeek.com/camo/e4da45f0fc606ba803bfedaabc4bb61c23375126/687474703a2f2f7061737361666973742e6e65742f696d616765732f6865726f2d696d6167652d636f70792e706e67" alt="" class="img-opp"></li>
 
 
             </ul>
@@ -16,8 +16,8 @@
         <div class="flex-container">
 
 
-            <img src="../assets/cards/main-fight.png" class="deck-fight" @click="drawCard">
-            <img src="../assets/cards/main-injury.png" class="deck-injury" @click="drawInjury">
+            <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard" >
+            <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury" >
 
         </div>
         <div class="fixed-action-btn click-to-toggle">
@@ -140,14 +140,23 @@
 </script>
 
 <style>
+.rotate90{
+    transform: rotate(270deg);
+    }
     .cardStyles {
-        background-color: rgba(16, 153, 158, .7);
-        width: 200px;
-        text-align: center;
-        border-radius: 15px 50px;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap:wrap;
+        background-color: rgba(100, 100, 100, .7);
         padding: 20px;
-        width: 200px;
-        height: 100px;
+        width: 120px;
+        height: 155px;
+        border-radius: 25px;
+    }
+    .img-opp{
+        height:100px;
+        width:250px;
     }
     
     .flex-container {

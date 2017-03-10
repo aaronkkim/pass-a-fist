@@ -12,7 +12,7 @@
                     <p>Created By: {{game.creatorId.name}}</p>
                 </div>
                 <div class="card-action" v-if="game.playersInGameSession.length < game.maxPlayers">
-                    <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn">Join Game</a>
+                    <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn orange-btn">Join Game</a>
                 </div>
                  <div class="card-action" v-if="game.playersInGameSession.length >= game.maxPlayers">
                     <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn disabled">Join Game</a>
@@ -82,6 +82,16 @@ export default {
   position: fixed;
   bottom: 0;
   right:0;
+}
+.orange-btn{
+background-color: #ffab40;
+color: white;
+}
+.orange-btn:hover{
+background-color: #ffab40;
+}
+.orange-btn:focus{
+background-color: #ffab40;
 }
 .card{
     display:inline-flex;
