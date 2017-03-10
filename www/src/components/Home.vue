@@ -1,5 +1,6 @@
 <template>
     <div>
+    <div>
      
             <div v-if="loading">
               <img src="../assets/preloader.gif" alt="">
@@ -73,6 +74,8 @@
          </div>
     
     </div>
+    </div>
+    
 </template>
 
 
