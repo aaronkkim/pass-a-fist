@@ -155,8 +155,8 @@
         border-radius: 25px;
     }
     .img-opp{
-        height:100px;
-        width:250px;
+        height:70%;
+        /*width:250px;*/
     }
     
     .flex-container {
