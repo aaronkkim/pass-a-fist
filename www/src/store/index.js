@@ -107,6 +107,7 @@ let gameStore = {
                 creatorId: user._id,
                 maxPlayers: maxPlayers
             }
+            state.activeUser.createdGame = true
             api.post('games', game).then(res => {
                 if (res.data.data.name) {
                     this.getGame(res.data.data.name)

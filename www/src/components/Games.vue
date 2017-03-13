@@ -12,8 +12,11 @@
               </form>
             </div>
           </div>
-          <div class="card-action">
-            <a href="#/games" @click="createGame">Create Game</button></a>
+          <div class="card-action"  v-if="user.createdGame">
+            <a href="#/games" @click="createGame" class="waves-effect waves-light orange-btn btn disabled">Create Game</button></a>
+          </div>
+           <div class="card-action"  v-else>
+            <a href="#/games" @click="createGame" class="waves-effect waves-light orange-btn btn">Create Game</button></a>
           </div>
         </div>
       </div>
