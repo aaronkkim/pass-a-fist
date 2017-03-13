@@ -12,13 +12,13 @@ let api = axios.create({
 
 let client = io.connect('http://localhost:3000/');
 
-client.on('CONNECTED', function(data) {
+client.on('CONNECTED', function (data) {
     console.log(data);
     state.chat.push(data)
 
 });
 
-client.on('message', function(data) {
+client.on('message', function (data) {
     console.log(data);
     if (data.name && data.text) {
         state.chat.push(data)
@@ -171,7 +171,16 @@ let gameStore = {
                 let injuryHand = state.injuryDeck.draw()
                 state.injuryHand.push(injuryHand)
             }
+        },
+        deleteGame(id) {
+            api.delete('games/' + id)
+                .then(res => {
+                    console.log(res)
+                    this.getGames()
+                })
+                .catch(handleError)
         }
+
         // goCrazy(card, index) {
         //     card.index = index
         //     api.post('/injuries', card).then(res => {

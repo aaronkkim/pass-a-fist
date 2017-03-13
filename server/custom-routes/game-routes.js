@@ -65,6 +65,7 @@ export default {
         })
     }
   },
+ 
   getLobby: {
     path: '/lobby',
     reqType: 'get',
