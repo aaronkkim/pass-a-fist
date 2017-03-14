@@ -10,8 +10,8 @@ const models = {
   user: {
     name: 'User',
     endpoint: 'users',
-    preventDefaultApi: true
-    // useCustomRoutes: true
+    preventDefaultApi: true,
+    useCustomRoutes: true
   },
   fight: {
     name: 'Fight',
