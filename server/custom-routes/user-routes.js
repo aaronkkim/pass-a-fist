@@ -8,7 +8,7 @@ export default {
         reqType: 'get',
         method(req, res, next) {
             let action = 'get a user'
-            Users.findOne({ id: req.params._id })
+            Users.findOne({ _id: req.params.id })
                 .then(user => {
                     res.send(handleResponse(action, user))
                 }).catch(error => {
