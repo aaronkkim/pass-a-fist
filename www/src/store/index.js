@@ -12,13 +12,13 @@ let api = axios.create({
 
 let client = io.connect('http://localhost:3000/');
 
-client.on('CONNECTED', function(data) {
+client.on('CONNECTED', function (data) {
     console.log(data);
     state.chat.push(data)
 
 });
 
-client.on('message', function(data) {
+client.on('message', function (data) {
     console.log(data);
     if (data.name && data.text) {
         state.chat.push(data)
@@ -143,12 +143,21 @@ let gameStore = {
             api('fights').then(res => {
                 let deck = Shuffle.shuffle({ deck: res.data.data })
                 state.deck = deck
-                this.drawHand()
+
+                this.drawHand(state.activeUser._id)
+                
             }).catch(handleError)
         },
-        drawHand() {
+        drawHand(id) {
             if (state.activeUser) {
+<<<<<<< HEAD
                 let hand = state.deck.draw(5);
+=======
+                let hand = state.deck.draw(5)
+            api.put('users/'+id, 
+            {cards:hand}
+            ).then(res=>console.log(res)).catch(handleError)
+>>>>>>> 0910f41a8239c872242784b8744347ce3909b4ad
 
                 for (let card of hand) {
                     state.hand.push(card)
@@ -172,7 +181,16 @@ let gameStore = {
                 let injuryHand = state.injuryDeck.draw()
                 state.injuryHand.push(injuryHand)
             }
+        },
+        deleteGame(id) {
+            api.delete('games/' + id)
+                .then(res => {
+                    console.log(res)
+                    this.getGames()
+                })
+                .catch(handleError)
         }
+
         // goCrazy(card, index) {
         //     card.index = index
         //     api.post('/injuries', card).then(res => {

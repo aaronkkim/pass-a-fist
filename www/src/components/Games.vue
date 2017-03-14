@@ -65,8 +65,8 @@ export default {
       this.$root.$data.store.actions.getDeck()
       
     },
-    drawHand() {
-      this.$root.$data.store.actions.drawHand()
+    drawHand(id) {
+      this.$root.$data.store.actions.drawHand(this.user_id)
     },
     drawCard() {
       this.$root.$data.store.actions.drawCard()

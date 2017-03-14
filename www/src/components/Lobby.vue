@@ -13,9 +13,12 @@
                 </div>
                 <div class="card-action" v-if="game.playersInGameSession.length < game.maxPlayers">
                     <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn orange-btn">Join Game</a>
+                    <a href="#/games" @click="deleteGame(game._id)" class ="waves-effect waves-light btn orange-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                 </div>
                  <div class="card-action" v-if="game.playersInGameSession.length >= game.maxPlayers">
                     <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn disabled">Join Game</a>
+                    <a href="#/games" @click="deleteGame(game._id)" class ="waves-effect waves-light btn orange-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    
                 </div>
             </div>
         </div>
@@ -61,6 +64,10 @@ export default {
     },
     refreshGame(){
         this.$root.$data.store.actions.getGames()
+    },
+    deleteGame(id){
+        console.log(id)
+        this.$root.$data.store.actions.deleteGame(id)
     }
   }
 }
