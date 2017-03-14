@@ -15,6 +15,8 @@ let schema = new Schema({
     activeGameId: { type: ObjectId, ref: 'Game' },
     badgeUrl: { type: String },
     createdGame: { type: Boolean, required: true, default: false },
+    currentTurn: {type: Boolean, required: true, default: false},
+    activeTurn: {type: Boolean, required: true, default: false },
     //RELATION
     cards: [{ type: ObjectId, ref: 'Fight' }],
     injuries: [{ type: ObjectId, ref: 'Injury' }]
