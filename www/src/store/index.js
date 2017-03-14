@@ -148,7 +148,7 @@ let gameStore = {
         },
         drawHand() {
             if (state.activeUser) {
-                let hand = state.deck.draw(5)
+                let hand = state.deck.draw(5);
 
                 for (let card of hand) {
                     state.hand.push(card)
