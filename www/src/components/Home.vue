@@ -67,7 +67,7 @@
                     <ul>
                         <li> To start turn, a player always draws 1 card from the top of the Fight deck. That player can then
                             play an Attack card from their hand on another player.</li>
-                        <li>If an Attack card lands on a player at any time, that player can play a Counter card to stap or redirect
+                        <li>If an Attack card lands on a player at any time, that player can play a Counter card to stop or redirect
                             the attack.</li>
                         <li>If an Attack card lands on a player, and that player can't (or won't) play a Counter card, then the
                             Attack card is successful, and the player receives an Injury card.</li>
