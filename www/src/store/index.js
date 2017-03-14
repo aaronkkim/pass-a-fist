@@ -150,7 +150,7 @@ let gameStore = {
         },
         drawHand(id) {
             if (state.activeUser) {
-                let hand = state.deck.draw(5)
+       let hand = state.deck.draw(5)
             api.put('users/'+id, 
             {cards:hand}
             ).then(res=>console.log(res)).catch(handleError)
