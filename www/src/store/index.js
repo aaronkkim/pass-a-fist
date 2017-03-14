@@ -143,12 +143,17 @@ let gameStore = {
             api('fights').then(res => {
                 let deck = Shuffle.shuffle({ deck: res.data.data })
                 state.deck = deck
-                this.drawHand()
+
+                this.drawHand(state.activeUser._id)
+                
             }).catch(handleError)
         },
-        drawHand() {
+        drawHand(id) {
             if (state.activeUser) {
                 let hand = state.deck.draw(5)
+            api.put('users/'+id, 
+            {cards:hand}
+            ).then(res=>console.log(res)).catch(handleError)
 
                 for (let card of hand) {
                     state.hand.push(card)
