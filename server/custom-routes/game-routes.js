@@ -4,6 +4,7 @@ let Fights = require('../models/fight')
 let Injuries = require('../models/injury')
 
 export default {
+
   gameSession: {
     path: '/game/:name',
     reqType: 'get',
@@ -30,6 +31,25 @@ export default {
         }).catch(error => {
           return next(handleResponse(action, null, error))
         })
+    }
+  },
+  startGame: {
+    path: '/startgame',
+    reqType: 'post',
+    method(req, res, next) {
+      let action = 'Start the game'
+      let gameId = req.body.id
+      Games.findById(gameId).populate('playersInGameSession').then(game => {
+        if (!game.active) {
+          // Activate the game (when ready)
+          //game.active = true
+          //game.save()
+          return res.send(handleResponse(action, { canStart: true, game: game }))
+        }
+        res.send(handleResponse(action, { canStart: false, message: "The game has already started" }))
+      }).catch(error => {
+        return next(handleResponse(action, null, error))
+      })
     }
   },
   leaveGame: {
@@ -64,6 +84,19 @@ export default {
         })
     }
   },
+  // updateCards: {
+  //   path: '/game/:name/players/:id',
+  //   reqType: 'put',
+  //   method(req, res, next) {
+  //     let action = 'Update player hand';
+  //     var cards = req.params.id.cards;
+  //     Players.findByIdAndUpdate(req.params.id, {
+  //       $set: {
+  //         cards: cards
+  //       }
+  //     })
+  //   }
+  // },
   getLobby: {
     path: '/lobby',
     reqType: 'get',
@@ -76,27 +109,10 @@ export default {
           return next(handleResponse(action, null, error))
         })
     }
-  },
-  startGame: {
-    path: '/startgame',
-    reqType: 'post',
-    method(req, res, next) {
-      let action = 'Start the game'
-      let gameId = req.body.id
-      Games.findById(gameId).populate('playersInGameSession').then(game => {
-        if (!game.active) {
-          // Activate the game (when ready)
-          //game.active = true
-          //game.save()
-          return res.send(handleResponse(action, { canStart: true, game: game }))
-        }
-        res.send(handleResponse(action, { canStart: false, message: "The game has already started" }))
-      }).catch(error => {
-        return next(handleResponse(action, null, error))
-      })
-    }
   }
 }
+
+
 
 function handleResponse(action, data, error) {
   var response = {
