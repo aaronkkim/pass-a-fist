@@ -13,12 +13,10 @@
 
             </ul>
         </div>
-        <div>
-        </div>
         <div class="flex-container">
 
+
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard" >
-            <button class="btn" @click="startGame">Start</button>
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury" >
 
         </div>
@@ -71,6 +69,7 @@
             }
         },
         mounted() {
+            
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
             // this.$root.$data.store.actions.getDeck()
@@ -112,6 +111,7 @@
             }
         },
         methods: {
+   
             handleCardHover(event) {
                 arguments
                 let x = event.clientX
@@ -134,9 +134,6 @@
                 this.$router.push({
                     path: '/'
                 })
-            },
-            startGame() {
-                 this.$root.$data.store.actions.startGame(this.game._id)
             }
 
         }

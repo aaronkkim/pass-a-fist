@@ -19,10 +19,11 @@ client.on('CONNECTED', function (data) {
 });
 
 client.on('message', function (data) {
-    debugger
+    
     console.log(data);
+
     if (data.name && data.text) {
-        state.chat.push(data)
+        // state.chat.push(data)
     }
 });
 
@@ -42,6 +43,7 @@ let state = {
 
 let handleError = (err) => {
     state.error = err
+    debugger
     state.isLoading = false
 }
 
@@ -102,12 +104,18 @@ let gameStore = {
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
+                
                 if (state.activeUser) {
                     state.activeUser.hand = []
                 }
             }).then(res => {
                 this.getDeck()
                 this.getInjuryDeck()
+                client.emit('joining',{name: gameName})
+                client.in(gameName).on('joined', function(){
+                    console.log("Joined Room")
+                    // console.log(data)
+                })                
             }).catch(handleError)
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -127,20 +135,21 @@ let gameStore = {
         },
         joinGame(user, gameName, cb) {
             //console.log(gameName)
+            debugger
             api.post('joingame', { user: user, name: gameName }).then(res => {
                 console.log(res.data.data)
                 cb(gameName)
+                state.gameSession = res.data.game
+                
                 console.log("attempting to join room")
-                client.emit('joining',{name: gameName})
-                client.in(gameName).on('joined', function(){
-                    console.log("Joined Room")
-                    // console.log(data)
-                })
+
             }).catch(handleError)
         },
         leaveGame(user, gameName) {
+            
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
+                client.emit('leavegame', gameName)
             }).catch(handleError)
         },
         getPlayers(gameName) {

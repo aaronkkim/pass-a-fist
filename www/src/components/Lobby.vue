@@ -12,7 +12,7 @@
                     <p>Created By: {{game.creatorId.name}}</p>
                 </div>
                 <div class="card-action" v-if="game.playersInGameSession.length < game.maxPlayers">
-                    <a href="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn orange-btn">Join Game</a>
+                   <a href ="#/games" @click="joinGame(game)" class ="waves-effect waves-light btn orange-btn">Join Game</a>
                     <a href="#/games" @click="deleteGame(game._id)" class ="waves-effect waves-light btn orange-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                 </div>
                  <div class="card-action" v-if="game.playersInGameSession.length >= game.maxPlayers">
@@ -52,7 +52,8 @@ export default {
         console.log(game._id)
         if(this.user.name && game.name) {
             if(!this.game._id || this.game._id === game._id) {
-                this.$root.$data.store.actions.joinGame(this.user, game.name, this.linkToGame);
+                debugger
+                this.$root.$data.store.actions.joinGame(this.user,game.name, this.linkToGame);
             }
             else {
                 console.log(this.user.name + " is already in a game")

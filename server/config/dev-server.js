@@ -62,9 +62,14 @@ io.sockets.on('connection', function (socket) {
 
                 io.sockets.to(data.name).emit('message', d)
             })
+            socket.to(data.name).on('leavegame', function(data){
+                // socket.leave(data, function(){
+                    console.log('user has left the game')
+                })
+            })
 
         })
-    })
+    
 });
 
 export default server
