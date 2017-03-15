@@ -21,10 +21,7 @@ export default {
     reqType: 'post',
     method(req, res, next) {
       let action = 'Join a game'
-      Games.findOneAndUpdate(
-        { name: req.body.name },
-        { $addToSet: { playersInGameSession: req.body.user } },
-        { safe: true, upsert: true, new: false })
+      Games.findOneAndUpdate({ name: req.body.name }, { $addToSet: { playersInGameSession: req.body.user } }, { safe: true, upsert: true, new: false })
         .then(game => {
           Users.findByIdAndUpdate(req.body.user._id, { $set: { activeGameId: game._id } }, { new: true }).then(user => {
             res.send(handleResponse(action, { activeGameId: user.activeGameId, game: game }))
@@ -66,7 +63,19 @@ export default {
         })
     }
   },
- 
+  updateCards: {
+    path: '/game/:name/players/:id',
+    reqType: 'put',
+    method(req, res, next) {
+      let action = 'Update player hand';
+      var cards = req.params.id.cards;
+      Players.findByIdAndUpdate(req.params.id, {
+        $set: {
+          cards: cards
+        }
+      })
+    }
+  },
   getLobby: {
     path: '/lobby',
     reqType: 'get',
