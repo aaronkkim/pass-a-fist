@@ -13,6 +13,7 @@ let schema = new Schema({
   creatorId: { type: ObjectId, ref: models.user.name },
   active: { type: Boolean, required: true, default: false },
   maxPlayers: { type: Number, required: true },
+  deck: [{ type: ObjectId, ref: models.fight.name }]
 })
 
 

@@ -13,10 +13,12 @@
 
             </ul>
         </div>
+        <div>
+        </div>
         <div class="flex-container">
 
-
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard" >
+            <button class="btn" @click="startGame">Start</button>
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury" >
 
         </div>
@@ -132,6 +134,9 @@
                 this.$router.push({
                     path: '/'
                 })
+            },
+            startGame() {
+                 this.$root.$data.store.actions.startGame(this.game._id)
             }
 
         }
