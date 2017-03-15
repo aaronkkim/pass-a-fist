@@ -63,19 +63,7 @@ export default {
                 })
         }
     },
-    updateCards: {
-        path: '/game/:name/players/:id',
-        reqType: 'put',
-        method(req, res, next) {
-            let action = 'Update player hand';
-            var cards = req.params.id.cards;
-            Players.findOneAndUpdate({ _id: req.params.id }, {
-                $set: {
-                    cards:
-                };
-            })
-        }
-    },
+
     getLobby: {
         path: '/lobby',
         reqType: 'get',
