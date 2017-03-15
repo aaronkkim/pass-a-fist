@@ -160,9 +160,13 @@ let gameStore = {
                 }
             }
         },
-        drawCard() {
+        drawCard(id) {
             if (state.activeUser) {
                 let hand = state.deck.draw()
+                api.put('users/' + id,
+                {cards:hand}
+                ).then(res => console.log(res)).catch(handleError)
+                
                 state.hand.push(hand)
             }
         },
