@@ -116,7 +116,7 @@
             },
             submitText() {
                 if (this.user.name) {
-                    this.$root.$data.store.actions.submitText(this.user.name, this.text)
+                    this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
                     this.text = ''
                 }
             },

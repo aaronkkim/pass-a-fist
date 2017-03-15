@@ -23,8 +23,8 @@ function Validate(req, res, next) {
 }
 
 function logger(req, res, next) {
-	console.log('INCOMING REQUEST', req.url)
-	next()
+    console.log('INCOMING REQUEST', req.url)
+    next()
 }
 
 // REGISTER MIDDLEWARE
@@ -44,14 +44,27 @@ let io = require('socket.io')(server, {
     origins: '*:*'
 })
 
-io.on('connection', function (socket) {
-  socket.emit('CONNECTED',"Hello Mr. Socket! How are you today?")
-  socket.on('update', function(data) {
-      console.log(data)
-  })
-  socket.on('message', (d)=>{
-    socket.emit('message', d)
-  })
+io.sockets.on('connection', function (socket) {
+    socket.emit('CONNECTED', "Hello Mr. Socket! How are you today?")
+    socket.on('update', function (data) {
+        console.log(data)
+    })
+    socket.on('joining', function (data) {
+        console.log(data)
+        socket.room = data.name;
+        socket.join(data.name, function () {
+            console.log("attempting to connect user")
+            socket.to(data.name).emit("joined")
+            // io.in(data.name)
+            console.log("you have joined " + data.name + " chat!")
+            
+            socket.to(data.name).on('message', (d) => {
+
+                io.sockets.to(data.name).emit('message', d)
+            })
+
+        })
+    })
 });
 
 export default server

@@ -14,11 +14,12 @@ let client = io.connect('http://localhost:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
-    state.chat.push(data)
+    
 
 });
 
 client.on('message', function (data) {
+    debugger
     console.log(data);
     if (data.name && data.text) {
         state.chat.push(data)
@@ -71,6 +72,14 @@ let gameStore = {
                 this.login(email, password)
             }).catch(handleError)
         },
+        submitText(name, text, gs) {
+            console.log("gamesession",gs)
+            client.emit('message', {
+                name: name,
+                text: text, 
+                roomId: gs._id
+            });
+        },
         logout() {
             api.delete('logout').then(res => {
                 state.activeUser = {}
@@ -117,9 +126,16 @@ let gameStore = {
             }).catch(handleError)
         },
         joinGame(user, gameName, cb) {
+            //console.log(gameName)
             api.post('joingame', { user: user, name: gameName }).then(res => {
                 console.log(res.data.data)
                 cb(gameName)
+                console.log("attempting to join room")
+                client.emit('joining',{name: gameName})
+                client.in(gameName).on('joined', function(){
+                    console.log("Joined Room")
+                    // console.log(data)
+                })
             }).catch(handleError)
         },
         leaveGame(user, gameName) {
@@ -132,12 +148,6 @@ let gameStore = {
                 state.players = res.data.data
                 console.log(res.data.data)
             })
-        },
-        submitText(name, text) {
-            client.emit('message', {
-                name: name,
-                text: text
-            });
         },
         getDeck() {
             api('fights').then(res => {
@@ -154,6 +164,7 @@ let gameStore = {
             api.put('users/' + id, 
             {cards:hand}
             ).then(res=>console.log(res)).catch(handleError)
+
 
                 for (let card of hand) {
                     state.hand.push(card)
