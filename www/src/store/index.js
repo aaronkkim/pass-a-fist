@@ -46,6 +46,7 @@ let handleError = (err) => {
 }
 
 let gameStore = {
+    // Time to fix shit
     //ALL DATA LIVES IN THE STATE
     state,
     //ACTIONS are responsible for managing all async requests
