@@ -37,12 +37,23 @@
                         <span>{{message.name}} : {{message.text}}</span>
                     </li>
 
-                </ul>
-                <form @submit.prevent="submitText">
-                    <input type="text" v-model="text"></input>
-                    <button type="submit" class="waves-effect waves-light btn">Chat</button>
-                </form>
-            </div>
+
+            <ul>
+                <div class="container textbox">
+                    <ul>
+              
+                    
+                        <li v-for="message in chat">
+                            <span>{{message.name}} : {{message.text}}</span>
+                        </li>
+            
+
+                    </ul>
+                    <form @submit.prevent="submitText">
+                        <input type="text" v-model="text"></input>
+                        <button type="submit" class="waves-effect waves-light btn">Chat</button>
+                    </form>
+                </div>
 
         </ul>
         </div>
@@ -80,8 +91,9 @@
             
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
-                // this.$root.$data.store.actions.getDeck()
-                // this.$root.$data.store.actions.getInjuryDeck()
+            this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
+            // this.$root.$data.store.actions.getInjuryDeck()
+
 
         },
         computed: {
