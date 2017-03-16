@@ -10,7 +10,7 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://192.168.0.7:3000/');
+let client = io.connect('http://localhost:3000/');
 
 client.on('CONNECTED', function(data) {
     console.log(data);
@@ -112,11 +112,13 @@ let gameStore = {
                 getDeck(state.gameSession._id)
             }).catch(handleError)
         },
-        chatRefresh(gameName) {
-            client.emit('joining', { name: gameName })
-            client.on('joined', function() {
-                console.log("Joined Room")
-            })
+
+        chatRefresh(gameName){
+                            
+               client.emit('joining',{name: gameName})
+                client.on('joined', function(){
+                    console.log("Joined Room")
+                })
 
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -153,10 +155,11 @@ let gameStore = {
         },
         leaveGame(user, gameName) {
 
+            client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
-                client.emit('leavegame', gameName)
-                state.chat = []
+               
+
             }).catch(handleError)
         },
         getPlayers(gameName) {

@@ -46,11 +46,13 @@ let io = require('socket.io')(server, {
 
 io.sockets.on('connection', function (socket) {
     socket.emit('CONNECTED', "Hello Mr. Socket! How are you today?")
+
     socket.on('update', function (data) {
         console.log(data)
     })
+
     socket.on('joining', function (data) {
-        console.log(data)
+        console.log("data: ", data)
         socket.room = data.name;
         socket.join(data.name, function () {
             console.log("attempting to connect user")
@@ -59,15 +61,17 @@ io.sockets.on('connection', function (socket) {
             console.log("you have joined " + data.name + " chat!")
 
             socket.to(data.name).on('message', (d) => {
-
-                io.sockets.to(data.name).emit('message', d)
+                console.log("sending message to:", data.name)
+                socket.to(data.name).emit('message', d)
             })
-            socket.to(data.name).on('leavegame', function (data) {
-                socket.leave(data, function () {
-                    console.log('user has left the game')
-                })
-            })
-
+        })
+    })
+    socket.on('leavegame', function (room) {
+        console.log(socket)
+        console.log(socket.rooms, room, socket.room)
+        console.log("player leaving", room)
+        socket.leave(socket.room, ()=>{
+            console.log("player has left", room)
         })
 
     })
