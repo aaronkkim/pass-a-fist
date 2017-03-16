@@ -123,20 +123,13 @@ let gameStore = {
 
             }).catch(handleError)
         },
-<<<<<<< HEAD
+
         chatRefresh(gameName){
                             
                client.emit('joining',{name: gameName})
                 client.on('joined', function(){
                     console.log("Joined Room")
                 })
-=======
-        chatRefresh(gameName) {
-            client.emit('joining', { name: gameName })
-            client.on('joined', function() {
-                console.log("Joined Room")
-            })
->>>>>>> 26ce2b4183f41ef6cf2301f2e6635858bb77aa07
 
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -167,18 +160,12 @@ let gameStore = {
             }).catch(handleError)
         },
         leaveGame(user, gameName) {
-<<<<<<< HEAD
+
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
                
-=======
 
-            api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-                state.gameSession = {}
-                client.emit('leavegame', gameName)
-                state.chat = []
->>>>>>> 26ce2b4183f41ef6cf2301f2e6635858bb77aa07
             }).catch(handleError)
         },
         getPlayers(gameName) {

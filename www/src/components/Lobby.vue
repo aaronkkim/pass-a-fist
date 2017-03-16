@@ -28,34 +28,7 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-export default {
-  name: 'lobby',
-  computed: {
-    user() {
-        return this.$root.$data.store.state.activeUser
-    },
-    game() {
-        return this.$root.$data.store.state.gameSession
-    },
-    lobby() {
-      return this.$root.$data.store.state.games.filter(function(game){
-          return game.creatorId
-      })
-    }
-  },
-  mounted() {
-      this.$root.$data.store.actions.getGames()
-  },
-  methods: {
-    joinGame(game) {
-        console.log(this.game._id)
-        console.log(game._id)
-        if(this.user.name && game.name) {
-            if(!this.game._id || this.game._id === game._id) {
-                
-                this.$root.$data.store.actions.joinGame(this.user,game.name, this.linkToGame);
-=======
+
     export default {
         name: 'lobby',
         computed: {
@@ -69,7 +42,7 @@ export default {
                 return this.$root.$data.store.state.games.filter(function(game) {
                     return game.creatorId
                 })
->>>>>>> 26ce2b4183f41ef6cf2301f2e6635858bb77aa07
+
             }
         },
         mounted() {
