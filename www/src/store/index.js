@@ -117,7 +117,7 @@ let gameStore = {
             }).catch(handleError)
         },
         chatRefresh(gameName){
-            
+                            
                client.emit('joining',{name: gameName})
                 client.on('joined', function(){
                     console.log("Joined Room")
@@ -152,11 +152,10 @@ let gameStore = {
             }).catch(handleError)
         },
         leaveGame(user, gameName) {
-            
+            client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
-                client.emit('leavegame', gameName)
-                state.chat= []
+               
             }).catch(handleError)
         },
         getPlayers(gameName) {

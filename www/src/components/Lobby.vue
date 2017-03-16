@@ -52,7 +52,7 @@ export default {
         console.log(game._id)
         if(this.user.name && game.name) {
             if(!this.game._id || this.game._id === game._id) {
-                debugger
+                
                 this.$root.$data.store.actions.joinGame(this.user,game.name, this.linkToGame);
             }
             else {
