@@ -10,7 +10,7 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://localhost:3000/');
+let client = io.connect('http://192.168.0.7:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
@@ -23,7 +23,7 @@ client.on('message', function (data) {
     console.log(data);
 
     if (data.name && data.text) {
-        // state.chat.push(data)
+          state.chat.push(data)
     }
 });
 
@@ -43,7 +43,7 @@ let state = {
 
 let handleError = (err) => {
     state.error = err
-    debugger
+ 
     state.isLoading = false
 }
 
@@ -111,12 +111,18 @@ let gameStore = {
             }).then(res => {
                 this.getDeck()
                 this.getInjuryDeck()
-                client.emit('joining',{name: gameName})
-                client.in(gameName).on('joined', function(){
-                    console.log("Joined Room")
+             
                     // console.log(data)
-                })                
+                            
             }).catch(handleError)
+        },
+        chatRefresh(gameName){
+            debugger
+               client.emit('joining',{name: gameName})
+                client.on('joined', function(){
+                    console.log("Joined Room")
+                })
+
         },
         createGame(user, gameName, maxPlayers, cb) {
             let game = {
@@ -135,7 +141,7 @@ let gameStore = {
         },
         joinGame(user, gameName, cb) {
             //console.log(gameName)
-            debugger
+          
             api.post('joingame', { user: user, name: gameName }).then(res => {
                 console.log(res.data.data)
                 cb(gameName)
@@ -150,6 +156,7 @@ let gameStore = {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
                 client.emit('leavegame', gameName)
+                state.chat= []
             }).catch(handleError)
         },
         getPlayers(gameName) {
