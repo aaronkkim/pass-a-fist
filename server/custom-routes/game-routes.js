@@ -4,7 +4,6 @@ let Fights = require('../models/fight')
 let Injuries = require('../models/injury')
 
 export default {
-
     gameSession: {
         path: '/game/:name',
         reqType: 'get',
@@ -101,6 +100,8 @@ export default {
         }
     }
 }
+
+
 
 function handleResponse(action, data, error) {
     var response = {

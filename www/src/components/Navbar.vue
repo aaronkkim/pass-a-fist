@@ -1,7 +1,7 @@
 <template>
 
 
-<nav>
+<nav v-if= "true">
     <div class="nav-wrapper">
       <a href="#" class="brand-logo">Pass-a-Fist</a>
       <div v-if="loading">
@@ -9,13 +9,13 @@
         <li>one sec...</li>
       </ul>
       </div>
-      <div v-else-if="!user.name">
+      <div v-else-if="user && !user.name">
        <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><router-link to="login">Login </router-link> </li>
             <li><router-link to="register">Register </router-link> </li>
       </ul>
       </div>
-      <div v-else-if="game.name">
+      <div v-else-if="game && game.name">
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
        
         <li><router-link v-show="!hideGame" :to="'games/'+game.name">Current Game</router-link></li>

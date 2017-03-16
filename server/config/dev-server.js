@@ -57,14 +57,20 @@ io.sockets.on('connection', function (socket) {
             socket.to(data.name).emit("joined")
             // io.in(data.name)
             console.log("you have joined " + data.name + " chat!")
-            
+
             socket.to(data.name).on('message', (d) => {
 
                 io.sockets.to(data.name).emit('message', d)
             })
+            socket.to(data.name).on('leavegame', function (data) {
+                socket.leave(data, function () {
+                    console.log('user has left the game')
+                })
+            })
 
         })
+
     })
-});
+})
 
 export default server
