@@ -33,6 +33,23 @@ export default {
                 })
         }
     },
+    addCard: {
+        path: '/users/:id/draw',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Adds one card to player\'s hand'
+            Users.findByIdAndUpdate(req.params.id, {
+                $push: { cards: req.body.card },
+            }, { new: true })
+                .then(user => {
+                    user.save()
+                    console.log(user.cards)
+                    res.send(handleResponse(action, user.cards))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
     getCards: {
         path: '/users/:id/cards',
         reqType: 'get',

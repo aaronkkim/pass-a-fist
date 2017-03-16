@@ -116,6 +116,15 @@
                 arguments
                 let x = event.clientX
             },
+            startGame() {
+                 this.$root.$data.store.actions.startGame(this.game._id)
+            },
+            leaveGame() {
+                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
+                this.$router.push({
+                    path: '/'
+                })
+            },
             submitText() {
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
@@ -123,22 +132,11 @@
                 }
             },
             drawCard() {
-                this.$root.$data.store.actions.drawCard()
+                this.$root.$data.store.actions.drawCard(this.game._id)
             },
             drawInjury() {
-                this.$root.$data.store.actions.drawInjury()
-            },
-
-            leaveGame() {
-                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
-                this.$router.push({
-                    path: '/'
-                })
-            },
-            startGame() {
-                 this.$root.$data.store.actions.startGame(this.game._id)
+                this.$root.$data.store.actions.drawInjury(this.game._id)
             }
-
         }
     }
 

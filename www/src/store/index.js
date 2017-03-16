@@ -103,6 +103,7 @@ let gameStore = {
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
+                getDeck(state.gameSession._id)
             }).catch(handleError)
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -151,21 +152,18 @@ let gameStore = {
                 }
             })
         },
-        drawCard(id) {
-            if (state.activeUser) {
-                let card = state.deck.draw()
-                api.put('users/' + id,
-                    { cards: state.hand }
-                ).then(res => {
-                    if (state.activeUser._id == id) {
-                        api('users' + id + '/cards').then(cards => {
-                            state.hand = cards.data.data
-                        })
-                    }
-                }).catch(handleError)
+        drawCard(gameId) {
+            if(!state.activeUser._id) return;
 
-                state.hand.push(hand)
-            }
+            let card = state.deck.draw()
+            let userId = state.activeUser._id
+
+            api.put('users/' + userId + '/draw',
+                { card: card }
+            ).then(res => {
+                updateDeck(gameId)
+                getHand(userId)
+            }).catch(handleError)
         },
         getInjuryDeck() {
             api('injuries').then(res => {
@@ -173,7 +171,7 @@ let gameStore = {
                 state.injuryDeck = injuryDeck
             }).catch(handleError)
         },
-        drawInjury() {
+        drawInjury(gameId) {
             if (state.activeUser) {
                 let injuryHand = state.injuryDeck.draw()
                 state.injuryHand.push(injuryHand)
