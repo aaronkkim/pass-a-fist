@@ -6,26 +6,31 @@
 
         <div class="players-in-game">
 
-            <ul v-for="player in players">
-
-                <li class="card-panel cardStyles"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
-
+            <ul v-for="player in players" v-if="player._id !== user._id">
+                <div class="countFights">{{player.cards.length}}</div>
+                <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
+                <div class="countInjuries">{{player.injuries.length}}</div>
 
             </ul>
         </div>
+
+
         <div class="flex-container">
 
+            <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
+            
+            <div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
+            <button class="btn" @click="startGame" v-show="show">Start</button>
+            </div>
+            <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
 
-            <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard" >
-            <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury" >
 
         </div>
         <div class="fixed-action-btn click-to-toggle">
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
-
-            <ul>
+       
                 <div class="container textbox">
                     <ul>
               
@@ -42,8 +47,9 @@
                     </form>
                 </div>
 
-            </ul>
+        </ul>
         </div>
+
 
         <div class="flex-injury" @mouseover="handleCardHover">
             <div class="injuryHand" v-for="injury in injuryHand">
@@ -61,6 +67,7 @@
 
 
 
+
 </template>
 
 <script>
@@ -69,14 +76,17 @@
         data() {
             return {
                 text: '',
+                show: true,
+                otherPlayer: true
             }
         },
         mounted() {
-            
+
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
             this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-            // this.$root.$data.store.actions.getInjuryDeck()
+                // this.$root.$data.store.actions.getInjuryDeck()
+
 
         },
         computed: {
@@ -114,10 +124,13 @@
             }
         },
         methods: {
-   
+
             handleCardHover(event) {
                 arguments
                 let x = event.clientX
+            },
+            toggleStart() {
+                this.show = !this.show
             },
             submitText() {
                 if (this.user.name) {
@@ -137,30 +150,53 @@
                 this.$router.push({
                     path: '/'
                 })
+
+            },
+            startGame() {
+                this.$root.$data.store.actions.startGame(this.game._id)
+
             }
 
         }
     }
-
 </script>
 
 <style>
-.rotate90{
-    transform: rotate(270deg);
+    .countFights {
+        height: 20px;
+        width: 20px;
+        border-radius: 50px;
+        background-color: lightblue;
+        text-align: center;
     }
+    
+    .countInjuries {
+        height: 20px;
+        width: 20px;
+        border-radius: 50px;
+        background-color: darkred;
+        color: white;
+        text-align: center;
+    }
+    
+    .rotate90 {
+        transform: rotate(270deg);
+    }
+    
     .cardStyles {
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
-        flex-wrap:wrap;
+        flex-wrap: wrap;
         background-color: rgba(100, 100, 100, .7);
         padding: 20px;
         width: 120px;
         height: 155px;
         border-radius: 25px;
     }
-    .img-opp{
-        height:70%;
+    
+    .img-opp {
+        height: 70%;
         /*width:250px;*/
     }
     
@@ -274,20 +310,20 @@
         border-radius: 25px;
         height: 100px;
         margin: 10px;
-        -webkit-filter: drop-shadow(0px 0px 0px rgba(255,255,255,0.80));
-	-webkit-transition: all 0.5s linear;
-	-o-transition: all 0.5s linear;
-	transition: all 0.5s linear;
+        -webkit-filter: drop-shadow(0px 0px 0px rgba(255, 255, 255, 0.80));
+        -webkit-transition: all 0.5s linear;
+        -o-transition: all 0.5s linear;
+        transition: all 0.5s linear;
     }
     
     .deck-injury {
         border-radius: 25px;
         height: 100px;
         margin: 10px;
-        -webkit-filter: drop-shadow(0px 0px 0px rgba(255,255,255,0.80));
-	-webkit-transition: all 0.5s linear;
-	-o-transition: all 0.5s linear;
-	transition: all 0.5s linear;
+        -webkit-filter: drop-shadow(0px 0px 0px rgba(255, 255, 255, 0.80));
+        -webkit-transition: all 0.5s linear;
+        -o-transition: all 0.5s linear;
+        transition: all 0.5s linear;
     }
     
     .deck-fight:hover {
