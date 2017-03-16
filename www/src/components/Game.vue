@@ -80,7 +80,7 @@
 
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
-            this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
+            // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
             // this.$root.$data.store.actions.getInjuryDeck()
 
 
@@ -131,6 +131,7 @@
             submitText() {
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
+                    debugger
                     this.text = ''
                 }
             },

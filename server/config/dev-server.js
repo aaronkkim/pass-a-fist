@@ -53,25 +53,25 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('joining', function (data) {
         console.log("data: ", data)
-        socket.room = data.name;
         socket.join(data.name, function () {
             console.log("attempting to connect user")
             socket.to(data.name).emit("joined")
             // io.in(data.name)
+
             console.log("you have joined " + data.name + " chat!")
 
-            socket.to(data.name).on('message', (d) => {
-                console.log("sending message to:", data.name)
-                socket.to(data.name).emit('message', d)
-            })
         })
     })
+            socket.on('message', (d) => {
+                console.log("sending message to:", d.name, "in", d.gameName)
+                io.to(d.gameName).emit('message', d)
+            })
     socket.on('leavegame', function (room) {
-        console.log(socket)
-        console.log(socket.rooms, room, socket.room)
-        console.log("player leaving", room)
-        socket.leave(socket.room, ()=>{
-            console.log("player has left", room)
+        // console.log(socket)
+        // console.log(socket.rooms, socket.room)
+        // console.log("player leaving", room)
+        socket.leave(room, ()=>{
+            // console.log("player has left")
         })
 
     })

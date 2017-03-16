@@ -21,9 +21,10 @@ client.on('CONNECTED', function(data) {
 client.on('message', function(data) {
 
     console.log(data);
-
+    
     if (data.name && data.text) {
         state.chat.push(data)
+        
     }
 });
 
@@ -79,7 +80,7 @@ let gameStore = {
             client.emit('message', {
                 name: name,
                 text: text,
-                roomId: gs._id
+                gameName: gs.name
             });
         },
         logout() {
@@ -118,15 +119,15 @@ let gameStore = {
             }).then(res => {
                 this.getDeck()
                 this.getInjuryDeck()
-
+                this.chatRefresh()
                 // console.log(data)
 
             }).catch(handleError)
         },
 
-        chatRefresh(gameName){
+        chatRefresh(){
                             
-               client.emit('joining',{name: gameName})
+               client.emit('joining',{name: state.gameSession.name})
                 client.on('joined', function(){
                     console.log("Joined Room")
                 })
@@ -155,7 +156,7 @@ let gameStore = {
                 cb(gameName)
                 state.gameSession = res.data.game
 
-                console.log("attempting to join room")
+               // console.log("attempting to join room")
 
             }).catch(handleError)
         },
@@ -164,6 +165,7 @@ let gameStore = {
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
+                state.chat= []
                
 
             }).catch(handleError)
