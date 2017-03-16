@@ -44,6 +44,8 @@ export default {
                 game.save()
                 Users.findById(userId).then(user => {
                     user.activeGameId = {}
+                    user.cards = []
+                    user.injuries = []
                     user.save()
                     res.send(handleResponse(action, {}))
                 }).catch(error => {
