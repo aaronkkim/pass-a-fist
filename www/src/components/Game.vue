@@ -7,9 +7,9 @@
         <div class="players-in-game">
 
             <ul v-for="player in players" v-if="player._id !== user._id">
-
+                <div class="countFights">{{player.cards.length}}</div>
                 <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
-
+                <div class="countInjuries">{{player.injuries.length}}</div>
 
             </ul>
         </div>
@@ -77,7 +77,7 @@
             return {
                 text: '',
                 show: true,
-                otherPlayer:true
+                otherPlayer: true
             }
         },
         mounted() {
@@ -162,6 +162,23 @@
 </script>
 
 <style>
+    .countFights {
+        height: 20px;
+        width: 20px;
+        border-radius: 50px;
+        background-color: lightblue;
+        text-align: center;
+    }
+    
+    .countInjuries {
+        height: 20px;
+        width: 20px;
+        border-radius: 50px;
+        background-color: darkred;
+        color: white;
+        text-align: center;
+    }
+    
     .rotate90 {
         transform: rotate(270deg);
     }
