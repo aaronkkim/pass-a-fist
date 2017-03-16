@@ -141,7 +141,6 @@ let gameStore = {
         getPlayers(gameName) {
             api('game/' + gameName + '/players').then(res => {
                 state.players = res.data.data
-                console.log(res.data.data)
                 if (state.activeUser) {
                     for (var i = 0; i < state.players.length; i++) {
                         var player = state.players[i];
@@ -183,7 +182,6 @@ let gameStore = {
         deleteGame(id) {
             api.delete('games/' + id)
                 .then(res => {
-                    console.log(res)
                     this.getGames()
                 })
                 .catch(handleError)
@@ -197,8 +195,7 @@ let gameStore = {
                         state.deck = deck
                         dealHands(res.data.data.game)
                         updateDeck(id)
-                    })
-
+                    }).catch(handleError)
                 }
             })
         }
@@ -219,7 +216,6 @@ let dealHand = (id) => {
     api.put('users/' + id + '/cards',
         { cards: hand }
     ).then(res => {
-        console.log(res.data.data)
         if (state.activeUser._id === id) {
             getHand(id)
         }
@@ -229,14 +225,13 @@ let dealHand = (id) => {
 let getHand = (id) => {
     api('users/' + id + '/cards').then(cards => {
         state.hand = cards.data.data
-        console.log(state.hand)
-    })
+    }).catch(handleError)
 }
 
-    let updateDeck = (id) => {
-        api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
-            console.log(deck.data.data)
-        })
-    }
+let updateDeck = (id) => {
+    api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
+
+    }).catch(handleError)
+}
 
 export default gameStore
