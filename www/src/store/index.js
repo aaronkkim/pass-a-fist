@@ -103,7 +103,6 @@ let gameStore = {
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
-
             }).catch(handleError)
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -143,16 +142,11 @@ let gameStore = {
             api('game/' + gameName + '/players').then(res => {
                 state.players = res.data.data
                 console.log(res.data.data)
-
                 if (state.activeUser) {
-                    console.log("Find the one")
-                    var players = state.players
-                    for (var i = 0; i < players.length; i++) {
-                        var player = players[i];
-                        console.log(player)
+                    for (var i = 0; i < state.players.length; i++) {
+                        var player = state.players[i];
                         if (player._id === state.activeUser._id) {
-                            state.hand = player.cards
-                            console.log(state.hand)
+                            getHand(player._id)
                         }
                     }
                 }
@@ -197,7 +191,6 @@ let gameStore = {
         startGame(id) {
             api.post('startgame', { id: id }).then(res => {
                 if (res.data.data.canStart) {
-
                     //Shuffle the deck
                     api('fights').then(cards => {
                         let deck = Shuffle.shuffle({ deck: cards.data.data })
@@ -228,19 +221,22 @@ let dealHand = (id) => {
     ).then(res => {
         console.log(res.data.data)
         if (state.activeUser._id === id) {
-            console.log("looks good")
-            api('users' + id + '/cards').then(cards => {
-                state.hand = cards.data.data
-                console.log(state.hand)
-            })
+            getHand(id)
         }
     }).catch(handleError)
 }
 
-let updateDeck = (id) => {
-    api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
-        console.log(deck.data.data)
+let getHand = (id) => {
+    api('users/' + id + '/cards').then(cards => {
+        state.hand = cards.data.data
+        console.log(state.hand)
     })
 }
+
+    let updateDeck = (id) => {
+        api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
+            console.log(deck.data.data)
+        })
+    }
 
 export default gameStore
