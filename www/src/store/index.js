@@ -117,7 +117,7 @@ let gameStore = {
             }).catch(handleError)
         },
         chatRefresh(gameName){
-            debugger
+            
                client.emit('joining',{name: gameName})
                 client.on('joined', function(){
                     console.log("Joined Room")
