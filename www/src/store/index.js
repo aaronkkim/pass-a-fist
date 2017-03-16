@@ -12,18 +12,18 @@ let api = axios.create({
 
 let client = io.connect('http://192.168.0.7:3000/');
 
-client.on('CONNECTED', function (data) {
+client.on('CONNECTED', function(data) {
     console.log(data);
-    
+
 
 });
 
-client.on('message', function (data) {
-    
+client.on('message', function(data) {
+
     console.log(data);
 
     if (data.name && data.text) {
-          state.chat.push(data)
+        state.chat.push(data)
     }
 });
 
@@ -43,7 +43,7 @@ let state = {
 
 let handleError = (err) => {
     state.error = err
- 
+
     state.isLoading = false
 }
 
@@ -75,10 +75,10 @@ let gameStore = {
             }).catch(handleError)
         },
         submitText(name, text, gs) {
-            console.log("gamesession",gs)
+            console.log("gamesession", gs)
             client.emit('message', {
                 name: name,
-                text: text, 
+                text: text,
                 roomId: gs._id
             });
         },
@@ -99,29 +99,35 @@ let gameStore = {
         getGames() {
             api('lobby/').then(res => {
                 state.games = res.data.data
-            }).catch(handleError)
+            }).then(res => {
+                state.games.forEach(game => {
+                    if (game.playersInGameSession.length == 0) {
+                        console.log(game._id)
+                        this.deleteGame(game._id)
+                    }
+                })
+            }).catch(handleError);
         },
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
-                
+
                 if (state.activeUser) {
                     state.activeUser.hand = []
                 }
             }).then(res => {
                 this.getDeck()
                 this.getInjuryDeck()
-             
-                    // console.log(data)
-                            
+
+                // console.log(data)
+
             }).catch(handleError)
         },
-        chatRefresh(gameName){
-            debugger
-               client.emit('joining',{name: gameName})
-                client.on('joined', function(){
-                    console.log("Joined Room")
-                })
+        chatRefresh(gameName) {
+            client.emit('joining', { name: gameName })
+            client.on('joined', function() {
+                console.log("Joined Room")
+            })
 
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -141,22 +147,22 @@ let gameStore = {
         },
         joinGame(user, gameName, cb) {
             //console.log(gameName)
-          
+
             api.post('joingame', { user: user, name: gameName }).then(res => {
                 console.log(res.data.data)
                 cb(gameName)
                 state.gameSession = res.data.game
-                
+
                 console.log("attempting to join room")
 
             }).catch(handleError)
         },
         leaveGame(user, gameName) {
-            
+
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
                 client.emit('leavegame', gameName)
-                state.chat= []
+                state.chat = []
             }).catch(handleError)
         },
         getPlayers(gameName) {
@@ -171,15 +177,13 @@ let gameStore = {
                 state.deck = deck
 
                 this.drawHand(state.activeUser._id)
-                
+
             }).catch(handleError)
         },
         drawHand(id) {
             if (state.activeUser) {
-       let hand = state.deck.draw(5)
-            api.put('users/' + id, 
-            {cards:hand}
-            ).then(res=>console.log(res)).catch(handleError)
+                let hand = state.deck.draw(5)
+                api.put('users/' + id, { cards: hand }).then(res => console.log(res)).catch(handleError)
 
 
                 for (let card of hand) {
@@ -190,10 +194,8 @@ let gameStore = {
         drawCard(id) {
             if (state.activeUser) {
                 let hand = state.deck.draw()
-                api.put('users/' + id,
-                {cards:hand}
-                ).then(res => console.log(res)).catch(handleError)
-                
+                api.put('users/' + id, { cards: hand }).then(res => console.log(res)).catch(handleError)
+
                 state.hand.push(hand)
             }
         },

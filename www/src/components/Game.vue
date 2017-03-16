@@ -6,9 +6,9 @@
 
         <div class="players-in-game">
 
-            <ul v-for="player in players">
+            <ul v-for="player in players" v-if="player._id !== user._id">
 
-                <li class="card-panel cardStyles"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
+                <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
 
 
             </ul>
@@ -30,15 +30,7 @@
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
-        <ul>
-            <div class="container textbox">
-                <ul>
-                    <li v-for="message in chat">
-                        <span>{{message.name}} : {{message.text}}</span>
-                    </li>
-
-
-            <ul>
+       
                 <div class="container textbox">
                     <ul>
               
@@ -84,15 +76,16 @@
         data() {
             return {
                 text: '',
-                show: true
+                show: true,
+                otherPlayer:true
             }
         },
         mounted() {
-            
+
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
             this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-            // this.$root.$data.store.actions.getInjuryDeck()
+                // this.$root.$data.store.actions.getInjuryDeck()
 
 
         },
@@ -131,7 +124,7 @@
             }
         },
         methods: {
-   
+
             handleCardHover(event) {
                 arguments
                 let x = event.clientX
