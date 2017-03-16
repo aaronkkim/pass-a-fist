@@ -38,7 +38,7 @@
                         </li>
                     </ul>
                     <form @submit.prevent="submitText">
-                        <input type="text" v-model="text"></input>
+                        <input type="text" v-model="text">
                         <button type="submit" class="waves-effect waves-light btn">Chat</button>
                     </form>
                 </div>
