@@ -14,7 +14,7 @@ let client = io.connect('http://localhost:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
-    
+
 
 });
 
@@ -74,10 +74,10 @@ let gameStore = {
             }).catch(handleError)
         },
         submitText(name, text, gs) {
-            console.log("gamesession",gs)
+            console.log("gamesession", gs)
             client.emit('message', {
                 name: name,
-                text: text, 
+                text: text,
                 roomId: gs._id
             });
         },
@@ -103,12 +103,7 @@ let gameStore = {
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
-                if (state.activeUser) {
-                    state.activeUser.hand = []
-                }
-            }).then(res => {
-                this.getDeck()
-                this.getInjuryDeck()
+
             }).catch(handleError)
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -132,8 +127,8 @@ let gameStore = {
                 console.log(res.data.data)
                 cb(gameName)
                 console.log("attempting to join room")
-                client.emit('joining',{name: gameName})
-                client.in(gameName).on('joined', function(){
+                client.emit('joining', { name: gameName })
+                client.in(gameName).on('joined', function () {
                     console.log("Joined Room")
                     // console.log(data)
                 })
@@ -148,37 +143,34 @@ let gameStore = {
             api('game/' + gameName + '/players').then(res => {
                 state.players = res.data.data
                 console.log(res.data.data)
-            })
-        },
-        getDeck() {
-            api('fights').then(res => {
-                let deck = Shuffle.shuffle({ deck: res.data.data })
-                state.deck = deck
 
-                this.drawHand(state.activeUser._id)
-                
-            }).catch(handleError)
-        },
-        drawHand(id) {
-            if (state.activeUser) {
-       let hand = state.deck.draw(5)
-            api.put('users/' + id, 
-            {cards:hand}
-            ).then(res=>console.log(res)).catch(handleError)
-
-
-                for (let card of hand) {
-                    state.hand.push(card)
+                if (state.activeUser) {
+                    console.log("Find the one")
+                    var players = state.players
+                    for (var i = 0; i < players.length; i++) {
+                        var player = players[i];
+                        console.log(player)
+                        if (player._id === state.activeUser._id) {
+                            state.hand = player.cards
+                            console.log(state.hand)
+                        }
+                    }
                 }
-            }
+            })
         },
         drawCard(id) {
             if (state.activeUser) {
-                let hand = state.deck.draw()
+                let card = state.deck.draw()
                 api.put('users/' + id,
-                {cards:hand}
-                ).then(res => console.log(res)).catch(handleError)
-                
+                    { cards: state.hand }
+                ).then(res => {
+                    if (state.activeUser._id == id) {
+                        api('users' + id + '/cards').then(cards => {
+                            state.hand = cards.data.data
+                        })
+                    }
+                }).catch(handleError)
+
                 state.hand.push(hand)
             }
         },
@@ -201,18 +193,54 @@ let gameStore = {
                     this.getGames()
                 })
                 .catch(handleError)
+        },
+        startGame(id) {
+            api.post('startgame', { id: id }).then(res => {
+                if (res.data.data.canStart) {
+
+                    //Shuffle the deck
+                    api('fights').then(cards => {
+                        let deck = Shuffle.shuffle({ deck: cards.data.data })
+                        state.deck = deck
+                        dealHands(res.data.data.game)
+                        updateDeck(id)
+                    })
+
+                }
+            })
         }
-
-        // goCrazy(card, index) {
-        //     card.index = index
-        //     api.post('/injuries', card).then(res => {
-        //         console.log(res.data.data)
-        //     }).catch(handleError)
-        // }
     }
-
 }
 
+let dealHands = (game) => {
+    if (!game.playersInGameSession) return;
+    var players = game.playersInGameSession
+    for (var i = 0; i < players.length; i++) {
+        var player = players[i];
+        dealHand(player._id)
+    }
+}
 
+let dealHand = (id) => {
+    let hand = state.deck.draw(5)
+    api.put('users/' + id + '/cards',
+        { cards: hand }
+    ).then(res => {
+        console.log(res.data.data)
+        if (state.activeUser._id === id) {
+            console.log("looks good")
+            api('users' + id + '/cards').then(cards => {
+                state.hand = cards.data.data
+                console.log(state.hand)
+            })
+        }
+    }).catch(handleError)
+}
+
+let updateDeck = (id) => {
+    api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
+        console.log(deck.data.data)
+    })
+}
 
 export default gameStore

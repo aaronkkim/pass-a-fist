@@ -17,7 +17,7 @@ export default {
         }
     },
     updateCards: {
-        path: '/users/:id',
+        path: '/users/:id/cards',
         reqType: 'put',
         method(req, res, next) {
             let action = 'Update a player\'s hand'
@@ -27,19 +27,21 @@ export default {
                 .then(user => {
                     user.save()
                     console.log(user.cards)
-                    res.send(handleResponse(action, user))
+                    res.send(handleResponse(action, user.cards))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
                 })
         }
     },
-    getHand: {
+    getCards: {
         path: '/users/:id/cards',
         reqType: 'get',
         method(req, res, next) {
             let action = 'Get your hand'
             Users.findById(req.params.id).populate("cards").then(user => {
                 res.send(handleResponse(action, user.cards))
+            }).catch(error => {
+                return next(handleResponse(action, null, error))
             })
         }
     }
