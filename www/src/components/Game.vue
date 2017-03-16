@@ -13,36 +13,38 @@
 
             </ul>
         </div>
-        <div>
-        </div>
+
         <div class="flex-container">
 
-            <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard" >
-            <button class="btn" @click="startGame">Start</button>
-            <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury" >
+            <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
+            
+            <div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
+            <button class="btn" @click="startGame" v-show="show">Start</button>
+            </div>
+            <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
 
         </div>
         <div class="fixed-action-btn click-to-toggle">
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
+        <ul>
+            <div class="container textbox">
+                <ul>
+                    <li v-for="message in chat">
+                        <span>{{message.name}} : {{message.text}}</span>
+                    </li>
 
-            <ul>
-                <div class="container textbox">
-                    <ul>
-                        <li v-for="message in chat">
-                            <span>{{message.name}} : {{message.text}}</span>
-                        </li>
+                </ul>
+                <form @submit.prevent="submitText">
+                    <input type="text" v-model="text"></input>
+                    <button type="submit" class="waves-effect waves-light btn">Chat</button>
+                </form>
+            </div>
 
-                    </ul>
-                    <form @submit.prevent="submitText">
-                        <input type="text" v-model="text"></input>
-                        <button type="submit" class="waves-effect waves-light btn">Chat</button>
-                    </form>
-                </div>
-
-            </ul>
+        </ul>
         </div>
+
 
         <div class="flex-injury" @mouseover="handleCardHover">
             <div class="injuryHand" v-for="injury in injuryHand">
@@ -60,6 +62,7 @@
 
 
 
+
 </template>
 
 <script>
@@ -68,13 +71,14 @@
         data() {
             return {
                 text: '',
+                show: true
             }
         },
         mounted() {
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
-            // this.$root.$data.store.actions.getDeck()
-            // this.$root.$data.store.actions.getInjuryDeck()
+                // this.$root.$data.store.actions.getDeck()
+                // this.$root.$data.store.actions.getInjuryDeck()
 
         },
         computed: {
@@ -116,6 +120,9 @@
                 arguments
                 let x = event.clientX
             },
+            toggleStart() {
+                this.show = !this.show
+            },
             submitText() {
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
@@ -136,31 +143,32 @@
                 })
             },
             startGame() {
-                 this.$root.$data.store.actions.startGame(this.game._id)
+                this.$root.$data.store.actions.startGame(this.game._id)
             }
 
         }
     }
-
 </script>
 
 <style>
-.rotate90{
-    transform: rotate(270deg);
+    .rotate90 {
+        transform: rotate(270deg);
     }
+    
     .cardStyles {
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items: center;
-        flex-wrap:wrap;
+        flex-wrap: wrap;
         background-color: rgba(100, 100, 100, .7);
         padding: 20px;
         width: 120px;
         height: 155px;
         border-radius: 25px;
     }
-    .img-opp{
-        height:70%;
+    
+    .img-opp {
+        height: 70%;
         /*width:250px;*/
     }
     
@@ -274,20 +282,20 @@
         border-radius: 25px;
         height: 100px;
         margin: 10px;
-        -webkit-filter: drop-shadow(0px 0px 0px rgba(255,255,255,0.80));
-	-webkit-transition: all 0.5s linear;
-	-o-transition: all 0.5s linear;
-	transition: all 0.5s linear;
+        -webkit-filter: drop-shadow(0px 0px 0px rgba(255, 255, 255, 0.80));
+        -webkit-transition: all 0.5s linear;
+        -o-transition: all 0.5s linear;
+        transition: all 0.5s linear;
     }
     
     .deck-injury {
         border-radius: 25px;
         height: 100px;
         margin: 10px;
-        -webkit-filter: drop-shadow(0px 0px 0px rgba(255,255,255,0.80));
-	-webkit-transition: all 0.5s linear;
-	-o-transition: all 0.5s linear;
-	transition: all 0.5s linear;
+        -webkit-filter: drop-shadow(0px 0px 0px rgba(255, 255, 255, 0.80));
+        -webkit-transition: all 0.5s linear;
+        -o-transition: all 0.5s linear;
+        transition: all 0.5s linear;
     }
     
     .deck-fight:hover {
