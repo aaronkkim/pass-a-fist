@@ -27,7 +27,11 @@
                 <i class="material-icons">chat_bubble</i>
             </a>
 
-       <ul>
+
+
+
+            <ul>
+
 
                 <div class="container textbox">
                     <ul>
@@ -41,8 +45,7 @@
                     </form>
                 </div>
 
-                </ul>
-
+                </ul> 
         </div>
 
 

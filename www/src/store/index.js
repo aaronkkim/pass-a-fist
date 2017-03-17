@@ -100,12 +100,13 @@ let gameStore = {
             api('lobby/').then(res => {
                 state.games = res.data.data
             }).then(res => {
-                state.games.forEach(game => {
-                    if (game.playersInGameSession.length == 0) {
-                        console.log(game._id)
-                        this.deleteGame(game._id)
-                    }
-                })
+                console.log(game._id)
+                // state.games.forEach(game => {
+                //     if (game.playersInGameSession.length == 0) {
+                //         console.log(game._id)
+                //         this.deleteGame(game._id)
+                //     }
+                // })
             }).catch(handleError);
         },
         getGame(gameName) {
@@ -113,7 +114,7 @@ let gameStore = {
                 state.gameSession = res.data.data
 
                 getDeck(state.gameSession._id)
-
+                chatRefresh()
             }).catch(handleError)
         },
 
