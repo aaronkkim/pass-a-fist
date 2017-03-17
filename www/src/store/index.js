@@ -12,11 +12,11 @@ let api = axios.create({
 
 let client = io.connect('http://localhost:3000/');
 
-client.on('CONNECTED', function(data) {
+client.on('CONNECTED', function (data) {
     console.log(data);
 });
 
-client.on('message', function(data) {
+client.on('message', function (data) {
 
     console.log(data);
 
@@ -30,6 +30,7 @@ let state = {
     activeUser: {},
     games: [],
     gameSession: {},
+    creator: {},
     players: [],
     isLoading: false,
     chat: [],
@@ -112,8 +113,14 @@ let gameStore = {
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
+                state.creator = res.data.data.creatorId
+                //getDeck(state.gameSession._id)
 
-                this.getDeck(state.gameSession._id)
+                state.deck = new Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
+                debugger
+                state.deck.cards = gameSession.deck
+                console.log(state.deck.cards)
+                console.log(gameSession.deck)
                 chatRefresh()
             }).catch(handleError)
         },
@@ -121,7 +128,7 @@ let gameStore = {
         chatRefresh() {
 
             client.emit('joining', { name: state.gameSession.name })
-            client.on('joined', function() {
+            client.on('joined', function () {
                 console.log("Joined Room")
             })
 
@@ -152,9 +159,9 @@ let gameStore = {
 
                 console.log("attempting to join room")
                 client.emit('joining', { name: gameName })
-                client.in(gameName).on('joined', function() {
+                client.in(gameName).on('joined', function () {
                     console.log("Joined Room")
-                        // console.log(data)
+                    // console.log(data)
                 })
 
 
@@ -166,7 +173,8 @@ let gameStore = {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
                 state.chat = []
-
+                state.cards = []
+                state.deck.cards = []
 
             }).catch(handleError)
         },
@@ -183,21 +191,7 @@ let gameStore = {
                 }
             })
         },
-        getDeck() {
-            api('fights').then(res => {
-                let deck = Shuffle.shuffle({ deck: res.data.data })
-                state.deck = deck
 
-                this.drawHand(state.activeUser._id)
-
-            }).catch(handleError)
-        },
-        drawHand(id) {
-            if (state.activeUser) {
-                let hand = state.deck.draw(5)
-                api.put('users/' + id, { cards: hand }).then(res => console.log(res)).catch(handleError)
-            }
-        },
         drawCard(gameId) {
             if (!state.activeUser._id) return;
 
@@ -242,6 +236,10 @@ let gameStore = {
             })
         }
     }
+}
+
+let getDeck = () => {
+    
 }
 
 let dealHands = (game) => {

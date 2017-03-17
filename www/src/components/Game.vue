@@ -16,9 +16,9 @@
         <div class="flex-container">
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
 
-            <!--<div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
+            <div v-if="user._id == creator._id">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
-            </div>-->
+            </div>
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
         </div>
 
@@ -106,6 +106,9 @@
             game() {
                 return this.$root.$data.store.state.gameSession
             },
+            creator() {
+                return this.$root.$data.store.state.creator
+            },
             deck() {
                 return this.$root.$data.store.state.deck
             },
@@ -128,9 +131,6 @@
                 arguments
                 let x = event.clientX
             },
-            toggleStart() {
-                this.show = !this.show
-            },
             submitText() {
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
@@ -145,6 +145,7 @@
                 this.$root.$data.store.actions.drawInjury(this.game._id)
             },
             startGame() {
+                this.show = !this.show
                 this.$root.$data.store.actions.startGame(this.game._id)
             },
             leaveGame() {
