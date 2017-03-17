@@ -1,7 +1,6 @@
 <template>
 
     <div class="bgpic bggame">
-
         <button class="waves-effect waves-light btn orange-btn" @click="leaveGame">leave game</button>
 
         <div class="players-in-game">
@@ -16,13 +15,10 @@
 
         <div class="flex-container">
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
-<<<<<<< HEAD
-=======
 
->>>>>>> 9ce1dcd6d14e7e87c38b77ba9d412e8ab612976e
-            <div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
+            <!--<div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
-            </div>
+            </div>-->
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
         </div>
 
@@ -30,11 +26,9 @@
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
-<<<<<<< HEAD
+
        <ul>
-=======
-            <ul>
->>>>>>> 9ce1dcd6d14e7e87c38b77ba9d412e8ab612976e
+
                 <div class="container textbox">
                     <ul>
                         <li v-for="message in chat">
@@ -46,11 +40,9 @@
                         <button type="submit" class="waves-effect waves-light btn">Chat</button>
                     </form>
                 </div>
-<<<<<<< HEAD
+
                 </ul>
-=======
-            </ul>
->>>>>>> 9ce1dcd6d14e7e87c38b77ba9d412e8ab612976e
+
         </div>
 
 
@@ -88,8 +80,8 @@
 
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
-            // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-            // this.$root.$data.store.actions.getInjuryDeck()
+                // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
+                // this.$root.$data.store.actions.getInjuryDeck()
 
 
         },
@@ -150,7 +142,7 @@
                 this.$root.$data.store.actions.drawInjury(this.game._id)
             },
             startGame() {
-                 this.$root.$data.store.actions.startGame(this.game._id)
+                this.$root.$data.store.actions.startGame(this.game._id)
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
@@ -160,7 +152,6 @@
             }
         }
     }
-
 </script>
 
 <style>
@@ -206,7 +197,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 50vh;
+        height: 28vh;
         width: 100%
     }
     
