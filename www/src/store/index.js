@@ -112,7 +112,7 @@ let gameStore = {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
 
-                getDeck(state.gameSession._id)
+                this.getDeck(state.gameSession._id)
                 chatRefresh()
             }).catch(handleError)
         },
