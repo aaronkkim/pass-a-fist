@@ -10,44 +10,35 @@
                 <div class="countFights">{{player.cards.length}}</div>
                 <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
                 <div class="countInjuries">{{player.injuries.length}}</div>
-
             </ul>
         </div>
 
 
         <div class="flex-container">
-
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
-            
             <div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
             <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
-
-
         </div>
+
         <div class="fixed-action-btn click-to-toggle">
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
-       
+       <ul>
                 <div class="container textbox">
                     <ul>
-              
-                    
                         <li v-for="message in chat">
                             <span>{{message.name}} : {{message.text}}</span>
                         </li>
-            
-
                     </ul>
                     <form @submit.prevent="submitText">
                         <input type="text" v-model="text"></input>
                         <button type="submit" class="waves-effect waves-light btn">Chat</button>
                     </form>
                 </div>
-
-        </ul>
+                </ul>
         </div>
 
 
@@ -63,8 +54,8 @@
             </div>
 
         </div>
-    </div>
 
+</div>
 
 
 
