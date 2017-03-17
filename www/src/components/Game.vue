@@ -18,9 +18,9 @@
         <div class="flex-container">
 
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
-            
+
             <div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
-            <button class="btn" @click="startGame" v-show="show">Start</button>
+                <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
 
@@ -30,24 +30,19 @@
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
-       
+            <ul>
                 <div class="container textbox">
                     <ul>
-              
-                    
                         <li v-for="message in chat">
                             <span>{{message.name}} : {{message.text}}</span>
                         </li>
-            
-
                     </ul>
                     <form @submit.prevent="submitText">
-                        <input type="text" v-model="text"></input>
+                        <input type="text" v-model="text">
                         <button type="submit" class="waves-effect waves-light btn">Chat</button>
                     </form>
                 </div>
-
-        </ul>
+            </ul>
         </div>
 
 
@@ -68,6 +63,7 @@
 
 
 
+
 </template>
 
 <script>
@@ -84,8 +80,8 @@
 
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
-            this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-                // this.$root.$data.store.actions.getInjuryDeck()
+            // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
+            // this.$root.$data.store.actions.getInjuryDeck()
 
 
         },
@@ -135,6 +131,7 @@
             submitText() {
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
+                    debugger
                     this.text = ''
                 }
             },
@@ -155,6 +152,7 @@
             }
         }
     }
+
 </script>
 
 <style>
