@@ -136,24 +136,20 @@
                 }
             },
             drawCard() {
-                this.$root.$data.store.actions.drawCard()
+                this.$root.$data.store.actions.drawCard(this.game._id)
             },
             drawInjury() {
-                this.$root.$data.store.actions.drawInjury()
+                this.$root.$data.store.actions.drawInjury(this.game._id)
             },
-
+            startGame() {
+                 this.$root.$data.store.actions.startGame(this.game._id)
+            },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
                 this.$router.push({
                     path: '/'
                 })
-
-            },
-            startGame() {
-                this.$root.$data.store.actions.startGame(this.game._id)
-
             }
-
         }
     }
 
