@@ -19,10 +19,10 @@ client.on('CONNECTED', function(data) {
 client.on('message', function(data) {
 
     console.log(data);
-    
+
     if (data.name && data.text) {
         state.chat.push(data)
-        
+
     }
 });
 
@@ -58,7 +58,8 @@ let gameStore = {
             api.post('login', {
                 email: email,
                 password: password
-            }).then(res => {                state.activeUser = res.data.data
+            }).then(res => {
+                state.activeUser = res.data.data
                 state.isLoading = false
             }).catch(handleError)
         },
@@ -117,12 +118,12 @@ let gameStore = {
             }).catch(handleError)
         },
 
-        chatRefresh(){
-                            
-               client.emit('joining',{name: state.gameSession.name})
-                client.on('joined', function(){
-                    console.log("Joined Room")
-                })
+        chatRefresh() {
+
+            client.emit('joining', { name: state.gameSession.name })
+            client.on('joined', function() {
+                console.log("Joined Room")
+            })
 
         },
         createGame(user, gameName, maxPlayers, cb) {
@@ -151,9 +152,9 @@ let gameStore = {
 
                 console.log("attempting to join room")
                 client.emit('joining', { name: gameName })
-                client.in(gameName).on('joined', function () {
+                client.in(gameName).on('joined', function() {
                     console.log("Joined Room")
-                    // console.log(data)
+                        // console.log(data)
                 })
 
 
@@ -164,8 +165,8 @@ let gameStore = {
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 state.gameSession = {}
-                state.chat= []
-               
+                state.chat = []
+
 
             }).catch(handleError)
         },
@@ -195,16 +196,14 @@ let gameStore = {
             if (state.activeUser) {
                 let hand = state.deck.draw(5)
                 api.put('users/' + id, { cards: hand }).then(res => console.log(res)).catch(handleError)
-            } 
+            }
         },
         drawCard(gameId) {
-            if(!state.activeUser._id) return;
-          
+            if (!state.activeUser._id) return;
+
             let card = state.deck.draw()
             let userId = state.activeUser._id
-            api.put('users/' + userId + '/draw',
-                { card: card }
-            ).then(res => {
+            api.put('users/' + userId + '/draw', { card: card }).then(res => {
                 updateDeck(gameId)
                 getHand(userId)
             }).catch(handleError)
@@ -256,9 +255,7 @@ let dealHands = (game) => {
 
 let dealHand = (id) => {
     let hand = state.deck.draw(5)
-    api.put('users/' + id + '/cards',
-        { cards: hand }
-    ).then(res => {
+    api.put('users/' + id + '/cards', { cards: hand }).then(res => {
         if (state.activeUser._id === id) {
             getHand(id)
         }

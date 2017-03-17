@@ -8,32 +8,27 @@ import store from './store'
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  data: {
-    store
-  },
-  router,
-  template: '<App/>',
-  components: { App }
+    el: '#app',
+    data: {
+        store
+    },
+    router,
+    template: '<App/>',
+    components: { App }
 })
 
-var client = io('http://localhost:3000');
+var client = io('http://192.168.0.52:3000');
 
-client.on('connection', function (socket) {
+client.on('connection', function(socket) {
     console.log(socket);
-    
+
     socket.on('CONNECTED', function(data) {
-       console.log(data);
+        console.log(data);
     })
-    
-    // socket.emit('message', 'le Message');
+
+
 
     socket.emit('update', function(data) {
-      console.log(data)
+        console.log(data)
     })
 });
-
-
-
-
-

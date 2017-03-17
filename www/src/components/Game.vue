@@ -1,7 +1,6 @@
 <template>
 
     <div class="bgpic bggame">
-
         <button class="waves-effect waves-light btn orange-btn" @click="leaveGame">leave game</button>
 
         <div class="players-in-game">
@@ -30,7 +29,9 @@
 
 
 
+
             <ul>
+
 
                 <div class="container textbox">
                     <ul>
@@ -44,9 +45,7 @@
                     </form>
                 </div>
 
-                </ul>
-
-
+                </ul> 
         </div>
 
 
@@ -84,8 +83,8 @@
 
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
-            // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-            // this.$root.$data.store.actions.getInjuryDeck()
+                // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
+                // this.$root.$data.store.actions.getInjuryDeck()
 
 
         },
@@ -146,7 +145,7 @@
                 this.$root.$data.store.actions.drawInjury(this.game._id)
             },
             startGame() {
-                 this.$root.$data.store.actions.startGame(this.game._id)
+                this.$root.$data.store.actions.startGame(this.game._id)
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
@@ -156,7 +155,6 @@
             }
         }
     }
-
 </script>
 
 <style>
@@ -202,7 +200,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 50vh;
+        height: 28vh;
         width: 100%
     }
     
