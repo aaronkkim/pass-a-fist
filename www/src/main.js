@@ -26,7 +26,7 @@ client.on('connection', function (socket) {
        console.log(data);
     })
     
-    socket.emit('message', 'le Message');
+    // socket.emit('message', 'le Message');
 
     socket.emit('update', function(data) {
       console.log(data)
