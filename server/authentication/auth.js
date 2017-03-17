@@ -63,7 +63,7 @@ router.get('/api/authenticate', (req,res) => {
     })
   }).catch(err=>{
     return res.send({
-      error:err 
+      response: "Stay away McCall"
     })
   })
 })

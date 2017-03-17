@@ -16,8 +16,12 @@
 
         <div class="flex-container">
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9ce1dcd6d14e7e87c38b77ba9d412e8ab612976e
             <div v-on:click="toggleStart" v-if="user._id == game.creatorId._id">
-            <button class="btn" @click="startGame" v-show="show">Start</button>
+                <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
         </div>
@@ -26,7 +30,11 @@
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
+<<<<<<< HEAD
        <ul>
+=======
+            <ul>
+>>>>>>> 9ce1dcd6d14e7e87c38b77ba9d412e8ab612976e
                 <div class="container textbox">
                     <ul>
                         <li v-for="message in chat">
@@ -34,11 +42,15 @@
                         </li>
                     </ul>
                     <form @submit.prevent="submitText">
-                        <input type="text" v-model="text"></input>
+                        <input type="text" v-model="text">
                         <button type="submit" class="waves-effect waves-light btn">Chat</button>
                     </form>
                 </div>
+<<<<<<< HEAD
                 </ul>
+=======
+            </ul>
+>>>>>>> 9ce1dcd6d14e7e87c38b77ba9d412e8ab612976e
         </div>
 
 
@@ -59,6 +71,7 @@
 
 
 
+
 </template>
 
 <script>
@@ -75,8 +88,8 @@
 
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
-            this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-                // this.$root.$data.store.actions.getInjuryDeck()
+            // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
+            // this.$root.$data.store.actions.getInjuryDeck()
 
 
         },
@@ -126,30 +139,28 @@
             submitText() {
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
+                    debugger
                     this.text = ''
                 }
             },
             drawCard() {
-                this.$root.$data.store.actions.drawCard()
+                this.$root.$data.store.actions.drawCard(this.game._id)
             },
             drawInjury() {
-                this.$root.$data.store.actions.drawInjury()
+                this.$root.$data.store.actions.drawInjury(this.game._id)
             },
-
+            startGame() {
+                 this.$root.$data.store.actions.startGame(this.game._id)
+            },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
                 this.$router.push({
                     path: '/'
                 })
-
-            },
-            startGame() {
-                this.$root.$data.store.actions.startGame(this.game._id)
-
             }
-
         }
     }
+
 </script>
 
 <style>

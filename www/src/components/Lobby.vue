@@ -28,6 +28,7 @@
 </template>
 
 <script>
+
     export default {
         name: 'lobby',
         computed: {
@@ -41,6 +42,7 @@
                 return this.$root.$data.store.state.games.filter(function(game) {
                     return game.creatorId
                 })
+
             }
         },
         mounted() {
