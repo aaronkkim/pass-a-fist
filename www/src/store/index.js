@@ -119,7 +119,7 @@ let gameStore = {
         },
         initiateDeck() {
             //Initiates a fake deck before assigning cards
-             state.deck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
+            state.deck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
         },
         chatRefresh() {
 
@@ -151,7 +151,6 @@ let gameStore = {
                 cb(gameName)
                 state.gameSession = res.data.game
 
-
                 console.log("attempting to join room")
                 client.emit('joining', { name: gameName })
                 client.in(gameName).on('joined', function () {
@@ -166,10 +165,7 @@ let gameStore = {
 
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-                state.activeUser.cards = []
-                state.activeUser.injuries = []
-                state.hand = []
-                state.injuryHand = []
+                resetUserData()
             }).catch(handleError)
         },
         getPlayers(gameName) {
@@ -218,22 +214,30 @@ let gameStore = {
         },
         startGame(id) {
             api.post('startgame', { id: id }).then(res => {
-                if (res.data.data.canStart) {
+                if (res.data.data.game) {
                     //Shuffle the deck
                     api('fights').then(cards => {
                         let deck = Shuffle.shuffle({ deck: cards.data.data })
                         state.deck = deck
                         dealHands(res.data.data.game)
+                        startTurn(res.data.data.game)
                         updateDeck(id)
                     }).catch(handleError)
+                } else {
+                    console.log(res.data.data.message)
                 }
             })
         }
     }
 }
 
-let getDeck = () => {
-    
+let resetUserData = () => {
+    state.activeUser.cards = []
+    state.activeUser.injuries = []
+    state.activeUser.activeTurn = false
+    state.activeUser.currentTurn = false
+    state.hand = []
+    state.injuryHand = []
 }
 
 let dealHands = (game) => {
@@ -264,6 +268,27 @@ let updateDeck = (id) => {
     api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
 
     }).catch(handleError)
+}
+
+let startTurn = (game) => {
+    if (!game.playersInGameSession) return;
+
+    let players = game.playersInGameSession
+    let player = players[[Math.floor(Math.random() * players.length)]]
+
+    if (player._id) {
+        api.put('users/' + player._id + '/turn', { currentTurn: true, activeTurn: true }).then(turn => {
+            let user = turn.data.data
+            if (user._id === state.activeUser._id) {
+                state.activeUser.currentTurn = user.currentTurn
+                state.activeUser.activeTurn = user.activeTurn
+            }
+        }).catch(handleError)
+    }
+}
+
+let nextTurn = function () {
+
 }
 
 export default gameStore

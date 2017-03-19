@@ -47,7 +47,9 @@ export default {
                         {
                             activeGameId: {},
                             cards: [],
-                            injuries: []
+                            injuries: [],
+                            currentTurn: false,
+                            activeTurn: false
                         }
                     }
                 ).then(user => {
@@ -93,12 +95,12 @@ export default {
             Games.findById(gameId).populate('playersInGameSession').then(game => {
                 if (!game.active) {
                     // Activate the game (when ready)
-                    //game.active = true
-                    //game.save()
-                    return res.send(handleResponse(action, { canStart: true, game: game }))
+                    game.active = true
+                    game.save()
+                    return res.send(handleResponse(action, { game: game }))
 
                 }
-                res.send(handleResponse(action, { canStart: false, message: "The game has already started" }))
+                res.send(handleResponse(action, { message: "The game has already started" }))
             }).catch(error => {
                 return next(handleResponse(action, null, error))
             })

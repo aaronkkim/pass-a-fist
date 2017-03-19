@@ -10,7 +10,51 @@ export default {
             let action = 'get a user'
             Users.findOne({ _id: req.params.id })
                 .then(user => {
+                    user.password = null
                     res.send(handleResponse(action, user))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
+    updateCurrentTurn: {
+        path: '/users/:id/turn',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update a player\'s current turn'
+            Users.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    currentTurn: req.body.currentTurn,
+                    activeTurn: req.body.activeTurn
+                },
+            }, { new: true })
+                .then(user => {
+                    user.save()
+                    console.log(user.currentTurn)
+                    res.send(handleResponse(action, {
+                        id: user._id,
+                        currentTurn: user.currentTurn,
+                        activeTurn: user.activeTurn
+                    }))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
+    updateActiveTurn: {
+        path: '/users/:id/activeturn',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update a player\'s active turn'
+            Users.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    activeTurn: req.body.activeTurn
+                },
+            }, { new: true })
+                .then(user => {
+                    user.save()
+                    console.log(user.activeTurn)
+                    res.send(handleResponse(action, user.activeTurn))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
                 })

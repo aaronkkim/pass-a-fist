@@ -16,7 +16,7 @@
         <div class="flex-container">
             <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
 
-            <div v-if="user._id == creator._id">
+            <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
             <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
@@ -104,7 +104,7 @@
                 return this.$root.$data.store.state.chat
             },
             game() {
-                return this.$root.$data.store.state.gameSession
+                return this.$root.$data.store.state.gameSession || true
             },
             creator() {
                 return this.$root.$data.store.state.creator

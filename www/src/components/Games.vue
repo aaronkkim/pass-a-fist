@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     submitText() {
-      if(this.user.name) {
+      if(this.user.name && this.text) {
         this.$root.$data.store.actions.submitText(this.user.name, this.text)
         this.text = ''
       }
