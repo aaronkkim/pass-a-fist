@@ -44,7 +44,7 @@ let state = {
 let handleError = (err) => {
     state.error = err
     state.isLoading = false
-    console.error(err)
+    console.warn(err)
 }
 
 let gameStore = {
@@ -279,7 +279,7 @@ let startTurn = (game) => {
     if (player._id) {
         api.put('users/' + player._id + '/turn', { currentTurn: true, activeTurn: true }).then(turn => {
             let user = turn.data.data
-            if (user._id === state.activeUser._id) {
+            if (user.id === state.activeUser._id) {
                 state.activeUser.currentTurn = user.currentTurn
                 state.activeUser.activeTurn = user.activeTurn
             }
