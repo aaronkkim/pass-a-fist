@@ -114,17 +114,13 @@ let gameStore = {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
                 state.creator = res.data.data.creatorId
-                //getDeck(state.gameSession._id)
-
-                state.deck = new Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
-                debugger
-                state.deck.cards = gameSession.deck
-                console.log(state.deck.cards)
-                console.log(gameSession.deck)
+                state.deck.cards = res.data.data.deck
                 chatRefresh()
             }).catch(handleError)
         },
-
+        initiateDeck() {
+             state.deck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
+        },
         chatRefresh() {
 
             client.emit('joining', { name: state.gameSession.name })
