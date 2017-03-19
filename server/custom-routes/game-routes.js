@@ -47,9 +47,7 @@ export default {
                         {
                             activeGameId: {},
                             cards: [],
-                            injuries: [],
-                            currentTurn: false,
-                            activeTurn: false
+                            injuries: []
                         }
                     }
                 ).then(user => {
@@ -80,6 +78,11 @@ export default {
             let action = 'Get all the games'
             Games.find().populate('creatorId')
                 .then(lobby => {
+                    lobby.forEach(game => {
+                        if (game.playersInGameSession.length == 0) {
+                            game.deleteGame()
+                        }
+                    })
                     res.send(handleResponse(action, lobby))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
@@ -105,7 +108,50 @@ export default {
                 return next(handleResponse(action, null, error))
             })
         }
-    }
+    },
+    updateCurrentTurn: {
+        path: '/game/:id/turn',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update turn to next player'
+            Games.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    currentTurn: req.body.currentTurn,
+                    activeTurn: req.body.activeTurn
+                },
+            }, { new: true })
+                .then(game => {
+                    game.save()
+                    console.log(game.currentTurn)
+                    res.send(handleResponse(action, {
+                        id: game._id,
+                        currentTurn: game.currentTurn,
+                        activeTurn: game.activeTurn
+                    }))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
+    updateActiveTurn: {
+        path: '/users/:id/activeturn',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update active turn to targeted player'
+            Users.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    activeTurn: req.body.activeTurn
+                },
+            }, { new: true })
+                .then(user => {
+                    user.save()
+                    console.log(user.activeTurn)
+                    res.send(handleResponse(action, user.activeTurn))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
 }
 
 

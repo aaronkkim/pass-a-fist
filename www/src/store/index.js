@@ -234,8 +234,6 @@ let gameStore = {
 let resetUserData = () => {
     state.activeUser.cards = []
     state.activeUser.injuries = []
-    state.activeUser.activeTurn = false
-    state.activeUser.currentTurn = false
     state.hand = []
     state.injuryHand = []
 }
@@ -277,18 +275,23 @@ let startTurn = (game) => {
     let player = players[[Math.floor(Math.random() * players.length)]]
 
     if (player._id) {
-        api.put('users/' + player._id + '/turn', { currentTurn: true, activeTurn: true }).then(turn => {
-            let user = turn.data.data
-            if (user.id === state.activeUser._id) {
-                state.activeUser.currentTurn = user.currentTurn
-                state.activeUser.activeTurn = user.activeTurn
-            }
-        }).catch(handleError)
+    api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id }).then(turn => {
+        let user = turn.data.data
+        if (user.id === state.activeUser._id) {
+            state.activeUser.currentTurn = user.currentTurn
+            state.activeUser.activeTurn = user.activeTurn
+        }
+    }).catch(handleError)
     }
 }
 
 let nextTurn = function () {
 
 }
+
+let nextActiveTurn = function() {
+
+}
+
 
 export default gameStore

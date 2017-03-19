@@ -9,11 +9,14 @@ let schema = new Schema({
   name: { type: String, required: true, unique: true, dropDeps: true },
   created: { type: Number, required: true, default: Date.now() },
   playersInGameSession: [{ type: ObjectId, ref: models.user.name }],
-  //RELATION
-  creatorId: { type: ObjectId, ref: models.user.name },
   active: { type: Boolean, required: true, default: false },
   maxPlayers: { type: Number, required: true },
-  deck: [{ type: ObjectId, ref: models.fight.name }]
+  //RELATION
+  deck: [{ type: ObjectId, ref: models.fight.name }],
+  creatorId: { type: ObjectId, ref: models.user.name },
+  currentTurn: { type: ObjectId, ref: models.user.name },
+  activeTurn: { type: ObjectId, ref: models.user.name },
+  lastActiveTurn: { type: ObjectId, ref: models.user.name },
 })
 
 
