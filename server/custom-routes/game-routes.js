@@ -9,7 +9,7 @@ export default {
         reqType: 'get',
         method(req, res, next) {
             let action = 'Get game session by custom game name'
-            Games.findOne({ name: req.params.name }).populate('creatorId')
+            Games.findOne({ name: req.params.name }).populate('creatorId', 'name')
                 .then(game => {
                     res.send(handleResponse(action, game))
                 }).catch(error => {
@@ -41,12 +41,17 @@ export default {
             Games.findOne({ name: req.body.name }).then(game => {
                 game.playersInGameSession.pull(userId)
                 game.save()
-                Users.findById(userId).then(user => {
-                    user.activeGameId = {}
-                    user.cards = []
-                    user.injuries = []
-                    user.save()
-                    res.send(handleResponse(action, {}))
+                Users.findByIdAndUpdate(userId,
+                    {
+                        $unset:
+                        {
+                            activeGameId: {},
+                            cards: [],
+                            injuries: []
+                        }
+                    }
+                ).then(user => {
+                    res.send(handleResponse(action, user.cards))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
                 })
@@ -58,7 +63,7 @@ export default {
         reqType: 'get',
         method(req, res, next) {
             let action = 'Get game session by custom game name'
-            Games.findOne({ name: req.params.name }).populate('playersInGameSession')
+            Games.findOne({ name: req.params.name }).populate('playersInGameSession', 'name cards injuries')
                 .then(game => {
                     res.send(handleResponse(action, game.playersInGameSession))
                 }).catch(error => {

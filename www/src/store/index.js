@@ -43,8 +43,8 @@ let state = {
 
 let handleError = (err) => {
     state.error = err
-
     state.isLoading = false
+    console.error(err)
 }
 
 let gameStore = {
@@ -100,14 +100,13 @@ let gameStore = {
         getGames() {
             api('lobby/').then(res => {
                 state.games = res.data.data
-            }).then(res => {
-                console.log(game._id)
-                // state.games.forEach(game => {
-                //     if (game.playersInGameSession.length == 0) {
-                //         console.log(game._id)
-                //         this.deleteGame(game._id)
-                //     }
-                // })
+
+                //This should probably be done on the backend
+                state.games.forEach(game => {
+                    if (game.playersInGameSession.length == 0) {
+                        this.deleteGame(game._id)
+                    }
+                })
             }).catch(handleError);
         },
         getGame(gameName) {
@@ -115,10 +114,11 @@ let gameStore = {
                 state.gameSession = res.data.data
                 state.creator = res.data.data.creatorId
                 state.deck.cards = res.data.data.deck
-                chatRefresh()
+                this.chatRefresh()
             }).catch(handleError)
         },
         initiateDeck() {
+            //Initiates a fake deck before assigning cards
              state.deck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
         },
         chatRefresh() {
@@ -139,7 +139,7 @@ let gameStore = {
             api.post('games', game).then(res => {
                 if (res.data.data.name) {
                     this.getGame(res.data.data.name)
-                    cb(gameName)
+                    this.joinGame(user, gameName, cb)
                 }
 
             }).catch(handleError)
@@ -148,7 +148,6 @@ let gameStore = {
             //console.log(gameName)
 
             api.post('joingame', { user: user, name: gameName }).then(res => {
-                console.log(res.data.data)
                 cb(gameName)
                 state.gameSession = res.data.game
 
@@ -167,11 +166,10 @@ let gameStore = {
 
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-                state.gameSession = {}
-                state.chat = []
-                state.cards = []
-                state.deck.cards = []
-
+                state.activeUser.cards = []
+                state.activeUser.injuries = []
+                state.hand = []
+                state.injuryHand = []
             }).catch(handleError)
         },
         getPlayers(gameName) {
