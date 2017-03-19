@@ -78,11 +78,11 @@ export default {
             let action = 'Get all the games'
             Games.find().populate('creatorId')
                 .then(lobby => {
-                    lobby.forEach(game => {
-                        if (game.playersInGameSession.length == 0) {
-                            game.deleteGame()
-                        }
-                    })
+                    // lobby.forEach(game => {
+                    //     if (game.playersInGameSession.length == 0) {
+                    //         game.deleteGame()
+                    //     }
+                    // })
                     res.send(handleResponse(action, lobby))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
@@ -95,7 +95,7 @@ export default {
         method(req, res, next) {
             let action = 'Start the game'
             let gameId = req.body.id
-            Games.findById(gameId).populate('playersInGameSession').then(game => {
+            Games.findById(gameId).populate('playersInGameSession', 'name age cards injuries').then(game => {
                 if (!game.active) {
                     // Activate the game (when ready)
                     game.active = true
@@ -122,7 +122,6 @@ export default {
             }, { new: true })
                 .then(game => {
                     game.save()
-                    console.log(game.currentTurn)
                     res.send(handleResponse(action, {
                         id: game._id,
                         currentTurn: game.currentTurn,

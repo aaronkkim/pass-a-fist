@@ -38,7 +38,9 @@ let state = {
     deck: {},
     hand: [],
     injuryDeck: {},
-    injuryHand: []
+    injuryHand: [],
+    currentTurn: '',
+    activeTurn: ''
 }
 
 let handleError = (err) => {
@@ -273,15 +275,15 @@ let startTurn = (game) => {
 
     let players = game.playersInGameSession
     let player = players[[Math.floor(Math.random() * players.length)]]
-
+    console.log(player)
     if (player._id) {
-    api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id }).then(turn => {
-        let user = turn.data.data
-        if (user.id === state.activeUser._id) {
-            state.activeUser.currentTurn = user.currentTurn
-            state.activeUser.activeTurn = user.activeTurn
-        }
-    }).catch(handleError)
+        console.log("yay")
+        api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id }).then(turn => {
+            let user = turn.data.data
+            console.log(user)
+            state.currentTurn = user.currentTurn
+            state.activeTurn = user.activeTurn
+        }).catch(handleError)
     }
 }
 
@@ -289,7 +291,7 @@ let nextTurn = function () {
 
 }
 
-let nextActiveTurn = function() {
+let nextActiveTurn = function () {
 
 }
 
