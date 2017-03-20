@@ -40,6 +40,7 @@ client.on('drawn', function(){
 
 
 
+
 let state = {
     activeUser: {},
     games: [],
@@ -211,19 +212,20 @@ let gameStore = {
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
-                  client.emit('drawing', {name:gameName })
+                  client.emit('drawing', {name: gameName })
                 updateDeck(gameId)
                 getHand(userId)
             }).catch(handleError)
 
         },
-        drawInjury(gameId) {
+        drawInjury(gameId, gameName) {
             if (!state.activeUser._id) return;
 
             let card = state.injuryDeck.draw()
             let userId = state.activeUser._id
 
             api.put('users/' + userId + '/drawinjury', { card: card }).then(res => {
+                 client.emit('drawing', {name: gameName })
                 updateInjuryDeck(gameId)
                 getInjuryHand(userId)
             }).catch(handleError)
