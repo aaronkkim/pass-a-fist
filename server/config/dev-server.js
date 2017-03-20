@@ -22,16 +22,16 @@ function Validate(req, res, next) {
     return next()
 }
 
-// function logger(req, res, next) {
-//     console.log('INCOMING REQUEST', req.url)
-//     next()
-// }
+function logger(req, res, next) {
+    console.log('INCOMING REQUEST', req.url)
+    next()
+}
 
 // REGISTER MIDDLEWARE
 app.use(session)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-// app.use('*', logger)
+app.use('*', logger)
 app.use('*', cors(corsOptions))
 app.use(Auth)
 
@@ -62,16 +62,18 @@ io.sockets.on('connection', function (socket) {
 
         })
     })
-            socket.on('message', (d) => {
-                console.log("sending message to:", d.name, "in", d.gameName)
-                io.to(d.gameName).emit('message', d)
-            })
+    socket.on('message', (d) => {
+        console.log("sending message to:", d.name, "in", d.gameName)
+        io.to(d.gameName).emit('message', d)
+    })
     socket.on('leavegame', function (room) {
+
         // console.log(socket)
         // console.log(socket.rooms, socket.room)
         // console.log("player leaving", room)
-        socket.leave(room, ()=>{
-            // console.log("player has left")
+        socket.leave(room, () => {
+            socket.to(room).emit("leavegame", room) 
+       // console.log("player has left")
         })
 
     })
