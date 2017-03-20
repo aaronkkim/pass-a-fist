@@ -1,7 +1,6 @@
 <template>
+
     <div id="home">
-
-
         <div v-if="loading" class="loader">
             <img src="../assets/preloader.gif" alt="">
         </div>
@@ -46,80 +45,10 @@
 
             </div>
             
-            <!--<div class="row bgwhite">
-                <div class="col s6">
-
-                    <h1>How to play:</h1>
-                </div>
-                <div class="col s6">
-
-                    <ul>
-                        <li> To start turn, a player always draws 1 card from the top of the Fight deck. That player can then
-                            play an Attack card from their hand on another player.</li>
-                            <br>
-                        <li>If an Attack card lands on a player at any time, that player can play a Counter card to stap or redirect
-                            the attack.</li>
-                            <br>
-                        <li>If an Attack card lands on a player, and that player can't (or won't) play a Counter card, then the
-                            Attack card is successful, and the player receives an Injury card.</li>
-                            <br>
-                        <li> If an Attack card results in an injury, the player that originally played the Attack gets to draw
-                            an additional Fight card as a bonus. </li>
-                            <br>
-                        <li>If a player is knocked out by an attack card on your turn, you get their entire hand as a bonus,
-                            instead of drawing an additional fight card</li>
-                            <br>
-                        <li class="redtext">IF YOU GET 3 INJURY CARDS, YOU'RE OUT OF THE GAME.</li>
-                    </ul>
-                </div>
-            </div>-->
-            <!--<div class="row bgpic2">
-
-
-                <div class="elevated-box2 center-things">
-                     <a class="waves-effect waves-light btn-flat" href="www.passafist.net">Real life pass-a-fist </a>
-                </div>
-
-
-
-            </div>-->
-
-
-
-<!--
-            <div class="row bgwhite">
-                <div class="col s6">
-
-
-                    <ul>
-                        <li> To start turn, a player always draws 1 card from the top of the Fight deck. That player can then
-                            play an Attack card from their hand on another player.</li>
-                            <br>
-                        <li>If an Attack card lands on a player at any time, that player can play a Counter card to stop or redirect
-                            the attack.</li>
-                            <br>
-                        <li>If an Attack card lands on a player, and that player can't (or won't) play a Counter card, then the
-                            Attack card is successful, and the player receives an Injury card.</li>
-                            <br>
-                        <li> If an Attack card results in an injury, the player that originally played the Attack gets to draw
-                            an additional Fight card as a bonus. </li>
-                            <br>
-                        <li>If a player is knocked out by an attack card on your turn, you get their entire hand as a bonus,
-                            instead of drawing an additional fight card</li>
-                            
-                        <li class="redtext">IF YOU GET 3 INJURY CARDS, YOU'RE OUT OF THE GAME.</li>
-                    </ul>
-
-                </div>
-                <div class="col s6">
-                    <h2>The Story of Pass-A-Fist</h2>
-                </div>
-            </div>-->
+           
         </div>
-
-
-    </div>
-    </div>
+      </div>
+    
     
 </template>
 

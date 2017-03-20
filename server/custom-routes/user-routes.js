@@ -27,7 +27,6 @@ export default {
             }, { new: true })
                 .then(user => {
                     user.save()
-                    console.log(user.cards)
                     res.send(handleResponse(action, user.cards))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
@@ -44,7 +43,6 @@ export default {
             }, { new: true })
                 .then(user => {
                     user.save()
-                    console.log(user.cards)
                     res.send(handleResponse(action, user.cards))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
@@ -61,7 +59,6 @@ export default {
             }, { new: true })
                 .then(user => {
                     user.save()
-                    console.log(user.injuries)
                     res.send(handleResponse(action, user.injuries))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))

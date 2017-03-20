@@ -107,7 +107,7 @@ export default {
             })
         }
     },
-    updateCurrentTurn: {
+    switchCurrentTurn: {
         path: '/game/:id/turn',
         reqType: 'put',
         method(req, res, next) {
@@ -130,8 +130,8 @@ export default {
                 })
         }
     },
-    updateActiveTurn: {
-        path: '/users/:id/activeturn',
+    switchActiveTurn: {
+        path: '/game/:id/activeturn',
         reqType: 'put',
         method(req, res, next) {
             let action = 'Update active turn to targeted player'
@@ -142,7 +142,6 @@ export default {
             }, { new: true })
                 .then(user => {
                     user.save()
-                    console.log(user.activeTurn)
                     res.send(handleResponse(action, user.activeTurn))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))

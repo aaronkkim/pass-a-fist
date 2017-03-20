@@ -14,12 +14,12 @@
 
 
         <div class="flex-container">
-            <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
+            <img src="../assets/cards/main-fight.png" v-if="game.active"class="deck-fight rotate90" @click="drawCard">
 
             <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
-            <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
+            <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" @click="drawInjury">
         </div>
 
         <div class="fixed-action-btn click-to-toggle">

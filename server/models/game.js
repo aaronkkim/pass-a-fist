@@ -11,10 +11,20 @@ let schema = new Schema({
   playersInGameSession: [{ type: ObjectId, ref: models.user.name }],
   active: { type: Boolean, required: true, default: false },
   maxPlayers: { type: Number, required: true },
+  // Phase 0: No turn
+  // Phase 1: Draw a card
+  // Phase 2: Choose an attack (if you have one)
+  // Phase 3: Choose a target*
+  // Phase 4: Target chooses a counter or takes an Injury
+  // Phase 5: Target chooses who the counter affects*
+  // Phase 6: Post-injury logic (Knockouts, CPR)*
+  turnPhase: { type: Number, default: 0 },
   //RELATION
   deck: [{ type: ObjectId, ref: models.fight.name }],
+  injuryDeck: [{ type: ObjectId, ref: models.injury.name }],
   creatorId: { type: ObjectId, ref: models.user.name },
   currentTurn: { type: ObjectId, ref: models.user.name },
+  lastTurn: { type: ObjectId, ref: models.user.name },
   activeTurn: { type: ObjectId, ref: models.user.name },
   lastActiveTurn: { type: ObjectId, ref: models.user.name },
 })
