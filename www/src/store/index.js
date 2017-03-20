@@ -155,7 +155,7 @@ let gameStore = {
                 state.gameSession = res.data.game
 
                 console.log("attempting to join room")
-                client.emit('joining', { name: gameName, user: user  })
+                client.emit('joining', { name: gameName, user: user })
                 client.to(gameName).on('joined', function () {
                     console.log("Joined Room")
                     getPlayers()
@@ -226,6 +226,7 @@ let gameStore = {
                         api('injuries').then(injuries => {
                             let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
                             state.injuryDeck = injuryDeck
+                            state.gameSession.active = true
                             dealHands(res.data.data.game)
                             startTurn(res.data.data.game)
                             updateDeck(id)
