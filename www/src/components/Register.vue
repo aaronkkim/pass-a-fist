@@ -5,26 +5,29 @@
       <input type="email" v-model="email" placeholder="Email" required>
       <input type="number" v-model="age" placeholder="Age" required>
       <input type="password" v-model="password" placeholder="Password" reqiured>
-      <input name="group1" type="radio" id="icon1" />
+      <p class="grey-text">Badge</p>
+      <input name="group1" type="radio" id="icon1" value="../assets/icon1.png" v-model="badge" />
       <label for="icon1"> <img src="../assets/icon1.png" alt=""></label>
-      <input name="group1" type="radio" id="icon2" />
+      <input name="group1" type="radio" id="icon2" value="../assets/icon2.png" v-model="badge"/>
       <label for="icon2"> <img src="../assets/icon2.png" alt=""></label>
-      <input name="group1" type="radio" id="icon3" />
+      <input name="group1" type="radio" id="icon3" value="../assets/icon3.png" v-model="badge"/>
       <label for="icon3"> <img src="../assets/icon3.png" alt=""></label>
-      <input name="group1" type="radio" id="icon4" />
+      <input name="group1" type="radio" id="icon4" value="../assets/icon4.png" v-model="badge"/>
       <label for="icon4"> <img src="../assets/icon4.png" alt=""></label>
-      <input name="group1" type="radio" id="icon5" />
+      <input name="group1" type="radio" id="icon5" value="../assets/icon5.png" v-model="badge"/>
       <label for="icon5"> <img src="../assets/icon5.png" alt=""></label>
-      <input name="group1" type="radio" id="icon6" />
+      <input name="group1" type="radio" id="icon6" value="../assets/icon6.png" v-model="badge"/>
       <label for="icon6"> <img src="../assets/icon6.png" alt=""></label>
       <br>
       <button class="waves-effect waves-light btn">Register</button>
+     
     </form>
     <!--<list></list>-->
   </div>
 </template>
 
 <script>
+    import badges from "../assets/icons.js"
     export default {
         name: 'Register',
         data() {
@@ -32,12 +35,15 @@
                 username: '',
                 email: '',
                 age: '',
-                password: ''
+                password: '',
+                badge: '',
+                icons: badges
             }
         },
         methods: {
             registerUser() {
-                this.$root.$data.store.actions.register(this.username, this.email, this.password, this.age)
+                this.$root.$data.store.actions.register(this.username, this.email, this.password, this.age, this.badge)
+                debugger
                 this.$router.push({
                         path: '/'
                     })
@@ -58,9 +64,5 @@
     img {
         height: 100px;
         width: 100px;
-    }
-    
-    label.active {
-        background-color: aquamarine;
     }
 </style>

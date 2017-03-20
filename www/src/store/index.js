@@ -10,13 +10,13 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://localhost:3000/');
+let client = io.connect('http://192.168.0.7:3000/');
 
-client.on('CONNECTED', function (data) {
+client.on('CONNECTED', function(data) {
     console.log(data);
 });
 
-client.on('message', function (data) {
+client.on('message', function(data) {
 
     console.log(data);
 
@@ -25,15 +25,15 @@ client.on('message', function (data) {
 
     }
 });
-client.on('joined', function () {
+client.on('joined', function() {
     console.log("Joined Room")
     gameStore.actions.getPlayers(state.gameSession.name)
 })
-client.on('leavegame', function () {
+client.on('leavegame', function() {
     console.log("Leaving Room")
     gameStore.actions.getPlayers(state.gameSession.name)
 })
-client.on('drawn', function(){
+client.on('drawn', function() {
     console.log("Drawing Card")
     gameStore.actions.getPlayers(state.gameSession.name)
     console.log("You have drawn a card?")
@@ -82,13 +82,14 @@ let gameStore = {
                 state.isLoading = false
             }).catch(handleError)
         },
-        register(username, email, password, age) {
+        register(username, email, password, age, badge) {
             state.isLoading = true
             api.post('register', {
                 name: username,
                 email: email,
                 password: password,
-                age: age
+                age: age,
+                badgeUrl: badge
             }).then(res => {
                 this.login(email, password)
             }).catch(handleError)
@@ -143,7 +144,7 @@ let gameStore = {
         },
         chatRefresh() {
             client.emit('joining', { name: state.gameSession.name })
-            client.on('joined', function () {
+            client.on('joined', function() {
                 console.log("Joined Room")
             })
 
@@ -185,10 +186,10 @@ let gameStore = {
 
         leaveGame(user, gameName, cb) {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-            client.emit('leavegame', gameName)
-                //     console.log("Attempting to leave")
-                // this.getPlayers(gameName)
-                // console.log("Left game")
+                client.emit('leavegame', gameName)
+                    //     console.log("Attempting to leave")
+                    // this.getPlayers(gameName)
+                    // console.log("Left game")
                 resetUserData()
                 cb()
             }).catch(handleError)
@@ -213,7 +214,7 @@ let gameStore = {
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
-                  client.emit('drawing', {name: gameName })
+                client.emit('drawing', { name: gameName })
                 updateDeck(gameId)
                 getHand(userId)
             }).catch(handleError)
@@ -226,7 +227,7 @@ let gameStore = {
             let userId = state.activeUser._id
 
             api.put('users/' + userId + '/drawinjury', { card: card }).then(res => {
-                 client.emit('drawing', {name: gameName })
+                client.emit('drawing', { name: gameName })
                 updateInjuryDeck(gameId)
                 getInjuryHand(userId)
             }).catch(handleError)
@@ -330,11 +331,11 @@ let startTurn = (game) => {
     }
 }
 
-let nextTurn = function () {
+let nextTurn = function() {
 
 }
 
-let nextActiveTurn = function () {
+let nextActiveTurn = function() {
 
 }
 

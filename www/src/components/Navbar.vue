@@ -26,6 +26,7 @@
       <div v-else>
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
         <li> Welcome, {{user.name}}!</li>
+        <li><img :src="user.badgeUrl" alt=""></li>
         <li><a href='#' @click="logout">Logout</a></li>
       </ul>
       </div>
