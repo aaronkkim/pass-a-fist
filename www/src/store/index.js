@@ -295,7 +295,7 @@ let startTurn = (game) => {
     if (!game.playersInGameSession) return;
 
     let players = game.playersInGameSession
-    let player = players[[Math.floor(Math.random() * players.length)]]
+    let player = players[Math.floor(Math.random() * players.length)]
     console.log(player)
     if (player._id) {
         api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id }).then(turn => {

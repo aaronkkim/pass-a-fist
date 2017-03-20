@@ -142,7 +142,6 @@ export default {
             }, { new: true })
                 .then(user => {
                     user.save()
-                    console.log(user.activeTurn)
                     res.send(handleResponse(action, user.activeTurn))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
