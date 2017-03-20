@@ -268,6 +268,7 @@ let resetUserData = () => {
     state.activeUser.createdGame = false
     state.hand = []
     state.injuryHand = []
+    state.chat = []
 }
 
 let dealHands = (game) => {
