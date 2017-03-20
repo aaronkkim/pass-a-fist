@@ -9,7 +9,7 @@ export default {
         reqType: 'get',
         method(req, res, next) {
             let action = 'Get game session by custom game name'
-            Games.findOne({ name: req.params.name }).populate('creatorId')
+            Games.findOne({ name: req.params.name }).populate('creatorId', 'name')
                 .then(game => {
                     res.send(handleResponse(action, game))
                 }).catch(error => {
@@ -41,12 +41,17 @@ export default {
             Games.findOne({ name: req.body.name }).then(game => {
                 game.playersInGameSession.pull(userId)
                 game.save()
-                Users.findById(userId).then(user => {
-                    user.activeGameId = {}
-                    user.cards = []
-                    user.injuries = []
-                    user.save()
-                    res.send(handleResponse(action, {}))
+                Users.findByIdAndUpdate(userId,
+                    {
+                        $unset:
+                        {
+                            activeGameId: {},
+                            cards: [],
+                            injuries: []
+                        }
+                    }
+                ).then(user => {
+                    res.send(handleResponse(action, user.cards))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
                 })
@@ -58,7 +63,7 @@ export default {
         reqType: 'get',
         method(req, res, next) {
             let action = 'Get game session by custom game name'
-            Games.findOne({ name: req.params.name }).populate('playersInGameSession')
+            Games.findOne({ name: req.params.name }).populate('playersInGameSession', 'name cards injuries')
                 .then(game => {
                     res.send(handleResponse(action, game.playersInGameSession))
                 }).catch(error => {
@@ -73,7 +78,10 @@ export default {
             let action = 'Get all the games'
             Games.find().populate('creatorId')
                 .then(lobby => {
-                    res.send(handleResponse(action, lobby))
+                    let availableGames = lobby.filter(game => {
+                        return !game.active
+                    })
+                    res.send(handleResponse(action, availableGames))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
                 })
@@ -85,20 +93,62 @@ export default {
         method(req, res, next) {
             let action = 'Start the game'
             let gameId = req.body.id
-            Games.findById(gameId).populate('playersInGameSession').then(game => {
+            Games.findById(gameId).populate('playersInGameSession', 'name age cards injuries').then(game => {
                 if (!game.active) {
                     // Activate the game (when ready)
-                    //game.active = true
-                    //game.save()
-                    return res.send(handleResponse(action, { canStart: true, game: game }))
+                    game.active = true
+                    game.save()
+                    return res.send(handleResponse(action, { game: game }))
 
                 }
-                res.send(handleResponse(action, { canStart: false, message: "The game has already started" }))
+                res.send(handleResponse(action, { message: "The game has already started" }))
             }).catch(error => {
                 return next(handleResponse(action, null, error))
             })
         }
-    }
+    },
+    updateCurrentTurn: {
+        path: '/game/:id/turn',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update turn to next player'
+            Games.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    currentTurn: req.body.currentTurn,
+                    activeTurn: req.body.activeTurn
+                },
+            }, { new: true })
+                .then(game => {
+                    game.save()
+                    res.send(handleResponse(action, {
+                        id: game._id,
+                        currentTurn: game.currentTurn,
+                        activeTurn: game.activeTurn
+                    }))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
+    updateActiveTurn: {
+        path: '/users/:id/activeturn',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update active turn to targeted player'
+            Users.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    activeTurn: req.body.activeTurn
+                },
+            }, { new: true })
+                .then(user => {
+                    user.save()
+                    console.log(user.activeTurn)
+                    res.send(handleResponse(action, user.activeTurn))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
 }
 
 

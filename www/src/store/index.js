@@ -38,13 +38,15 @@ let state = {
     deck: {},
     hand: [],
     injuryDeck: {},
-    injuryHand: []
+    injuryHand: [],
+    currentTurn: '',
+    activeTurn: ''
 }
 
 let handleError = (err) => {
     state.error = err
-
     state.isLoading = false
+    console.warn(err)
 }
 
 let gameStore = {
@@ -100,33 +102,30 @@ let gameStore = {
         getGames() {
             api('lobby/').then(res => {
                 state.games = res.data.data
-            }).then(res => {
-                console.log(game._id)
-                // state.games.forEach(game => {
-                //     if (game.playersInGameSession.length == 0) {
-                //         console.log(game._id)
-                //         this.deleteGame(game._id)
-                //     }
-                // })
+
+                //This should probably be done on the backend
+                state.games.forEach(game => {
+                    if (game.playersInGameSession.length == 0) {
+                        this.deleteGame(game._id)
+                    }
+                })
             }).catch(handleError);
         },
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
                 state.creator = res.data.data.creatorId
-                //getDeck(state.gameSession._id)
-
-                state.deck = new Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
-                debugger
-                state.deck.cards = gameSession.deck
-                console.log(state.deck.cards)
-                console.log(gameSession.deck)
-                chatRefresh()
+                state.deck.cards = res.data.data.deck
+                state.injuryDeck.cards = res.data.data.injuryDeck
+                this.chatRefresh()
             }).catch(handleError)
         },
-
+        initiateDeck() {
+            //Initiates a fake deck before assigning cards
+            state.deck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
+            state.injuryDeck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
+        },
         chatRefresh() {
-
             client.emit('joining', { name: state.gameSession.name })
             client.on('joined', function () {
                 console.log("Joined Room")
@@ -143,7 +142,7 @@ let gameStore = {
             api.post('games', game).then(res => {
                 if (res.data.data.name) {
                     this.getGame(res.data.data.name)
-                    cb(gameName)
+                    this.joinGame(user, gameName, cb)
                 }
 
             }).catch(handleError)
@@ -152,10 +151,8 @@ let gameStore = {
             //console.log(gameName)
 
             api.post('joingame', { user: user, name: gameName }).then(res => {
-                console.log(res.data.data)
                 cb(gameName)
                 state.gameSession = res.data.game
-
 
                 console.log("attempting to join room")
                 client.emit('joining', { name: gameName })
@@ -167,15 +164,12 @@ let gameStore = {
 
             }).catch(handleError)
         },
-        leaveGame(user, gameName) {
+        leaveGame(user, gameName, cb) {
 
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-                state.gameSession = {}
-                state.chat = []
-                state.cards = []
-                state.deck.cards = []
-
+                resetUserData()
+                cb()
             }).catch(handleError)
         },
         getPlayers(gameName) {
@@ -191,7 +185,6 @@ let gameStore = {
                 }
             })
         },
-
         drawCard(gameId) {
             if (!state.activeUser._id) return;
 
@@ -203,17 +196,17 @@ let gameStore = {
             }).catch(handleError)
 
         },
-        getInjuryDeck() {
-            api('injuries').then(res => {
-                let injuryDeck = Shuffle.shuffle({ deck: res.data.data })
-                state.injuryDeck = injuryDeck
-            }).catch(handleError)
-        },
         drawInjury(gameId) {
-            if (state.activeUser) {
-                let injuryHand = state.injuryDeck.draw()
-                state.injuryHand.push(injuryHand)
-            }
+            if (!state.activeUser._id) return;
+
+            let card = state.injuryDeck.draw()
+            let userId = state.activeUser._id
+
+            api.put('users/' + userId + '/drawinjury', { card: card }).then(res => {
+                updateInjuryDeck(gameId)
+                getInjuryHand(userId)
+            }).catch(handleError)
+
         },
         deleteGame(id) {
             api.delete('games/' + id)
@@ -224,22 +217,35 @@ let gameStore = {
         },
         startGame(id) {
             api.post('startgame', { id: id }).then(res => {
-                if (res.data.data.canStart) {
+                if (res.data.data.game) {
                     //Shuffle the deck
                     api('fights').then(cards => {
                         let deck = Shuffle.shuffle({ deck: cards.data.data })
                         state.deck = deck
-                        dealHands(res.data.data.game)
-                        updateDeck(id)
+                        api('injuries').then(injuries => {
+                            let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
+                            state.injuryDeck = injuryDeck
+                            dealHands(res.data.data.game)
+                            startTurn(res.data.data.game)
+                            updateDeck(id)
+                            updateInjuryDeck(id)
+                        })
                     }).catch(handleError)
+                } else {
+                    console.log(res.data.data.message)
                 }
             })
         }
     }
 }
 
-let getDeck = () => {
-    
+let resetUserData = () => {
+    state.gameSession = {}
+    state.activeUser.cards = []
+    state.activeUser.injuries = []
+    state.activeUser.createdGame = false
+    state.hand = []
+    state.injuryHand = []
 }
 
 let dealHands = (game) => {
@@ -266,10 +272,46 @@ let getHand = (id) => {
     }).catch(handleError)
 }
 
-let updateDeck = (id) => {
-    api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
-
+let getInjuryHand = (id) => {
+    api('users/' + id + '/injuries').then(injuries => {
+        state.injuryHand = injuries.data.data
     }).catch(handleError)
 }
+
+let updateDeck = (id) => {
+    api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
+        // Hrmm
+    }).catch(handleError)
+}
+
+let updateInjuryDeck = (id) => {
+    api.put('games/' + id, { injuryDeck: state.injuryDeck.cards }).then(deck => {
+        // Hrmm
+    }).catch(handleError)
+}
+
+let startTurn = (game) => {
+    if (!game.playersInGameSession) return;
+
+    let players = game.playersInGameSession
+    let player = players[[Math.floor(Math.random() * players.length)]]
+    console.log(player)
+    if (player._id) {
+        api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id }).then(turn => {
+            let user = turn.data.data
+            state.currentTurn = user.currentTurn
+            state.activeTurn = user.activeTurn
+        }).catch(handleError)
+    }
+}
+
+let nextTurn = function () {
+
+}
+
+let nextActiveTurn = function () {
+
+}
+
 
 export default gameStore

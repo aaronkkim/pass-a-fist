@@ -17,7 +17,7 @@ new Vue({
     components: { App }
 })
 
-var client = io('http://192.168.0.52:3000');
+var client = io('http://localhost:3000');
 
 client.on('connection', function(socket) {
     console.log(socket);
@@ -25,8 +25,6 @@ client.on('connection', function(socket) {
     socket.on('CONNECTED', function(data) {
         console.log(data);
     })
-
-
 
     socket.emit('update', function(data) {
         console.log(data)

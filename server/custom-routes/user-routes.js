@@ -10,6 +10,7 @@ export default {
             let action = 'get a user'
             Users.findOne({ _id: req.params.id })
                 .then(user => {
+                    user.password = null
                     res.send(handleResponse(action, user))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
@@ -50,6 +51,23 @@ export default {
                 })
         }
     },
+    addInjury: {
+        path: '/users/:id/drawinjury',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Adds one injury to player\'s hand'
+            Users.findByIdAndUpdate(req.params.id, {
+                $push: { injuries: req.body.card },
+            }, { new: true })
+                .then(user => {
+                    user.save()
+                    console.log(user.injuries)
+                    res.send(handleResponse(action, user.injuries))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
+        }
+    },
     getCards: {
         path: '/users/:id/cards',
         reqType: 'get',
@@ -57,6 +75,18 @@ export default {
             let action = 'Get your hand'
             Users.findById(req.params.id).populate("cards").then(user => {
                 res.send(handleResponse(action, user.cards))
+            }).catch(error => {
+                return next(handleResponse(action, null, error))
+            })
+        }
+    },
+    getInjuries: {
+        path: '/users/:id/injuries',
+        reqType: 'get',
+        method(req, res, next) {
+            let action = 'Get your injuries'
+            Users.findById(req.params.id).populate("injuries").then(user => {
+                res.send(handleResponse(action, user.injuries))
             }).catch(error => {
                 return next(handleResponse(action, null, error))
             })
