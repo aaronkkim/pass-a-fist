@@ -6,7 +6,7 @@ let ObjectId = Schema.Types.ObjectId
 
 
 let schema = new Schema({
-  name: { type: String, required: true, unique: true, dropDeps: true },
+  name: { type: String, required: true, unique: true, dropDups: true },
   created: { type: Number, required: true, default: Date.now() },
   playersInGameSession: [{ type: ObjectId, ref: models.user.name }],
   active: { type: Boolean, required: true, default: false },
