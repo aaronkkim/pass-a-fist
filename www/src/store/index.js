@@ -10,7 +10,7 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://192.168.0.7:3000/');
+let client = io.connect('http://localhost:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
@@ -36,7 +36,9 @@ client.on('leavegame', function () {
 client.on('drawn', function(){
     console.log("Drawing Card")
     gameStore.actions.getPlayers(state.gameSession.name)
+    console.log("You have drawn a card?")
 })
+
 
 
 
@@ -211,19 +213,20 @@ let gameStore = {
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
-                  client.emit('drawing', {name:gameName })
+                  client.emit('drawing', {name: gameName })
                 updateDeck(gameId)
                 getHand(userId)
             }).catch(handleError)
 
         },
-        drawInjury(gameId) {
+        drawInjury(gameId, gameName) {
             if (!state.activeUser._id) return;
 
             let card = state.injuryDeck.draw()
             let userId = state.activeUser._id
 
             api.put('users/' + userId + '/drawinjury', { card: card }).then(res => {
+                 client.emit('drawing', {name: gameName })
                 updateInjuryDeck(gameId)
                 getInjuryHand(userId)
             }).catch(handleError)
