@@ -33,6 +33,10 @@ client.on('leavegame', function () {
     console.log("Leaving Room")
     gameStore.actions.getPlayers(state.gameSession.name)
 })
+client.on('drawn', function(){
+    console.log("Drawing Card")
+    gameStore.actions.getPlayers(state.gameSession.name)
+})
 
 
 
@@ -200,12 +204,13 @@ let gameStore = {
                 }
             })
         },
-        drawCard(gameId) {
+        drawCard(gameId, gameName) {
             if (!state.activeUser._id) return;
 
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
+                  client.emit('drawing', {name:gameName })
                 updateDeck(gameId)
                 getHand(userId)
             }).catch(handleError)

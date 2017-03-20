@@ -137,7 +137,7 @@
                 }
             },
             drawCard() {
-                this.$root.$data.store.actions.drawCard(this.game._id)
+                this.$root.$data.store.actions.drawCard(this.game._id, this.gameName)
             },
             drawInjury() {
                 this.$root.$data.store.actions.drawInjury(this.game._id)
