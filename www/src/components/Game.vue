@@ -170,7 +170,7 @@
         ul {
             position: relative;
             bottom: auto;
-            overflow: scroll;
+            overflow: auto;
             height: 100%;
             text-align:left;
             margin-left: 10px;
@@ -267,7 +267,7 @@
     
     .textbox {
         background-color: white;
-        width: 30%;
+        width: 20%;
         height: 50%;
         position: fixed;
         bottom: 0;

@@ -200,6 +200,7 @@ let gameStore = {
                         var player = state.players[i];
                         if (player._id === state.activeUser._id) {
                             getHand(player._id)
+                            getInjuryHand(player._id)
                         }
                     }
                 }
