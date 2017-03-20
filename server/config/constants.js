@@ -30,6 +30,12 @@ const models = {
         endpoint: 'games',
         // preventDefaultApi: true,
         useCustomRoutes: true
+    },
+    badge: {
+        name: 'Badge',
+        endpoint: 'badges',
+        // preventDefaultApi: true,
+        // useCustomRoutes: true
     }
     // More models here in future
 }

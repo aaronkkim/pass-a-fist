@@ -17,6 +17,7 @@ let schema = new Schema({
   // Phase 3: Choose a target*
   // Phase 4: Target chooses a counter or takes an Injury
   // Phase 5: Target chooses who the counter affects*
+  // Phase 6: Post-injury logic (Knockouts, CPR)*
   turnPhase: { type: Number, default: 0 },
   //RELATION
   deck: [{ type: ObjectId, ref: models.fight.name }],
