@@ -1,7 +1,5 @@
 <template>
     <div>
-
-
         <div v-if="loading" class="loader">
             <img src="../assets/preloader.gif" alt="">
         </div>
@@ -24,6 +22,7 @@
 
                 </div>
             </div>
+            
             <div class="row bgwhite">
                 <div class="col s6">
 
@@ -52,6 +51,8 @@
                 <div class="elevated-box2">
                     <p>Check out the original Pass-a-fist</p>
                 </div>
+
+                
 
 
 
@@ -84,9 +85,7 @@
                 </div>
             </div>
         </div>
-
-
-    </div>
+      </div>
     </div>
     
 </template>

@@ -25,14 +25,14 @@ client.on('message', function (data) {
 
     }
 });
-  client.on('joined', function () {
-     console.log("Joined Room") 
+client.on('joined', function () {
+    console.log("Joined Room")
     gameStore.actions.getPlayers(state.gameSession.name)
 })
-  client.on('leavegame', function () {
+client.on('leavegame', function () {
     console.log("Leaving Room")
     gameStore.actions.getPlayers(state.gameSession.name)
-  })
+})
 
 
 let state = {
@@ -164,22 +164,24 @@ let gameStore = {
                 state.gameSession = res.data.game
 
                 console.log("attempting to join room")
-                client.emit('joining', { name: gameName, user: user  })
 
-              
-                    // console.log(data)
-                
+                client.emit('joining', { name: gameName, user: user })
+
+
+
+                // console.log(data)
+
 
 
             }).catch(handleError)
         },
-        
+
         leaveGame(user, gameName, cb) {
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-            //     console.log("Attempting to leave")
-            // this.getPlayers(gameName)
-            // console.log("Left game")
+                //     console.log("Attempting to leave")
+                // this.getPlayers(gameName)
+                // console.log("Left game")
                 resetUserData()
                 cb()
             }).catch(handleError)
@@ -237,6 +239,7 @@ let gameStore = {
                         api('injuries').then(injuries => {
                             let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
                             state.injuryDeck = injuryDeck
+                            state.gameSession.active = true
                             dealHands(res.data.data.game)
                             startTurn(res.data.data.game)
                             updateDeck(id)
@@ -306,7 +309,7 @@ let startTurn = (game) => {
     if (!game.playersInGameSession) return;
 
     let players = game.playersInGameSession
-    let player = players[[Math.floor(Math.random() * players.length)]]
+    let player = players[Math.floor(Math.random() * players.length)]
     console.log(player)
     if (player._id) {
         api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id }).then(turn => {
