@@ -267,7 +267,7 @@
     
     .textbox {
         background-color: white;
-        width: 30%;
+        width: 20%;
         height: 50%;
         position: fixed;
         bottom: 0;
