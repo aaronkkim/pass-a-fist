@@ -78,12 +78,10 @@ export default {
             let action = 'Get all the games'
             Games.find().populate('creatorId')
                 .then(lobby => {
-                    // lobby.forEach(game => {
-                    //     if (game.playersInGameSession.length == 0) {
-                    //         game.deleteGame()
-                    //     }
-                    // })
-                    res.send(handleResponse(action, lobby))
+                    let availableGames = lobby.filter(game => {
+                        return !game.active
+                    })
+                    res.send(handleResponse(action, availableGames))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
                 })

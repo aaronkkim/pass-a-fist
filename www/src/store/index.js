@@ -243,6 +243,7 @@ let resetUserData = () => {
     state.gameSession = {}
     state.activeUser.cards = []
     state.activeUser.injuries = []
+    state.activeUser.createdGame = false
     state.hand = []
     state.injuryHand = []
 }
