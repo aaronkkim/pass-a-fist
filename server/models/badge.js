@@ -7,10 +7,9 @@ let ObjectId = Schema.Types.ObjectId
 
 let schema = new Schema({
   name: { type: String, required: true },
-  imgUrl: { type: String, required: true}
-
+  imgUrl: { type: String, required: true }
 })
 
 
 
-module.exports = mongoose.model('Game', schema)
+module.exports = mongoose.model('Badge', schema)
