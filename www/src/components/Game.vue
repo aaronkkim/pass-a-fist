@@ -170,7 +170,7 @@
         ul {
             position: relative;
             bottom: auto;
-            overflow: scroll;
+            overflow: auto;
             height: 100%;
             text-align:left;
             margin-left: 10px;
