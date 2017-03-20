@@ -21,6 +21,7 @@ let schema = new Schema({
   turnPhase: { type: Number, default: 0 },
   //RELATION
   deck: [{ type: ObjectId, ref: models.fight.name }],
+  injuryDeck: [{ type: ObjectId, ref: models.injury.name }],
   creatorId: { type: ObjectId, ref: models.user.name },
   currentTurn: { type: ObjectId, ref: models.user.name },
   lastTurn: { type: ObjectId, ref: models.user.name },
