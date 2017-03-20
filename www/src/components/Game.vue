@@ -84,7 +84,6 @@
             this.$root.$data.store.actions.getGame(this.$route.params.id)
             this.$root.$data.store.actions.getPlayers(this.$route.params.id)
                 // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-                // this.$root.$data.store.actions.getInjuryDeck()
 
 
         },
