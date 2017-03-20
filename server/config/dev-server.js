@@ -77,6 +77,18 @@ io.sockets.on('connection', function (socket) {
         })
 
     })
+    
+    socket.on('drawing', function (data) {
+        console.log("data: ", data)
+        socket.join(data.name, function () {
+            console.log("attempting to draw")
+            socket.to(data.name).emit("drawn", data)
+            // io.in(data.name)
+
+            console.log("you have drawn a card")
+
+        })
+    })
 })
 
 export default server
