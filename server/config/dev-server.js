@@ -22,16 +22,16 @@ function Validate(req, res, next) {
     return next()
 }
 
-function logger(req, res, next) {
-    console.log('INCOMING REQUEST', req.url)
-    next()
-}
+// function logger(req, res, next) {
+//     console.log('INCOMING REQUEST', req.url)
+//     next()
+// }
 
 // REGISTER MIDDLEWARE
 app.use(session)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use('*', logger)
+// app.use('*', logger)
 app.use('*', cors(corsOptions))
 app.use(Auth)
 
@@ -55,7 +55,7 @@ io.sockets.on('connection', function (socket) {
         console.log("data: ", data)
         socket.join(data.name, function () {
             console.log("attempting to connect user")
-            socket.to(data.name).emit("joined")
+            socket.to(data.name).emit("joined", data)
             // io.in(data.name)
 
             console.log("you have joined " + data.name + " chat!")

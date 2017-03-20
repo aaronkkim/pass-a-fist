@@ -25,6 +25,15 @@ client.on('message', function (data) {
 
     }
 });
+  client.on('joined', function () {
+     console.log("Joined Room") 
+    gameStore.actions.getPlayers(state.gameSession.name)
+})
+  client.on('leavegame', function () {
+    console.log("Leaving Room")
+    gameStore.actions.getPlayers(state.gameSession.name)
+  })
+
 
 let state = {
     activeUser: {},
@@ -50,7 +59,7 @@ let handleError = (err) => {
 }
 
 let gameStore = {
-    // Time to fix shit
+
     //ALL DATA LIVES IN THE STATE
     state,
     //ACTIONS are responsible for managing all async requests
@@ -156,19 +165,21 @@ let gameStore = {
 
                 console.log("attempting to join room")
                 client.emit('joining', { name: gameName, user: user  })
-                client.to(gameName).on('joined', function () {
-                    console.log("Joined Room")
-                    getPlayers()
+
+              
                     // console.log(data)
-                })
+                
 
 
             }).catch(handleError)
         },
+        
         leaveGame(user, gameName, cb) {
-
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
+            //     console.log("Attempting to leave")
+            // this.getPlayers(gameName)
+            // console.log("Left game")
                 resetUserData()
                 cb()
             }).catch(handleError)
