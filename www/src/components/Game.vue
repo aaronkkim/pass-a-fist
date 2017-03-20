@@ -140,7 +140,7 @@
 
             },
             drawCard() {
-                this.$root.$data.store.actions.drawCard(this.game._id, this.gameName)
+                this.$root.$data.store.actions.drawCard(this.game._id, this.game.name)
             },
             drawInjury() {
                 this.$root.$data.store.actions.drawInjury(this.game._id)
