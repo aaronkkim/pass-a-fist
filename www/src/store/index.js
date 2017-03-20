@@ -155,9 +155,10 @@ let gameStore = {
                 state.gameSession = res.data.game
 
                 console.log("attempting to join room")
-                client.emit('joining', { name: gameName })
-                client.in(gameName).on('joined', function () {
+                client.emit('joining', { name: gameName, user: user  })
+                client.to(gameName).on('joined', function () {
                     console.log("Joined Room")
+                    getPlayers()
                     // console.log(data)
                 })
 
