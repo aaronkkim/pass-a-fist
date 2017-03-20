@@ -35,6 +35,7 @@ client.on('leavegame', function () {
 })
 
 
+
 let state = {
     activeUser: {},
     games: [],
@@ -177,8 +178,8 @@ let gameStore = {
         },
 
         leaveGame(user, gameName, cb) {
-            client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
+            client.emit('leavegame', gameName)
                 //     console.log("Attempting to leave")
                 // this.getPlayers(gameName)
                 // console.log("Left game")
