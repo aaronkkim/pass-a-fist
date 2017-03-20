@@ -25,6 +25,16 @@ client.on('message', function (data) {
 
     }
 });
+client.on('joined', function () {
+    console.log("Joined Room")
+    gameStore.actions.getPlayers(state.gameSession.name)
+})
+client.on('leavegame', function () {
+    console.log("Leaving Room")
+    gameStore.actions.getPlayers(state.gameSession.name)
+})
+
+
 
 let state = {
     activeUser: {},
@@ -50,7 +60,7 @@ let handleError = (err) => {
 }
 
 let gameStore = {
-    // Time to fix shit
+
     //ALL DATA LIVES IN THE STATE
     state,
     //ACTIONS are responsible for managing all async requests
@@ -155,20 +165,24 @@ let gameStore = {
                 state.gameSession = res.data.game
 
                 console.log("attempting to join room")
-                client.emit('joining', { name: gameName, user: user  })
-                client.to(gameName).on('joined', function () {
-                    console.log("Joined Room")
-                    getPlayers()
-                    // console.log(data)
-                })
+
+                client.emit('joining', { name: gameName, user: user })
+
+
+
+                // console.log(data)
+
 
 
             }).catch(handleError)
         },
-        leaveGame(user, gameName, cb) {
 
-            client.emit('leavegame', gameName)
+        leaveGame(user, gameName, cb) {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
+            client.emit('leavegame', gameName)
+                //     console.log("Attempting to leave")
+                // this.getPlayers(gameName)
+                // console.log("Left game")
                 resetUserData()
                 cb()
             }).catch(handleError)
@@ -226,6 +240,7 @@ let gameStore = {
                         api('injuries').then(injuries => {
                             let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
                             state.injuryDeck = injuryDeck
+                            state.gameSession.active = true
                             dealHands(res.data.data.game)
                             startTurn(res.data.data.game)
                             updateDeck(id)
