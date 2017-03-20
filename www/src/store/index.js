@@ -164,11 +164,12 @@ let gameStore = {
 
             }).catch(handleError)
         },
-        leaveGame(user, gameName) {
+        leaveGame(user, gameName, cb) {
 
             client.emit('leavegame', gameName)
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 resetUserData()
+                cb()
             }).catch(handleError)
         },
         getPlayers(gameName) {
@@ -239,6 +240,7 @@ let gameStore = {
 }
 
 let resetUserData = () => {
+    state.gameSession = {}
     state.activeUser.cards = []
     state.activeUser.injuries = []
     state.hand = []

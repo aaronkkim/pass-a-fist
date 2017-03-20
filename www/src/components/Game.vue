@@ -148,7 +148,9 @@
                 this.$root.$data.store.actions.startGame(this.game._id)
             },
             leaveGame() {
-                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id)
+                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id, this.returnHome)
+            },
+            returnHome() {
                 this.$router.push({
                     path: '/'
                 })
