@@ -65,7 +65,7 @@ io.sockets.on('connection', function (socket) {
     socket.on("starting", function (data) {
         console.log("data: ", data)
         socket.join(data.name, function () {
-            console.log("attempting to start gane")
+            console.log("attempting to start game")
             io.to(data.name).emit("started", data)
             // io.in(data.name)
         })
