@@ -42,6 +42,7 @@ client.on('started', function (id) {
     console.log("starting Game")
     gameStore.actions.activateGame()
     console.log("Game has Started?")
+    console.log(state.gameSession.active)
 })
 
 
@@ -250,7 +251,8 @@ let gameStore = {
                     //Shuffle the deck
                     api('fights').then(cards => {
                         let deck = Shuffle.shuffle({ deck: cards.data.data })
-                        state.deck = deck
+                        Vue.set(state, deck, deck)
+                        // state.deck = deck
                         api('injuries').then(injuries => {
                             client.emit("Starting Game")
                             let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
