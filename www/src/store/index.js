@@ -33,9 +33,14 @@ client.on('leavegame', function () {
     console.log("Leaving Room")
     gameStore.actions.getPlayers(state.gameSession.name)
 })
-client.on('drawn', function(){
+client.on('drawn', function () {
     console.log("Drawing Card")
     gameStore.actions.getPlayers(state.gameSession.name)
+    console.log("You have drawn a card?")
+})
+client.on('started', function (id) {
+    console.log("starting Game")
+    gameStore.actions.activateGame()
     console.log("You have drawn a card?")
 })
 
@@ -185,7 +190,7 @@ let gameStore = {
 
         leaveGame(user, gameName, cb) {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-            client.emit('leavegame', gameName)
+                client.emit('leavegame', gameName)
                 //     console.log("Attempting to leave")
                 // this.getPlayers(gameName)
                 // console.log("Left game")
@@ -213,7 +218,7 @@ let gameStore = {
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
-                  client.emit('drawing', {name: gameName })
+                client.emit('drawing', { name: gameName })
                 updateDeck(gameId)
                 getHand(userId)
             }).catch(handleError)
@@ -226,7 +231,7 @@ let gameStore = {
             let userId = state.activeUser._id
 
             api.put('users/' + userId + '/drawinjury', { card: card }).then(res => {
-                 client.emit('drawing', {name: gameName })
+                client.emit('drawing', { name: gameName })
                 updateInjuryDeck(gameId)
                 getInjuryHand(userId)
             }).catch(handleError)
@@ -239,7 +244,7 @@ let gameStore = {
                 })
                 .catch(handleError)
         },
-        startGame(id) {
+        startGame(id, gameName) {
             api.post('startgame', { id: id }).then(res => {
                 if (res.data.data.game) {
                     //Shuffle the deck
@@ -247,9 +252,10 @@ let gameStore = {
                         let deck = Shuffle.shuffle({ deck: cards.data.data })
                         state.deck = deck
                         api('injuries').then(injuries => {
+                           client.emit("Starting Game")
                             let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
                             state.injuryDeck = injuryDeck
-                            state.gameSession.active = true
+                            this.activateGame()
                             dealHands(res.data.data.game)
                             startTurn(res.data.data.game)
                             updateDeck(id)
@@ -260,6 +266,9 @@ let gameStore = {
                     console.log(res.data.data.message)
                 }
             })
+        },
+        activateGame(){
+         state.gameSession.active = true
         }
     }
 }

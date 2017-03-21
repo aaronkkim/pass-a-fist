@@ -89,6 +89,9 @@ io.sockets.on('connection', function (socket) {
 
         })
     })
+    socket.on("Starting Game", function(){
+     socket.emit("started")
+    })
 })
 
 export default server

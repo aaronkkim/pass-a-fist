@@ -147,7 +147,7 @@
             },
             startGame() {
                 this.show = !this.show
-                this.$root.$data.store.actions.startGame(this.game._id)
+                this.$root.$data.store.actions.startGame(this.game._id, this.game.name)
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id, this.returnHome)
