@@ -383,5 +383,7 @@
     .players-in-game {
         display: flex;
         justify-content: space-around;
+        margin-bottom: 45px;
+        margin-top: -30px;
     }
 </style>
