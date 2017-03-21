@@ -28,7 +28,6 @@
 </template>
 
 <script>
-
     export default {
         name: 'lobby',
         computed: {
@@ -81,8 +80,7 @@
         background-position: fixed;
         height: 100%;
     }
-    
-    .textbox {
+    /*.textbox {
         background: rgba(205, 210, 216, .7);
         width: 20%;
         overflow: auto;
@@ -90,7 +88,7 @@
         position: fixed;
         bottom: 0;
         right: 0;
-    }
+    }*/
     
     .orange-btn {
         background-color: #ffab40;

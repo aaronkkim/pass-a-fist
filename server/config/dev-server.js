@@ -55,25 +55,39 @@ io.sockets.on('connection', function (socket) {
         console.log("data: ", data)
         socket.join(data.name, function () {
             console.log("attempting to connect user")
-            socket.to(data.name).emit("joined")
+            socket.to(data.name).emit("joined", data)
             // io.in(data.name)
 
             console.log("you have joined " + data.name + " chat!")
 
         })
     })
-            socket.on('message', (d) => {
-                console.log("sending message to:", d.name, "in", d.gameName)
-                io.to(d.gameName).emit('message', d)
-            })
+    socket.on('message', (d) => {
+        console.log("sending message to:", d.name, "in", d.gameName)
+        io.to(d.gameName).emit('message', d)
+    })
     socket.on('leavegame', function (room) {
+
         // console.log(socket)
         // console.log(socket.rooms, socket.room)
         // console.log("player leaving", room)
-        socket.leave(room, ()=>{
-            // console.log("player has left")
+        socket.leave(room, () => {
+            socket.to(room).emit("leavegame", room) 
+       // console.log("player has left")
         })
 
+    })
+    
+    socket.on('drawing', function (data) {
+        console.log("data: ", data)
+        socket.join(data.name, function () {
+            console.log("attempting to draw")
+            socket.to(data.name).emit("drawn", data)
+            // io.in(data.name)
+
+            console.log("you have drawn a card")
+
+        })
     })
 })
 

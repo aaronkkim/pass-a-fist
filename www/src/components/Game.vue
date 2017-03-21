@@ -14,37 +14,38 @@
 
 
         <div class="flex-container">
-            <img src="../assets/cards/main-fight.png" class="deck-fight rotate90" @click="drawCard">
+            <img src="../assets/cards/main-fight.png" v-if="game.active"class="deck-fight rotate90" @click="drawCard">
 
             <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
-            <img src="../assets/cards/main-injury.png" class="deck-injury rotate90" @click="drawInjury">
+            <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" @click="drawInjury">
         </div>
 
         <div class="fixed-action-btn click-to-toggle">
             <a class="btn-floating btn-large red">
                 <i class="material-icons">chat_bubble</i>
             </a>
-
-
-
-
             <ul>
 
+                <div class="textbox">
+                    <div class="content">
 
-                <div class="container textbox">
+                    <div class="messages">
                     <ul>
                         <li v-for="message in chat">
                             <span>{{message.name}} : {{message.text}}</span>
                         </li>
                     </ul>
-                    <form @submit.prevent="submitText">
-                        <input type="text" v-model="text">
+
+
+                    </div>
+                    <form @submit.prevent="submitText" class="typing">
+                        <input type="text" v-model="text" >
                         <button type="submit" class="waves-effect waves-light btn">Chat</button>
                     </form>
+                    </div>
                 </div>
-
                 </ul> 
         </div>
 
@@ -133,15 +134,16 @@
             submitText() {
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
-                    debugger
                     this.text = ''
+                   $(".messages ul").animate({ scrollTop: $(document).height() }, "slow");
                 }
+
             },
             drawCard() {
-                this.$root.$data.store.actions.drawCard(this.game._id)
+                this.$root.$data.store.actions.drawCard(this.game._id, this.game.name)
             },
             drawInjury() {
-                this.$root.$data.store.actions.drawInjury(this.game._id)
+                this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)
             },
             startGame() {
                 this.show = !this.show
@@ -159,7 +161,35 @@
     }
 </script>
 
-<style>
+<style lang="scss">
+    .content {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow:hidden;
+        ul {
+            position: relative;
+            bottom: auto;
+            overflow: auto;
+            height: 100%;
+            text-align:left;
+            margin-left: 10px;
+        }
+        .messages {
+            overflow: hidden;
+            
+        }
+    }
+    
+    .messages {
+        height: 75%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+    }
+    
     .countFights {
         height: 20px;
         width: 20px;
@@ -212,7 +242,7 @@
         background-size: cover;
         background-position: fixed;
         height: 100vh;
-        overflow-y: scroll;
+        /*overflow-y: scroll;*/
         padding-top: 5rem;
     }
     
@@ -222,19 +252,30 @@
         bottom: 0;
         right: 0;
         left: 0;
-        overflow-y: hidden;
+        /*overflow-y: hidden;*/
         z-index: 1;
     }
     
+  .typing{
+      position:absolute;
+      bottom: 0;
+      width:75%;
+      height: 25%;
+      text-align: left;
+      margin-left: 10px;
+  }
+    
     .textbox {
-        background: rgba(205, 210, 216, .7);
+        background-color: white;
         width: 20%;
-        overflow: auto;
-        height: 70%;
+        height: 50%;
         position: fixed;
         bottom: 0;
         right: 0;
+        /*margin-bottom: 81px;*/
     }
+    
+    
     /*.hand {
     /*display: inline-flex;*/
     /*transition: transform 500ms ease-out;*/

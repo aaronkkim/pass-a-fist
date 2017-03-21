@@ -26,7 +26,8 @@ export default {
 #app {
   color: black;
   height: 100%;
-  width:100%
+  width:100%;
+  font-family: 'Quicksand', sans-serif;
 }
 h1, h2{
   color: #11ABB0;
@@ -52,5 +53,9 @@ font-family: 'Montserrat', sans-serif;
 html, body{
   height:  100%;
   width:100%
+}
+.center-things{
+  display:flex;
+  justify-content: center;
 }
 </style>
