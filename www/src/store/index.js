@@ -336,7 +336,7 @@ let startTurn = (game) => {
     let player = players[Math.floor(Math.random() * players.length)]
     console.log(player)
     if (player._id) {
-        api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id }).then(turn => {
+        api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id, phase: 1 }).then(turn => {
             let user = turn.data.data
             state.currentTurn = user.currentTurn
             state.activeTurn = user.activeTurn
