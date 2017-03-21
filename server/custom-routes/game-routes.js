@@ -115,7 +115,8 @@ export default {
             Games.findByIdAndUpdate(req.params.id, {
                 $set: {
                     currentTurn: req.body.currentTurn,
-                    activeTurn: req.body.activeTurn
+                    activeTurn: req.body.activeTurn,
+                    turnPhase: req.body.phase
                 },
             }, { new: true })
                 .then(game => {
@@ -137,9 +138,10 @@ export default {
             let action = 'Update active turn to targeted player'
             Users.findByIdAndUpdate(req.params.id, {
                 $set: {
-                    activeTurn: req.body.activeTurn
+                    activeTurn: req.body.activeTurn,
+                    turnPhase: req.body.phase
                 },
-            }, { new: true })
+            })
                 .then(user => {
                     user.save()
                     res.send(handleResponse(action, user.activeTurn))

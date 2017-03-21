@@ -55,11 +55,19 @@ io.sockets.on('connection', function (socket) {
         console.log("data: ", data)
         socket.join(data.name, function () {
             console.log("attempting to connect user")
-            socket.to(data.name).emit("joined", data)
+            io.to(data.name).emit("joined", data)
             // io.in(data.name)
 
             console.log("you have joined " + data.name + " chat!")
 
+        })
+    })
+    socket.on("starting", function (data) {
+        console.log("data: ", data)
+        socket.join(data.name, function () {
+            console.log("attempting to start gane")
+            io.to(data.name).emit("started", data)
+            // io.in(data.name)
         })
     })
     socket.on('message', (d) => {
@@ -72,7 +80,7 @@ io.sockets.on('connection', function (socket) {
         // console.log(socket.rooms, socket.room)
         // console.log("player leaving", room)
         socket.leave(room, () => {
-            socket.to(room).emit("leavegame", room) 
+            io.to(room).emit("leavegame", room) 
        // console.log("player has left")
         })
 
@@ -82,7 +90,7 @@ io.sockets.on('connection', function (socket) {
         console.log("data: ", data)
         socket.join(data.name, function () {
             console.log("attempting to draw")
-            socket.to(data.name).emit("drawn", data)
+            io.to(data.name).emit("drawn", data)
             // io.in(data.name)
 
             console.log("you have drawn a card")

@@ -4,14 +4,13 @@
         <button class="waves-effect waves-light btn orange-btn" @click="leaveGame">leave game</button>
 
         <div class="players-in-game">
-
             <ul v-for="player in players" v-if="player._id !== user._id">
                 <div class="countFights">{{player.cards.length}}</div>
                 <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
                 <div class="countInjuries">{{player.injuries.length}}</div>
             </ul>
         </div>
-
+        
 
         <div class="flex-container">
             <img src="../assets/cards/main-fight.png" v-if="game.active"class="deck-fight rotate90" @click="drawCard">
@@ -19,6 +18,7 @@
             <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
+            <img v-if="game.active" :src="fightCard.imgUrl"></img>
             <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" @click="drawInjury">
         </div>
 
@@ -34,7 +34,7 @@
                     <div class="messages">
                     <ul>
                         <li v-for="message in chat">
-                            <span>{{message.name}} : {{message.text}}</span>
+                            <span>{{message.name}}<a v-show="message.name">: </a>{{message.text}}</span>
                         </li>
                     </ul>
 
@@ -71,19 +71,20 @@
 </template>
 
 <script>
+    import fightCards from '../services/card-service.js'
     export default {
         name: 'game',
         data() {
             return {
                 text: '',
                 show: true,
-                otherPlayer: true
+                otherPlayer: true,
+                fightCard: fightCards.getSomeFakeCards()[0]
             }
         },
         mounted() {
             this.$root.$data.store.actions.initiateDeck()
             this.$root.$data.store.actions.getGame(this.$route.params.id)
-            this.$root.$data.store.actions.getPlayers(this.$route.params.id)
                 // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
 
 
@@ -145,11 +146,11 @@
                 this.$root.$data.store.actions.drawCard(this.game._id, this.game.name)
             },
             drawInjury() {
-                this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)
+                this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name, this.game.name)
             },
             startGame() {
                 this.show = !this.show
-                this.$root.$data.store.actions.startGame(this.game._id, this.game.name)
+                this.$root.$data.store.actions.startGame(this.game._id, this.game.name, this.creator)
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id, this.returnHome)
@@ -384,5 +385,7 @@
     .players-in-game {
         display: flex;
         justify-content: space-around;
+        margin-bottom: 45px;
+        margin-top: -30px;
     }
 </style>
