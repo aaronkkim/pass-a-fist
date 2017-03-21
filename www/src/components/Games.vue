@@ -61,16 +61,6 @@ export default {
         this.text = ''
       }
     },
-    getDeck() {
-      this.$root.$data.store.actions.getDeck()
-      
-    },
-    drawHand(id) {
-      this.$root.$data.store.actions.drawHand(this.user_id)
-    },
-    drawCard() {
-      this.$root.$data.store.actions.drawCard()
-    },
     createGame(){
       let gameName = this.gameName.replace(/[^\w\s!?]/g,'');
       this.$root.$data.store.actions.createGame(this.user, gameName, this.maxPlayers, this.linkToGame)

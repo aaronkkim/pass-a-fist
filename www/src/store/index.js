@@ -50,6 +50,7 @@ client.on('leavegame', function (data) {
 client.on('drawn', function (data) {
     console.log("Drawing Card")
     getPlayers(state.gameSession.name)
+    getDeck(state.gameSession.name)
 })
 client.on('started', function (id) {
     console.log("starting Game")
@@ -185,7 +186,7 @@ let gameStore = {
 
         leaveGame(user, gameName, cb) {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
-                client.emit('leavegame', gameName)
+                client.emit('leavegame', {name: gameName, user: user})
                 // console.log("Left game")
                 resetUserData()
                 cb()
@@ -197,9 +198,11 @@ let gameStore = {
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
-                updateDeck(gameId)
-                getHand(userId)
-                client.emit('drawing', { name: gameName })
+                var p1 = updateDeck(gameId)
+                var p2 = getHand(userId)
+                Promise.all([p1, p2]).then(values => {
+                    setTimeout(function(){client.emit('drawing', { name: gameName })}, 200)
+                })
             }).catch(handleError)
 
         },
@@ -315,15 +318,27 @@ let getInjuryHand = (id) => {
     }).catch(handleError)
 }
 
+let getDeck = (gameName) => {
+    api('game/' + gameName + '/deck').then(deck => {
+        state.deck.cards = deck.data.data
+    }).catch(handleError)
+}
+
 let updateDeck = (id) => {
     api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
         // Hrmm
+        return new Promise((resolve, reject) => {
+            resolve(deck)
+        })
     }).catch(handleError)
 }
 
 let updateInjuryDeck = (id) => {
     api.put('games/' + id, { injuryDeck: state.injuryDeck.cards }).then(deck => {
         // Hrmm
+        return new Promise((resolve, reject) => {
+            resolve(deck)
+        })
     }).catch(handleError)
 }
 
