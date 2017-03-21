@@ -123,11 +123,6 @@
                 return this.$root.$data.store.state.players
             }
         },
-        watch:{
-            deck() {
-                return this.$root.$data.store.state.deck 
-        }
-        },
         methods: {
 
             handleCardHover(event) {
@@ -146,7 +141,7 @@
                 this.$root.$data.store.actions.drawCard(this.game._id, this.game.name)
             },
             drawInjury() {
-                this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name, this.game.name)
+                this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)
             },
             startGame() {
                 this.show = !this.show
