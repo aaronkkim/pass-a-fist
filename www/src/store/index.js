@@ -24,6 +24,7 @@ client.on('message', function (data) {
         state.chat.push(data)
     }
 });
+
 client.on('joined', function (data) {
     console.log(data)
     var message = `${data.user.name} has joined the game.`
@@ -43,13 +44,17 @@ client.on('leavegame', function (data) {
     getPlayers(state.gameSession.name)
 })
 client.on('drawn', function (data) {
+
     console.log("Drawing Card")
     gameStore.actions.getGame(state.gameSession.name)
     console.log("You have drawn a card?")
 })
-
-
-
+client.on('started', function (id) {
+    console.log("starting Game")
+    gameStore.actions.activateGame()
+    console.log("Game has Started?")
+    console.log(state.gameSession.active)
+})
 
 let state = {
     activeUser: {},
@@ -91,14 +96,13 @@ let gameStore = {
                 state.isLoading = false
             }).catch(handleError)
         },
-        register(username, email, password, age, badge) {
+        register(username, email, password, age) {
             state.isLoading = true
             api.post('register', {
                 name: username,
                 email: email,
                 password: password,
-                age: age,
-                badgeUrl: badge
+                age: age
             }).then(res => {
                 this.login(email, password)
             }).catch(handleError)
@@ -152,13 +156,13 @@ let gameStore = {
             state.deck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
             state.injuryDeck = Shuffle.shuffle({ deck: ['Pass', 'a', 'fist'] })
         },
-        // chatRefresh() {
-            // client.emit('joining', { name: state.gameSession.name })
-            // client.on('joined', function () {
-            //     console.log("Joined Room")
-            // })
 
-        // },
+        chatRefresh() {
+            client.emit('joining', { name: state.gameSession.name })
+            client.on('joined', function () {
+                console.log("Joined Room")
+            })
+        },
         createGame(user, gameName, maxPlayers, cb) {
             let game = {
                 name: gameName,
@@ -189,7 +193,6 @@ let gameStore = {
         leaveGame(user, gameName, cb) {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 client.emit('leavegame', gameName)
-                //     console.log("Attempting to leave")
                 // console.log("Left game")
                 resetUserData()
                 cb()
@@ -233,8 +236,10 @@ let gameStore = {
                     //Shuffle the deck
                     api('fights').then(cards => {
                         let deck = Shuffle.shuffle({ deck: cards.data.data })
-                        state.deck = deck
+                        Vue.set(state, deck, deck)
+                        // state.deck = deck
                         api('injuries').then(injuries => {
+                            client.emit("Starting Game")
                             let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
                             state.injuryDeck = injuryDeck
                             state.gameSession.active = true
@@ -252,6 +257,9 @@ let gameStore = {
                     console.log(res.data.data.message)
                 }
             })
+        },
+        activateGame(){
+         state.gameSession.active = true
         }
     }
 }
@@ -263,7 +271,6 @@ let resetUserData = () => {
     state.activeUser.createdGame = false
     state.hand = []
     state.injuryHand = []
-    state.chat = []
 }
 
 let getPlayers = (gameName) => {

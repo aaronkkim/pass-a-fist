@@ -110,9 +110,6 @@
             creator() {
                 return this.$root.$data.store.state.creator
             },
-            deck() {
-                return this.$root.$data.store.state.deck
-            },
             hand() {
                 return this.$root.$data.store.state.hand
             },
@@ -125,6 +122,11 @@
             players() {
                 return this.$root.$data.store.state.players
             }
+        },
+        watch:{
+            deck() {
+                return this.$root.$data.store.state.deck 
+        }
         },
         methods: {
 
