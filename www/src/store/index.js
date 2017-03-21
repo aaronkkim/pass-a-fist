@@ -41,7 +41,7 @@ client.on('drawn', function () {
 client.on('started', function (id) {
     console.log("starting Game")
     gameStore.actions.activateGame()
-    console.log("You have drawn a card?")
+    console.log("Game has Started?")
 })
 
 
@@ -252,10 +252,10 @@ let gameStore = {
                         let deck = Shuffle.shuffle({ deck: cards.data.data })
                         state.deck = deck
                         api('injuries').then(injuries => {
-                           client.emit("Starting Game")
+                            client.emit("Starting Game")
                             let injuryDeck = Shuffle.shuffle({ deck: injuries.data.data })
                             state.injuryDeck = injuryDeck
-                            this.activateGame()
+                        
                             dealHands(res.data.data.game)
                             startTurn(res.data.data.game)
                             updateDeck(id)
