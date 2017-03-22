@@ -44,7 +44,7 @@ let gameManager = {
         var playerHands = []
         for (var i = 0; i < players.length; i++) {
             var player = players[i];
-            playerHands.push(dealHand(player._id))
+            playerHands.push(this.dealHand(player._id))
         }
         Promise.all(playerHands).then(values => {
             return new Promise((resolve, reject) => {
