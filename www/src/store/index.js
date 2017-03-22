@@ -2,6 +2,7 @@ import axios from 'axios'
 import io from 'socket.io-client'
 import Shuffle from 'shuffle'
 
+import GameManager from '../services/game-manager'
 
 let api = axios.create({
     baseURL: 'http://localhost:3000/api/',
@@ -31,7 +32,7 @@ client.on('joined', function (data) {
         var message = `${data.user.name} has joined the game.`
         state.chat.push({ text: message })
     }
-    getPlayers(state.gameSession.name)
+    GameManager.getPlayers(state.gameSession.name)
 })
 client.on('started', function (data) {
     console.log(data)
@@ -45,12 +46,12 @@ client.on('started', function (data) {
 client.on('leavegame', function (data) {
     var message = `${data.user.name} has left the game.`
     state.chat.push({ text: message })
-    getPlayers(state.gameSession.name)
+    GameManager.getPlayers(state.gameSession.name)
 })
 client.on('drawn', function (data) {
     console.log("Drawing Card")
-    getPlayers(state.gameSession.name)
-    getDeck(state.gameSession.name)
+    GameManager.getPlayers(state.gameSession.name)
+    GameManager.getDeck(state.gameSession.name)
 })
 client.on('started', function (id) {
     console.log("starting Game")
@@ -149,7 +150,7 @@ let gameStore = {
                 state.deck.cards = res.data.data.deck
                 state.injuryDeck.cards = res.data.data.injuryDeck
                 // this.chatRefresh()
-                getPlayers(gameName)
+                GameManager.getPlayers(gameName)
             }).catch(handleError)
         },
         initiateDeck() {
@@ -188,7 +189,7 @@ let gameStore = {
             api.post('leavegame', { userId: user._id, name: gameName }).then(res => {
                 client.emit('leavegame', {name: gameName, user: user})
                 // console.log("Left game")
-                resetUserData()
+                GameManager.resetUserData()
                 cb()
             }).catch(handleError)
         },
@@ -198,8 +199,8 @@ let gameStore = {
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
-                var p1 = updateDeck(gameId)
-                var p2 = getHand(userId)
+                var p1 = GameManager.updateDeck(gameId)
+                var p2 = GameManager.getHand(userId)
                 Promise.all([p1, p2]).then(values => {
                     setTimeout(function(){client.emit('drawing', { name: gameName })}, 200)
                 })
@@ -214,8 +215,8 @@ let gameStore = {
 
             api.put('users/' + userId + '/drawinjury', { card: card }).then(res => {
                 client.emit('drawing', { name: gameName })
-                updateInjuryDeck(gameId)
-                getInjuryHand(userId)
+                GameManager.updateInjuryDeck(gameId)
+                GameManager.getInjuryHand(userId)
             }).catch(handleError)
 
         },
@@ -238,10 +239,10 @@ let gameStore = {
                             state.injuryDeck = injuryDeck
                             state.gameSession.active = true
 
-                            let p1 = dealHands(res.data.data.game)
-                            let p2 = startTurn(res.data.data.game)
-                            let p3 = updateDeck(id)
-                            let p4 = updateInjuryDeck(id)
+                            let p1 = GameManager.dealHands(res.data.data.game)
+                            let p2 = GameManager.startTurn(res.data.data.game)
+                            let p3 = GameManager.updateDeck(id)
+                            let p4 = GameManager.updateInjuryDeck(id)
                             Promise.all([p1, p2, p3, p4]).then(values => {
                                 setTimeout(function () { client.emit('starting', { name: gameName, user: creator }); }, 500)
                             })
@@ -256,114 +257,6 @@ let gameStore = {
             state.gameSession.active = true
         }
     }
-}
-
-let resetUserData = () => {
-    state.gameSession = {}
-    state.activeUser.cards = []
-    state.activeUser.injuries = []
-    state.activeUser.createdGame = false
-    state.hand = []
-    state.injuryHand = []
-}
-
-let getPlayers = (gameName) => {
-    api('game/' + gameName + '/players').then(res => {
-        state.players = res.data.data
-        if (state.activeUser) {
-            for (var i = 0; i < state.players.length; i++) {
-                var player = state.players[i];
-                if (player._id === state.activeUser._id) {
-                    getHand(player._id)
-                    getInjuryHand(player._id)
-                }
-            }
-        }
-    })
-}
-
-let dealHands = (game) => {
-    if (!game.playersInGameSession) return;
-    var players = game.playersInGameSession
-    var playerHands = []
-    for (var i = 0; i < players.length; i++) {
-        var player = players[i];
-        playerHands.push(dealHand(player._id))
-    }
-    Promise.all(playerHands).then(values => {
-        return new Promise((resolve, reject) => {
-            resolve(values)
-        })
-    })
-}
-
-let dealHand = (id) => {
-    let hand = state.deck.draw(5)
-    api.put('users/' + id + '/cards', { cards: hand }).then(res => {
-        if (state.activeUser._id === id) {
-            getHand(id)
-        }
-    }).catch(handleError)
-}
-
-let getHand = (id) => {
-    api('users/' + id + '/cards').then(cards => {
-        state.hand = cards.data.data
-    }).catch(handleError)
-}
-
-let getInjuryHand = (id) => {
-    api('users/' + id + '/injuries').then(injuries => {
-        state.injuryHand = injuries.data.data
-    }).catch(handleError)
-}
-
-let getDeck = (gameName) => {
-    api('game/' + gameName + '/deck').then(deck => {
-        state.deck.cards = deck.data.data
-    }).catch(handleError)
-}
-
-let updateDeck = (id) => {
-    api.put('games/' + id, { deck: state.deck.cards }).then(deck => {
-        // Hrmm
-        return new Promise((resolve, reject) => {
-            resolve(deck)
-        })
-    }).catch(handleError)
-}
-
-let updateInjuryDeck = (id) => {
-    api.put('games/' + id, { injuryDeck: state.injuryDeck.cards }).then(deck => {
-        // Hrmm
-        return new Promise((resolve, reject) => {
-            resolve(deck)
-        })
-    }).catch(handleError)
-}
-
-let startTurn = (game) => {
-    if (!game.playersInGameSession) return;
-
-    let players = game.playersInGameSession
-    let player = players[Math.floor(Math.random() * players.length)]
-    console.log(player)
-    if (player._id) {
-        api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id, phase: 1 }).then(turn => {
-            let user = turn.data.data
-            state.currentTurn = user.currentTurn
-
-            state.activeTurn = user.activeTurn
-        }).catch(handleError)
-    }
-}
-
-let nextTurn = function () {
-
-}
-
-let nextActiveTurn = function () {
-
 }
 
 
