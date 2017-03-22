@@ -203,7 +203,7 @@ let gameStore = {
                 var p2 = GameManager.getHand(userId)
                 Promise.all([p1, p2]).then(values => {
                     setTimeout(function() { client.emit('drawing', { name: gameName }) }, 200)
-                    GameManager.nextTurn()
+                    GameManager.nextTurn(gameId)
                 })
             }).catch(handleError)
 

@@ -120,7 +120,7 @@ let gameManager = {
         }
     },
 
-    nextTurn() {
+    nextTurn(game) {
         if (!game.playersInGameSession) return;
         let players = game.playersInGameSession
         var currentPlayer = Store.state.currentTurn
