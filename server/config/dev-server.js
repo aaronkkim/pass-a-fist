@@ -80,11 +80,11 @@ io.sockets.on('connection', function (socket) {
     })
     socket.on('leavegame', function (room) {
 
-        // console.log(socket)
-        // console.log(socket.rooms, socket.room)
-        // console.log("player leaving", room)
+
+      
         socket.leave(room)
             io.emit("leavegame", room) 
+
 
     })
     

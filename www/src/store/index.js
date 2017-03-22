@@ -1,6 +1,7 @@
 import axios from 'axios'
 import io from 'socket.io-client'
 import Shuffle from 'shuffle'
+import cardService from '../services/card-service'
 
 import GameManager from '../services/game-manager'
 
@@ -11,7 +12,7 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://localhost:3000/');
+let client = io.connect('http://192.168.0.7:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
@@ -219,6 +220,14 @@ let gameStore = {
             }).catch(handleError)
 
         },
+        // playCard(card){
+        //     api.put('playCard', { card: card}.then(res =>{
+        //         this.cardService.addFakeCard()
+                
+
+        //     }))
+
+        // },
         drawInjury(gameId, gameName) {
             if (!state.activeUser._id) return;
 

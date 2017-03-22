@@ -741,6 +741,7 @@ let cards = [
 
 let cardService = {
     getSomeFakeCards() {
+        
         return cards
     },
     addFakeCard(cardName) {
