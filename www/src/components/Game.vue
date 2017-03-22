@@ -159,7 +159,7 @@
                 this.$root.$data.store.actions.startGame(this.game._id, this.game.name, this.creator)
             },
             leaveGame() {
-                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id, this.returnHome)
+                this.$root.$data.store.actions.leaveGame(this.user, this.game.name, this.returnHome)
             },
             
             playCard(){

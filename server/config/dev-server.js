@@ -78,16 +78,13 @@ io.sockets.on('connection', function (socket) {
         console.log("sending message to:", d.name, "in", d.gameName)
         io.to(d.gameName).emit('message', d)
     })
-    socket.on('leavegame', function (room) {
+    socket.on('leavegame', function (data) {
 
-
-      
-        socket.leave(room)
-            io.emit("leavegame", room) 
-
+        socket.leave(data.name)
+        io.emit("leavegame", data)
 
     })
-    
+
     socket.on('drawing', function (data) {
         console.log("data: ", data)
         socket.join(data.name, function () {
@@ -99,8 +96,8 @@ io.sockets.on('connection', function (socket) {
 
         })
     })
-    socket.on("Starting Game", function(){
-     socket.emit("started")
+    socket.on("Starting Game", function () {
+        socket.emit("started")
     })
 })
 

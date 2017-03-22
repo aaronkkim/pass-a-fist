@@ -47,7 +47,8 @@ client.on('started', function (data) {
 client.on('leavegame', function (data) {
     var message = `${data.user.name} has left the game.`
     state.chat.push({ text: message })
-    GameManager.getPlayers(state.gameSession.name)
+    if (state.gameSession.name)
+        GameManager.getPlayers(state.gameSession.name);
 })
 client.on('drawn', function (data) {
     console.log("Drawing Card")
@@ -161,6 +162,8 @@ let gameStore = {
                 state.creator = res.data.data.creatorId
                 state.deck.cards = res.data.data.deck
                 state.injuryDeck.cards = res.data.data.injuryDeck
+                state.activeTurn = res.data.data.activeTurn
+                state.currentTurn = res.data.data.currentTurn
                 // this.chatRefresh()
                 GameManager.getPlayers(gameName)
             }).catch(handleError)
@@ -223,7 +226,7 @@ let gameStore = {
         // playCard(card){
         //     api.put('playCard', { card: card}.then(res =>{
         //         this.cardService.addFakeCard()
-                
+
 
         //     }))
 
