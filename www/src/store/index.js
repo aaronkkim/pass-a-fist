@@ -209,14 +209,14 @@ let gameStore = {
             }).catch(handleError)
 
         },
-        playCard(card){
-            api.put('playCard', { card: card}.then(res =>{
-                this.cardService.addFakeCard()
+        // playCard(card){
+        //     api.put('playCard', { card: card}.then(res =>{
+        //         this.cardService.addFakeCard()
                 
 
-            }))
+        //     }))
 
-        },
+        // },
         drawInjury(gameId, gameName) {
             if (!state.activeUser._id) return;
 
