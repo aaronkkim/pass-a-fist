@@ -13,6 +13,7 @@ let handleError = (err) => {
     console.warn(err)
 }
 
+
 let gameManager = {
     resetUserData() {
         Store.state.gameSession = {}
@@ -111,18 +112,31 @@ let gameManager = {
                 debugger
                 Store.state.currentTurn = user.currentTurn
                 Store.state.activeTurn = user.activeTurn
-                var playerName = Store.state.players.filter(function(banana) {
+                var playerName = Store.state.players.find(function(banana) {
                     return banana._id == player._id
                 })
-                console.log(playerName[0].name)
-                console.log(playerName)
-                Materialize.toast(`${playerName[0].name}'s turn`, 9000)
+                Materialize.toast(`${playerName.name}'s turn`, 9000)
             }).catch(handleError)
         }
     },
 
     nextTurn() {
-
+        if (!game.playersInGameSession) return;
+        let players = game.playersInGameSession
+        var currentPlayer = Store.state.currentTurn
+        var nextPlayer = Store.state.players.find(function(nPLayer) {
+            return nPlayer._id == currentPlayer._id
+        })
+        if (nextPlayer) {
+            api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id, phase: 1 }).then(turn => {
+                let user = turn.data.data
+                console.log(user)
+                debugger
+                Store.state.currentTurn = user.currentTurn
+                Store.state.activeTurn = user.activeTurn
+                Materialize.toast(`${nextPlayer.name}'s turn`, 9000)
+            }).catch(handleError)
+        }
     },
 
     nextActiveTurn() {
