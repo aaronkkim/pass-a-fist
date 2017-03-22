@@ -122,9 +122,14 @@ let gameManager = {
         if (!game.playersInGameSession) return;
         let players = game.playersInGameSession
         var currentPlayer = Store.state.currentTurn
-        var nextPlayer = Store.state.players.find(function(nPLayer) {
+        var currentPlayerIndex = Store.state.players.findIndex(function(nPLayer) {
             return nPlayer._id == currentPlayer._id
         })
+        if (players[currentPlayerIndex + 1]) {
+            var nextPlayer = players[currentPlayerIndex + 1]
+        } else {
+            var nextPlayer = players[0]
+        }
         if (nextPlayer) {
             api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id, phase: 1 }).then(turn => {
                 let user = turn.data.data
