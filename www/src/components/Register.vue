@@ -6,18 +6,18 @@
       <input type="number" v-model="age" placeholder="Age" required>
       <input type="password" v-model="password" placeholder="Password" reqiured>
       <p class="grey-text">Badge</p>
-      <input name="group1" type="radio" id="icon1" value="../assets/icon1.png" v-model="badge" />
-      <label for="icon1"> <img src="../assets/icon1.png" alt=""></label>
-      <input name="group1" type="radio" id="icon2" value="../assets/icon2.png" v-model="badge"/>
-      <label for="icon2"> <img src="../assets/icon2.png" alt=""></label>
-      <input name="group1" type="radio" id="icon3" value="../assets/icon3.png" v-model="badge"/>
-      <label for="icon3"> <img src="../assets/icon3.png" alt=""></label>
-      <input name="group1" type="radio" id="icon4" value="../assets/icon4.png" v-model="badge"/>
-      <label for="icon4"> <img src="../assets/icon4.png" alt=""></label>
-      <input name="group1" type="radio" id="icon5" value="../assets/icon5.png" v-model="badge"/>
-      <label for="icon5"> <img src="../assets/icon5.png" alt=""></label>
-      <input name="group1" type="radio" id="icon6" value="../assets/icon6.png" v-model="badge"/>
-      <label for="icon6"> <img src="../assets/icon6.png" alt=""></label>
+      <input name="group1" type="radio" id="icon1" :value="icons.icon1"v-model="badge" />
+      <label for="icon1"> <img :src="icons.icon1" alt=""></label>
+      <input name="group1" type="radio" id="icon2" :value="icons.icon2" v-model="badge"/>
+      <label for="icon2"> <img :src="icons.icon2" alt=""></label>
+      <input name="group1" type="radio" id="icon3" :value="icons.icon3" v-model="badge"/>
+      <label for="icon3"> <img :src="icons.icon3" alt=""></label>
+      <input name="group1" type="radio" id="icon4" :value="icons.icon4" v-model="badge"/>
+      <label for="icon4"> <img :src="icons.icon4" alt=""></label>
+      <input name="group1" type="radio" id="icon5" :value="icons.icon5" v-model="badge"/>
+      <label for="icon5"> <img :src="icons.icon5" alt=""></label>
+      <input name="group1" type="radio" id="icon6" :value="icons.icon6" v-model="badge"/>
+      <label for="icon6"> <img :src="icons.icon6" alt=""></label>
       <br>
       <button class="waves-effect waves-light btn">Register</button>
      
