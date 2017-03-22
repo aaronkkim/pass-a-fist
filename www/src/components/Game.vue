@@ -123,8 +123,16 @@
             players() {
                 return this.$root.$data.store.state.players
             },
+
             fightCard(){
                 return this.$root.$data.store.state.activeCard 
+            },
+            currentTurn() {
+                return this.$root.$data.store.state.currentTurn
+            },
+            activeTurn() {
+                return this.$root.$data.store.state.activeTurn
+
             }
         },
         methods: {
@@ -142,7 +150,7 @@
 
             },
             drawCard() {
-                if (this.game.currentTurn == this.user._id){
+                if (this.activeTurn == this.user._id){
                     this.$root.$data.store.actions.drawCard(this.game)
                 }else{
                     console.log('it\'s not your turn, dumb dumb')
@@ -156,7 +164,7 @@
                 this.$root.$data.store.actions.startGame(this.game._id, this.game.name, this.creator)
             },
             leaveGame() {
-                this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id, this.returnHome)
+                this.$root.$data.store.actions.leaveGame(this.user, this.game.name, this.returnHome)
             },
             
             playCard(card){

@@ -14,6 +14,7 @@ let handleError = (err) => {
 }
 
 
+
 let gameManager = {
     resetUserData() {
         Store.state.gameSession = {}
@@ -99,7 +100,7 @@ let gameManager = {
         }).catch(handleError)
     },
 
-    startTurn(game) {
+    startTurn(game, cb) {
         if (!game.playersInGameSession) return;
 
         let players = game.playersInGameSession
@@ -110,18 +111,18 @@ let gameManager = {
                 let user = turn.data.data
                 Store.state.currentTurn = user.currentTurn
                 Store.state.activeTurn = user.activeTurn
-                var playerName = Store.state.players.find(function(banana) {
+                var playerName = Store.state.players.find(function (banana) {
                     return banana._id == player._id
                 })
-                Materialize.toast(`${playerName.name}'s turn`, 9000)
+                cb(game.name, user, player.name)
             }).catch(handleError)
         }
     },
 
-    nextTurn(game) {
+    nextTurn(game, cb) {
         let players = Store.state.players
         var currentPlayer = Store.state.currentTurn
-        var currentPlayerIndex = players.findIndex(function(nPlayer) {
+        var currentPlayerIndex = players.findIndex(function (nPlayer) {
             return nPlayer._id == currentPlayer
         })
         if (players[currentPlayerIndex + 1]) {
@@ -132,14 +133,14 @@ let gameManager = {
         if (nextPlayer) {
             console.log(nextPlayer)
             api.put('game/' + game._id + '/turn', { currentTurn: nextPlayer._id, activeTurn: nextPlayer._id, phase: 1 }).then(turn => {
-                let user = turn.data.data
-                console.log(user)
-                debugger
+                var user = turn.data.data
                 Store.state.currentTurn = user.currentTurn
                 Store.state.activeTurn = user.activeTurn
-                Materialize.toast(`${nextPlayer.name}'s turn`, 9000)
+                //client.emit("changingTurn", {user: user, game: game})
+                cb(game.name, user, nextPlayer.name)
             }).catch(handleError)
         }
+
     },
 
     nextActiveTurn() {
