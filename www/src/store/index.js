@@ -193,17 +193,17 @@ let gameStore = {
                 cb()
             }).catch(handleError)
         },
-        drawCard(gameId, gameName) {
+        drawCard(game) {
             if (!state.activeUser._id) return;
 
             let card = state.deck.draw()
             let userId = state.activeUser._id
             api.put('users/' + userId + '/draw', { card: card }).then(res => {
-                var p1 = GameManager.updateDeck(gameId)
+                var p1 = GameManager.updateDeck(game._id)
                 var p2 = GameManager.getHand(userId)
                 Promise.all([p1, p2]).then(values => {
-                    setTimeout(function() { client.emit('drawing', { name: gameName }) }, 200)
-                    GameManager.nextTurn(gameId)
+                    setTimeout(function() { client.emit('drawing', { name: game.name }) }, 200)
+                    GameManager.nextTurn(game)
                 })
             }).catch(handleError)
 

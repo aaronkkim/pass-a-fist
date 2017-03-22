@@ -119,11 +119,10 @@ let gameManager = {
     },
 
     nextTurn(game) {
-        if (!game.playersInGameSession) return;
-        let players = game.playersInGameSession
+        let players = Store.state.players
         var currentPlayer = Store.state.currentTurn
-        var currentPlayerIndex = Store.state.players.findIndex(function(nPLayer) {
-            return nPlayer._id == currentPlayer._id
+        var currentPlayerIndex = players.findIndex(function(nPlayer) {
+            return nPlayer._id == currentPlayer
         })
         if (players[currentPlayerIndex + 1]) {
             var nextPlayer = players[currentPlayerIndex + 1]
@@ -131,7 +130,8 @@ let gameManager = {
             var nextPlayer = players[0]
         }
         if (nextPlayer) {
-            api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id, phase: 1 }).then(turn => {
+            console.log(nextPlayer)
+            api.put('game/' + game._id + '/turn', { currentTurn: nextPlayer._id, activeTurn: nextPlayer._id, phase: 1 }).then(turn => {
                 let user = turn.data.data
                 console.log(user)
                 debugger
