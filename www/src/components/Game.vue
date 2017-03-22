@@ -122,6 +122,9 @@
             },
             players() {
                 return this.$root.$data.store.state.players
+            },
+            fightCard(){
+                return this.$root.$data.store.state.activeCard 
             }
         },
         methods: {
@@ -156,7 +159,7 @@
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id, this.returnHome)
             },
             
-            playCard(){
+            playCard(card){
                 this.$root.$data.store.actions.playCard()
             },
             returnHome() {

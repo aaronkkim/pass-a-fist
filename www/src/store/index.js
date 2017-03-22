@@ -2,7 +2,6 @@ import axios from 'axios'
 import io from 'socket.io-client'
 import Shuffle from 'shuffle'
 import cardService from '../services/card-service'
-
 import GameManager from '../services/game-manager'
 
 let api = axios.create({
@@ -73,7 +72,8 @@ let state = {
     injuryDeck: {},
     injuryHand: [],
     currentTurn: '',
-    activeTurn: ''
+    activeTurn: '',
+    activeCard: {}
 }
 
 let handleError = (err) => {
@@ -209,14 +209,10 @@ let gameStore = {
             }).catch(handleError)
 
         },
-        // playCard(card){
-        //     api.put('playCard', { card: card}.then(res =>{
-        //         this.cardService.addFakeCard()
-                
+        playCard(card){
+            state.activeCard = card
 
-        //     }))
-
-        // },
+        },
         drawInjury(gameId, gameName) {
             if (!state.activeUser._id) return;
 
