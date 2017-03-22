@@ -13,6 +13,7 @@ let handleError = (err) => {
     console.warn(err)
 }
 
+
 let gameManager = {
     resetUserData() {
         Store.state.gameSession = {}
@@ -23,7 +24,7 @@ let gameManager = {
         Store.state.injuryHand = []
     },
 
-    getPlayers (gameName) {
+    getPlayers(gameName) {
         api('game/' + gameName + '/players').then(res => {
             Store.state.players = res.data.data
             if (Store.state.activeUser) {
@@ -62,13 +63,13 @@ let gameManager = {
         }).catch(handleError)
     },
 
-    getHand(id){
+    getHand(id) {
         api('users/' + id + '/cards').then(cards => {
             Store.state.hand = cards.data.data
         }).catch(handleError)
     },
 
-    getInjuryHand(id){
+    getInjuryHand(id) {
         api('users/' + id + '/injuries').then(injuries => {
             Store.state.injuryHand = injuries.data.data
         }).catch(handleError)
@@ -80,7 +81,7 @@ let gameManager = {
         }).catch(handleError)
     },
 
-    updateDeck(id){
+    updateDeck(id) {
         api.put('games/' + id, { deck: Store.state.deck.cards }).then(deck => {
             // Hrmm
             return new Promise((resolve, reject) => {
@@ -89,7 +90,7 @@ let gameManager = {
         }).catch(handleError)
     },
 
-    updateInjuryDeck(id){
+    updateInjuryDeck(id) {
         api.put('games/' + id, { injuryDeck: Store.state.injuryDeck.cards }).then(deck => {
             // Hrmm
             return new Promise((resolve, reject) => {
@@ -98,7 +99,7 @@ let gameManager = {
         }).catch(handleError)
     },
 
-    startTurn(game){
+    startTurn(game) {
         if (!game.playersInGameSession) return;
 
         let players = game.playersInGameSession
@@ -109,12 +110,31 @@ let gameManager = {
                 let user = turn.data.data
                 Store.state.currentTurn = user.currentTurn
                 Store.state.activeTurn = user.activeTurn
+                var playerName = Store.state.players.find(function(banana) {
+                    return banana._id == player._id
+                })
+                Materialize.toast(`${playerName.name}'s turn`, 9000)
             }).catch(handleError)
         }
     },
 
     nextTurn() {
-
+        if (!game.playersInGameSession) return;
+        let players = game.playersInGameSession
+        var currentPlayer = Store.state.currentTurn
+        var nextPlayer = Store.state.players.find(function(nPLayer) {
+            return nPlayer._id == currentPlayer._id
+        })
+        if (nextPlayer) {
+            api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id, phase: 1 }).then(turn => {
+                let user = turn.data.data
+                console.log(user)
+                debugger
+                Store.state.currentTurn = user.currentTurn
+                Store.state.activeTurn = user.activeTurn
+                Materialize.toast(`${nextPlayer.name}'s turn`, 9000)
+            }).catch(handleError)
+        }
     },
 
     nextActiveTurn() {
