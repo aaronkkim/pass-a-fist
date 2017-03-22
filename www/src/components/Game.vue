@@ -122,6 +122,12 @@
             },
             players() {
                 return this.$root.$data.store.state.players
+            },
+            currentTurn() {
+                return this.$root.$data.store.state.currentTurn
+            },
+            activeTurn() {
+                return this.$root.$data.store.state.activeTurn
             }
         },
         methods: {
@@ -139,7 +145,7 @@
 
             },
             drawCard() {
-                if (this.game.currentTurn == this.user._id){
+                if (this.activeTurn == this.user._id){
                     this.$root.$data.store.actions.drawCard(this.game)
                 }else{
                     console.log('it\'s not your turn, dumb dumb')

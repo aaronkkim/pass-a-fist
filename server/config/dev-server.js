@@ -70,6 +70,10 @@ io.sockets.on('connection', function (socket) {
             // io.in(data.name)
         })
     })
+    socket.on("changingTurn", function (data) {
+        console.log("data: ", data)
+        io.to(data.gameName).emit("changeTurn", data)
+    })
     socket.on('message', (d) => {
         console.log("sending message to:", d.name, "in", d.gameName)
         io.to(d.gameName).emit('message', d)
