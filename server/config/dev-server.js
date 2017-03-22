@@ -75,15 +75,9 @@ io.sockets.on('connection', function (socket) {
         io.to(d.gameName).emit('message', d)
     })
     socket.on('leavegame', function (room) {
-
-        // console.log(socket)
-        // console.log(socket.rooms, socket.room)
-        // console.log("player leaving", room)
         socket.leave(room, () => {
-            io.to(room).emit("leavegame", room) 
-       // console.log("player has left")
+            io.emit(room).emit("leavegame", room)
         })
-
     })
     
     socket.on('drawing', function (data) {

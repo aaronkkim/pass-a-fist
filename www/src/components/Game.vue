@@ -57,7 +57,7 @@
 
         </div>
         <div class="flex-hand" @mouseover="handleCardHover">
-            <div class="hand" :style="cardPosition" v-for="card in hand">
+            <div class="hand" :style="cardPosition" v-for="card in hand" @click="playCard(card)">
                 <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
             </div>
 
@@ -154,6 +154,10 @@
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.$root.$data.store.state.activeUser, this.$route.params.id, this.returnHome)
+            },
+            
+            playCard(){
+                this.$root.$data.store.actions.playCard()
             },
             returnHome() {
                 this.$router.push({
