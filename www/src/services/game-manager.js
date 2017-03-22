@@ -108,8 +108,6 @@ let gameManager = {
         if (player._id) {
             api.put('game/' + game._id + '/turn', { currentTurn: player._id, activeTurn: player._id, phase: 1 }).then(turn => {
                 let user = turn.data.data
-                console.log(user)
-                debugger
                 Store.state.currentTurn = user.currentTurn
                 Store.state.activeTurn = user.activeTurn
                 var playerName = Store.state.players.find(function(banana) {
