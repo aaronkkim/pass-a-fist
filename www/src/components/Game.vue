@@ -139,7 +139,11 @@
 
             },
             drawCard() {
+                if (this.game.currentTurn == this.user._id){
                 this.$root.$data.store.actions.drawCard(this.game._id, this.game.name)
+                }else{
+                    console.log('it\'s not your turn, dumb dumb')
+                }
             },
             drawInjury() {
                 this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)

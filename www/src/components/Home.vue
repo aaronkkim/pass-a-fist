@@ -14,9 +14,9 @@
                             <router-link class="waves-effect waves-light btn-flat" :to="'games'">FIND A GAME! </router-link>
                         </div>
                         <div v-else>
-                            <h4>
+                            <h5>
                                 Please <router-link to="login">login </router-link> or <router-link  to="register">register </router-link> to play Pass-a-fist.
-                            </h4>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     #home {
-        font-family: 'Josefin Sans', sans-serif;
+        font-family: 'Didact Gothic'
     }
     
     li {
@@ -176,7 +176,7 @@
         background-size: cover;
         background-position: center;
         /*background-attachment: fixed;*/
-        height: 200vh;
+        height: 76vh;
         display: flex;
         justify-content: center;
         /*align-items: center;*/

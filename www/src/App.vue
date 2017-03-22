@@ -27,7 +27,7 @@ export default {
   color: black;
   height: 100%;
   width:100%;
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Didcat Gothic', sans-serif;
 }
 h1, h2{
   color: #11ABB0;
