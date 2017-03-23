@@ -11,7 +11,7 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://67.60.34.190:3000/');
+let client = io.connect('http://192.168.0.36:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
