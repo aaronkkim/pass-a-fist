@@ -5,6 +5,7 @@ import Login from 'components/Login'
 import Register from 'components/Register'
 import Game from 'components/Game'
 import Games from 'components/Games'
+import Profile from 'components/Profile'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/games/:id',
       name: 'Game',
       component: Game
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     }
   ]
 })

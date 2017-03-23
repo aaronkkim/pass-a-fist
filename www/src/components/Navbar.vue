@@ -26,7 +26,7 @@
       <div v-else>
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
         <li> Welcome, {{user.name}}!</li>
-        <li><img :src="user.badgeUrl" alt=""></li>
+        <li><img class="badger" :src="badgeUrl"/></li>
         <li><a href='#' @click="logout">Logout</a></li>
       </ul>
       </div>
@@ -48,7 +48,7 @@
                 this.$root.$data.store.actions.logout()
                 this.$router.push({path: '/'})
             }
-        },
+                },
         computed: {
             user() {
                 return this.$root.$data.store.state.activeUser
@@ -67,8 +67,14 @@
                 } else {
                     return false
                 }
-            } 
-        }
+            }, 
+            badgeUrl(){
+              return this.$root.$data.store.state.activeUser.badgeUrl
+            }
+        },
+    
+
+        
     }
 </script>
 
@@ -88,5 +94,8 @@
     }
     a{
        color: #11abb0
+    }
+    .badger{
+        height: 5vh;
     }
 </style>
