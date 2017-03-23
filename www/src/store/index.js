@@ -177,8 +177,7 @@ let gameStore = {
                 state.activeTurn = res.data.data.activeTurn
                 state.currentTurn = res.data.data.currentTurn
                 state.phase = res.data.data.turnPhase
-                if(res.data.data.lastCard)
-                    state.lastCard = res.data.data.lastCard;
+                state.lastCard = res.data.data.lastCard || {}
                 // this.chatRefresh()
                 GameManager.getPlayers(gameName)
             }).catch(handleError)
