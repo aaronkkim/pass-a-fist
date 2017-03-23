@@ -6,7 +6,7 @@
         <div class="players-in-game">
             <ul v-for="player in players" v-if="player._id !== user._id">
                 <div class="countFights">{{player.cards.length}}</div>
-                <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img src="../assets/preloader.gif" alt="" class="img-opp"></li>
+                <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img :src="player.badgeUrl" alt="" class="img-opp"></li>
                 <div class="countInjuries">{{player.injuries.length}}</div>
             </ul>
         </div>
