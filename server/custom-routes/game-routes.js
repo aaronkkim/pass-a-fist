@@ -24,7 +24,13 @@ export default {
             let action = 'Join a game'
             Games.findOneAndUpdate({ name: req.body.name }, { $addToSet: { playersInGameSession: req.body.user } }, { safe: true, upsert: true, new: false })
                 .then(game => {
-                    Users.findByIdAndUpdate(req.body.user._id, { $set: { activeGameId: game._id } }, { new: true }).then(user => {
+                    Users.findByIdAndUpdate(req.body.user._id, 
+                    { 
+                        $set: 
+                        {
+                            activeGameId: game._id 
+                        } 
+                    }, { new: true }).then(user => {
                         res.send(handleResponse(action, { activeGameId: user.activeGameId, game: game }))
                     })
                 }).catch(error => {
@@ -48,6 +54,12 @@ export default {
                             activeGameId: {},
                             cards: [],
                             injuries: []
+                        },
+                        $set: 
+                        {
+                            alive: true,
+                            conscious: true,
+                            turnEnabled: true
                         }
                     }
                 ).then(user => {
@@ -137,7 +149,8 @@ export default {
                     res.send(handleResponse(action, {
                         id: game._id,
                         currentTurn: game.currentTurn,
-                        activeTurn: game.activeTurn
+                        activeTurn: game.activeTurn,
+                        phase: game.turnPhase
                     }))
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
@@ -153,16 +166,32 @@ export default {
                 $set: {
                     activeTurn: req.body.activeTurn,
                     turnPhase: req.body.phase
-                },
+                }
+            }).then(user => {
+                user.save()
+                res.send(handleResponse(action, user.activeTurn))
+            }).catch(error => {
+                return next(handleResponse(action, null, error))
             })
-                .then(user => {
-                    user.save()
-                    res.send(handleResponse(action, user.activeTurn))
-                }).catch(error => {
-                    return next(handleResponse(action, null, error))
-                })
         }
     },
+    switchPhase: {
+        path: '/game/:id/phase',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update to next phase'
+            console.log(typeof req.body.phase)
+            Games.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    turnPhase: req.body.phase
+                }
+            }).then(game => {
+                res.send(handleResponse(action, game.turnPhase))
+            }).catch(error => {
+                return next(handleResponse(action, null, error))
+            })
+        }
+    }
 }
 
 

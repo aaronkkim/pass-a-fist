@@ -74,15 +74,19 @@ io.sockets.on('connection', function (socket) {
         console.log("data: ", data)
         io.to(data.gameName).emit("changeTurn", data)
     })
+
+    socket.on("changingPhase", function (data) {
+        console.log("data: ", data)
+        io.to(data.gameName).emit("changePhase", data.phase)
+    })
+
     socket.on('message', (d) => {
         console.log("sending message to:", d.name, "in", d.gameName)
         io.to(d.gameName).emit('message', d)
     })
     socket.on('leavegame', function (data) {
-
         socket.leave(data.name)
         io.emit("leavegame", data)
-
     })
 
     socket.on('drawing', function (data) {
@@ -96,6 +100,11 @@ io.sockets.on('connection', function (socket) {
 
         })
     })
+
+    socket.on('playing', function (data) {
+        io.to(data.name).emit("playCard", data)
+    })
+
     socket.on("Starting Game", function () {
         socket.emit("started")
     })

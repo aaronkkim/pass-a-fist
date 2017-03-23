@@ -18,7 +18,7 @@
             <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
-            <img v-if="game.active" :src="fightCard.imgUrl"></img>
+            <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl"></img>
             <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" @click="drawInjury">
         </div>
 
@@ -57,7 +57,7 @@
 
         </div>
         <div class="flex-hand" @mouseover="handleCardHover">
-            <div class="hand" :style="cardPosition" v-for="card in hand" @click="playCard(card)">
+            <div class="hand" :style="cardPosition" v-for="(card, index) in hand" @click="playCard(card, index)">
                 <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
             </div>
 
@@ -86,9 +86,6 @@
         mounted() {
             this.$root.$data.store.actions.initiateDeck()
             this.$root.$data.store.actions.getGame(this.$route.params.id)
-                // this.$root.$data.store.actions.chatRefresh(this.$route.params.id)
-
-
         },
         computed: {
             cardPosition() {
@@ -128,6 +125,12 @@
             },
             activeTurn() {
                 return this.$root.$data.store.state.activeTurn
+            },
+            phase() {
+                return this.$root.$data.store.state.phase
+            },
+            lastCard() {
+                return this.$root.$data.store.state.lastCard
             }
         },
         methods: {
@@ -145,9 +148,25 @@
 
             },
             drawCard() {
-                if (this.activeTurn == this.user._id){
-                    this.$root.$data.store.actions.drawCard(this.game)
-                }else{
+                if (this.activeTurn == this.user._id) {
+                    if (this.phase == 1){
+                        this.$root.$data.store.actions.drawCard(this.game)
+                    } else {
+                        console.log('you already drew, dummy')
+                    }
+                } else {
+                    console.log('it\'s not your turn, dumb dumb')
+                }
+            },
+            playCard(card, index){
+                if (this.activeTurn == this.user._id) {
+                    if (this.phase == 2) {
+                        this.$root.$data.store.actions.playCard(card, index)
+                    } else {
+                        console.log('you can\'t play cards yet.')
+                    }
+                } else {
+                    
                     console.log('it\'s not your turn, dumb dumb')
                 }
             },
@@ -160,10 +179,6 @@
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.user, this.game.name, this.returnHome)
-            },
-            
-            playCard(){
-                this.$root.$data.store.actions.playCard()
             },
             returnHome() {
                 this.$router.push({

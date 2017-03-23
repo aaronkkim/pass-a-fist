@@ -13,11 +13,12 @@ let schema = new Schema({
   maxPlayers: { type: Number, required: true },
   // Phase 0: No turn
   // Phase 1: Draw a card
-  // Phase 2: Choose an attack (if you have one)
-  // Phase 3: Choose a target*
-  // Phase 4: Target chooses a counter or takes an Injury
-  // Phase 5: Target chooses who the counter affects*
-  // Phase 6: Post-injury logic (Knockouts, CPR)*
+  // Phase 2: Choose an attack if you have one. *If not, draw another card or a new hand. 
+  // Phase 2.5: (front-end) Choose a target if applicable
+  // Phase 3: Target chooses a counter or takes an Injury
+  // Phase 3.5: (front-end) Target chooses who the counter affects
+  // Phase 4: *Post-injury logic (Injury effects, Knockouts, some special cards)
+  // * Stretch goal
   turnPhase: { type: Number, default: 0 },
   //RELATION
   deck: [{ type: ObjectId, ref: models.fight.name }],

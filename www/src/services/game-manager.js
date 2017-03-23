@@ -13,8 +13,6 @@ let handleError = (err) => {
     console.warn(err)
 }
 
-
-
 let gameManager = {
     resetUserData() {
         Store.state.gameSession = {}
@@ -141,6 +139,16 @@ let gameManager = {
             }).catch(handleError)
         }
 
+    },
+
+    nextPhase(game, cb) {
+        let phase = game.turnPhase + 1
+        api.put('game/' + game._id + '/phase', { phase: phase }).then(nextPhase => {
+            //Store.state.phase = nextPhase.data.data
+            //console.log(nextPhase.data.data)
+            //client.emit("changingTurn", {user: user, game: game})
+            cb(game.name, phase)
+        }).catch(handleError)
     },
 
     nextActiveTurn() {

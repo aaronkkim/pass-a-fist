@@ -15,6 +15,10 @@ let schema = new Schema({
     activeGameId: { type: ObjectId, ref: 'Game' },
     badgeUrl: { type: String },
     createdGame: { type: Boolean, required: true, default: false },
+    //GAME LOGIC 
+    alive: {type: Boolean, default: true},
+    conscious: {type: Boolean, default: true},
+    turnEnabled: {type: Boolean, default: true},
     //RELATION
     badge: {type: ObjectId, ref: models.badge.name},
     cards: [{ type: ObjectId, ref: 'Fight' }],
