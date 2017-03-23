@@ -13,7 +13,7 @@
         
 
         <div class="flex-container">
-            <img src="../assets/cards/main-fight.png" v-if="game.active"class="deck-fight rotate90" @click="drawCard">
+            <img src="../assets/cards/main-fight.png" v-if="game.active"class="deck-fight rotate90" @click="drawCard(deck)">
 
             <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
@@ -105,11 +105,31 @@
             game() {
                 return this.$root.$data.store.state.gameSession || true
             },
+            deck() {
+                let deck = {}
+                if(this.user && this.activeTurn && this.phase) {
+                    if(this.user._id == this.activeTurn) {
+                        if(this.phase == 1 || this.phase == 2) {
+                            deck.valid = true
+                        }
+                    }
+                }
+                return deck
+            },
             creator() {
                 return this.$root.$data.store.state.creator
             },
             hand() {
-                return this.$root.$data.store.state.hand
+                let hand = this.$root.$data.store.state.hand
+                if (this.user && this.activeTurn && this.phase) {
+                    if(this.user._id == this.activeTurn && this.phase === 2)
+                    for(let card of hand) {
+                        if(card.type == 'Attack') {
+                            card.valid = true
+                        }
+                    }
+                }
+                return hand
             },
             injuryDeck() {
                 return this.$root.$data.store.state.injuryDeck
@@ -120,7 +140,6 @@
             players() {
                 return this.$root.$data.store.state.players
             },
-
             fightCard(){
                 return this.$root.$data.store.state.activeCard 
             },
@@ -135,7 +154,6 @@
             },
             lastCard() {
                 return this.$root.$data.store.state.lastCard
-
             }
         },
         methods: {
@@ -152,26 +170,18 @@
                 }
 
             },
-            drawCard() {
-                if (this.activeTurn == this.user._id) {
-                    if (this.phase == 1){
-                        this.$root.$data.store.actions.drawCard(this.game)
-                    } else {
-                        console.log('you already drew, dummy')
-                    }
+            drawCard(deck) {
+                if (deck.valid) {
+                     this.$root.$data.store.actions.drawCard(this.game)
                 } else {
-                    console.log('it\'s not your turn, dumb dumb')
+                    console.log('nope')
                 }
             },
             playCard(card, index){
-                if (this.activeTurn == this.user._id) {
-                    if (this.phase === 2) {
-                        this.$root.$data.store.actions.playCard(card, index)
-                    } else {
-                        console.log('you can\'t play cards yet.')
-                    }
+                if (card.valid) {
+                    this.$root.$data.store.actions.playCard(card, index)
                 } else {
-                    console.log('it\'s not your turn, dumb dumb')
+                    console.log('nope')
                 }
             },
             drawInjury() {

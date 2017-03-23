@@ -62,10 +62,12 @@ client.on('changeTurn', function (data) {
     state.activeTurn = data.user.activeTurn
     state.currentTurn = data.user.currentTurn
     state.phase = data.user.phase
+    state.gameSession.turnPhase = data.user.phase
     Materialize.toast(`${playerName}\'s turn`, 9000)
 })
 client.on('changePhase', function (data) {
     state.phase = data
+    state.gameSession.turnPhase = data
 })
 client.on('started', function (id) {
     console.log("starting Game")
@@ -232,7 +234,12 @@ let gameStore = {
                 var p2 = GameManager.getHand(userId)
                 Promise.all([p1, p2]).then(values => {
                     setTimeout(function () { client.emit('drawing', { name: game.name }) }, 200)
-                    GameManager.nextPhase(game, changePhase)
+                    if(state.gameSession.turnPhase == 1)
+                        GameManager.nextPhase(game, changePhase);
+                    else if(state.gameSession.turnPhase == 2) {
+                        GameManager.nextTurn(game, changeTurn);
+                    }
+
                 })
             }).catch(handleError)
 
