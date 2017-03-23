@@ -6,8 +6,8 @@
       <input type="number" v-model="age" placeholder="Age" required>
       <input type="password" v-model="password" placeholder="Password" reqiured>
       <p class="grey-text">Badge</p>
-      <input name="group1" type="radio" id="icon1" :value="badges[0].badgeUrl"v-model="badge" />
-      <label for="icon1"> <img :src="badges[0].badgeUrl" alt=""></label>
+      <input name="group1" type="radio" id="icon1" :value="badges[0].badgeUrl"v-model="badge"/>
+      <label for="icon1"> <img :src="badges[0].badgeUrl" alt="" @click="displayBadgeUrl(badges)"></label>
       <input name="group1" type="radio" id="icon2" :value="badges[1].badgeUrl" v-model="badge"/>
       <label for="icon2"> <img :src="badges[1].badgeUrl" alt=""></label>
       <input name="group1" type="radio" id="icon3" :value="badges[2].badgeUrl" v-model="badge"/>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import badgeService from "../services/badge-service"
+    import badgeService from "../services/badge-service.js"
     export default {
         name: 'Register',
         data() {
@@ -50,6 +50,12 @@
                     // this.username = ''
                     // this.email = ''
                     // this.password = ''
+            },
+            displayBadgeUrl(badges) {
+                for(let badge of badges) {
+                    console.log(badge.name)
+                    console.log(badge.badgeUrl)
+                }
             }
         }
     }

@@ -62,8 +62,7 @@
             hideGame(){
                 console.log(this.$route.path)
                 if (this.$route.path === '/games/' + this.game.name){
-                return true
-
+                    return true
                 } else {
                     return false
                 }

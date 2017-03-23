@@ -77,7 +77,7 @@ export default {
         reqType: 'get',
         method(req, res, next) {
             let action = 'Get game session by custom game name'
-            Games.findOne({ name: req.params.name }).populate('playersInGameSession', 'name cards injuries')
+            Games.findOne({ name: req.params.name }).populate('playersInGameSession', 'name cards injuries badgeUrl')
                 .then(game => {
                     res.send(handleResponse(action, game.playersInGameSession))
                 }).catch(error => {
