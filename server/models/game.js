@@ -28,6 +28,7 @@ let schema = new Schema({
   lastTurn: { type: ObjectId, ref: models.user.name },
   activeTurn: { type: ObjectId, ref: models.user.name },
   lastActiveTurn: { type: ObjectId, ref: models.user.name },
+  lastCard: { type: ObjectId, ref: models.fight.name }
 })
 
 

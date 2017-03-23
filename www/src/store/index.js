@@ -11,7 +11,7 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://192.168.0.7:3000/');
+let client = io.connect('http://localhost:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
@@ -54,7 +54,8 @@ client.on('drawn', function (data) {
     GameManager.getDeck(state.gameSession.name)
 })
 client.on('playCard', function (data) {
-    
+    console.log(data)
+    state.lastCard = data.card
 })
 client.on('changeTurn', function (data) {
     let playerName = data.name
@@ -176,6 +177,8 @@ let gameStore = {
                 state.activeTurn = res.data.data.activeTurn
                 state.currentTurn = res.data.data.currentTurn
                 state.phase = res.data.data.turnPhase
+                if(res.data.data.lastCard)
+                    state.lastCard = res.data.data.lastCard;
                 // this.chatRefresh()
                 GameManager.getPlayers(gameName)
             }).catch(handleError)
@@ -242,11 +245,14 @@ let gameStore = {
             let game = state.gameSession
             let userId = state.activeUser._id
 
-            let lastCard = state.hand.splice(index, 1)
+            let lastCard = state.hand.splice(index, 1)[0]
             let hand = state.hand
-            api.put('users/' + userId + '/cards', { cards: hand }).then(res => {
-                //hrm
-                client.emit("playingCard", {card: lastCard, name: game.name})
+            api.put('game/' + game._id + '/play', { 
+                cards: hand, 
+                userId: userId, 
+                lastCard: lastCard 
+            }).then(res => {
+                client.emit("playing", {card: lastCard, name: game.name})
                 GameManager.nextTurn(game, changeTurn)
             }).catch(handleError)
         },

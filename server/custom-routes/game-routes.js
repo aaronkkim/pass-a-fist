@@ -9,7 +9,9 @@ export default {
         reqType: 'get',
         method(req, res, next) {
             let action = 'Get game session by custom game name'
-            Games.findOne({ name: req.params.name }).populate('creatorId', 'name')
+            Games.findOne({ name: req.params.name })
+                .populate('creatorId', 'name')
+                .populate('lastCard')
                 .then(game => {
                     res.send(handleResponse(action, game))
                 }).catch(error => {
@@ -24,15 +26,15 @@ export default {
             let action = 'Join a game'
             Games.findOneAndUpdate({ name: req.body.name }, { $addToSet: { playersInGameSession: req.body.user } }, { safe: true, upsert: true, new: false })
                 .then(game => {
-                    Users.findByIdAndUpdate(req.body.user._id, 
-                    { 
-                        $set: 
+                    Users.findByIdAndUpdate(req.body.user._id,
                         {
-                            activeGameId: game._id 
-                        } 
-                    }, { new: true }).then(user => {
-                        res.send(handleResponse(action, { activeGameId: user.activeGameId, game: game }))
-                    })
+                            $set:
+                            {
+                                activeGameId: game._id
+                            }
+                        }, { new: true }).then(user => {
+                            res.send(handleResponse(action, { activeGameId: user.activeGameId, game: game }))
+                        })
                 }).catch(error => {
                     return next(handleResponse(action, null, error))
                 })
@@ -55,7 +57,7 @@ export default {
                             cards: [],
                             injuries: []
                         },
-                        $set: 
+                        $set:
                         {
                             alive: true,
                             conscious: true,
@@ -187,6 +189,30 @@ export default {
                 }
             }).then(game => {
                 res.send(handleResponse(action, game.turnPhase))
+            }).catch(error => {
+                return next(handleResponse(action, null, error))
+            })
+        }
+    },
+    updatePlay: {
+        path: '/game/:id/play',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Update the last card played'
+            console.log(req.body.lastCard)
+            Games.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    lastCard: req.body.lastCard._id
+                }
+            }, { new: true }).then(game => {
+                Users.findByIdAndUpdate(req.body.userId, {
+                    $set: {
+                        cards: req.body.cards
+                    }
+                }, { new: true }).then(user => {
+                    console.log(game.lastCard)
+                    res.send(handleResponse(action, { message: "Card played", lastCard: game.lastCard }))
+                })
             }).catch(error => {
                 return next(handleResponse(action, null, error))
             })

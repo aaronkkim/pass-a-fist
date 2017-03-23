@@ -171,7 +171,6 @@
                         console.log('you can\'t play cards yet.')
                     }
                 } else {
-                    
                     console.log('it\'s not your turn, dumb dumb')
                 }
             },
