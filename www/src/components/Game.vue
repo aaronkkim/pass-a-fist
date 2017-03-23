@@ -13,7 +13,7 @@
         
 
         <div class="flex-container">
-            <img src="../assets/cards/main-fight.png" v-if="game.active"class="deck-fight rotate90" @click="drawCard(deck)">
+            <img src="../assets/cards/main-fight.png" v-if="game.active" class="deck-fight rotate90" :class="{'deck-fight-valid': deck.valid}" @click="drawCard(deck)">
 
             <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
@@ -396,6 +396,13 @@
         -o-transition: all 0.5s linear;
         transition: all 0.5s linear;
     }
+    .deck-fight-valid {
+        border-radius: 25px;
+        height: 100px;
+        margin: 10px;
+        -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
+        box-shadow: 0px 0px 25px 10px #0ff
+    }
     
     .deck-injury {
         border-radius: 25px;
@@ -406,12 +413,21 @@
         -o-transition: all 0.5s linear;
         transition: all 0.5s linear;
     }
+
+     .deck-injury-valid {
+        border-radius: 25px;
+        height: 100px;
+        margin: 10px;
+        -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
+        box-shadow: 0px 0px 25px 10px #ffb3b3
+    }
     
     .deck-fight:hover {
         border-radius: 25px;
         height: 100px;
         margin: 10px;
         -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
+        box-shadow: 0px 0px 25px 10px #0ff
     }
     
     .deck-injury:hover {
@@ -419,6 +435,7 @@
         height: 100px;
         margin: 10px;
         -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
+        box-shadow: 0px 0px 25px 10px #ffb3b3
     }
     
     .players-in-game {
