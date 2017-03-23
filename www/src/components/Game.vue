@@ -120,6 +120,10 @@
             players() {
                 return this.$root.$data.store.state.players
             },
+
+            fightCard(){
+                return this.$root.$data.store.state.activeCard 
+            },
             currentTurn() {
                 return this.$root.$data.store.state.currentTurn
             },
@@ -131,6 +135,7 @@
             },
             lastCard() {
                 return this.$root.$data.store.state.lastCard
+
             }
         },
         methods: {
@@ -179,6 +184,9 @@
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.user, this.game.name, this.returnHome)
+            },  
+            playCard(card){
+                this.$root.$data.store.actions.playCard()
             },
             returnHome() {
                 this.$router.push({

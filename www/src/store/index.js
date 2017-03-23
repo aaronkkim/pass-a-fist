@@ -2,7 +2,6 @@ import axios from 'axios'
 import io from 'socket.io-client'
 import Shuffle from 'shuffle'
 import cardService from '../services/card-service'
-
 import GameManager from '../services/game-manager'
 
 let api = axios.create({
@@ -89,6 +88,7 @@ let state = {
     activeTurn: '',
     phase: 0,
     lastCard: {}
+
 }
 
 let handleError = (err) => {
