@@ -71,7 +71,7 @@
 </template>
 
 <script>
-    import badges from "../assets/icons.js"
+    import badges from "../services/badge-service.js"
     import fightCards from '../services/card-service.js'
     export default {
         name: 'game',

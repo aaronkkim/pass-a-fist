@@ -1,28 +1,28 @@
-import images from '../assets/icons.js'
+import badgeIcons from '../assets/badges/icons.js'
 
 let badges = [{
         name: 'icon1',
-        badgeUrl: images.icon1
+        badgeUrl: badgeIcons.icon1
     },
     {
         name: 'icon2',
-        badgeUrl: images.icon2
+        badgeUrl: badgeIcons.icon2
     },
     {
         name: 'icon3',
-        badgeUrl: images.icon3
+        badgeUrl: badgeIcons.icon3
     },
     {
         name: 'icon4',
-        badgeUrl: images.icon4
+        badgeUrl: badgeIcons.icon4
     },
     {
         name: 'icon5',
-        badgeUrl: images.icon5
+        badgeUrl: badgeIcons.icon5
     },
     {
         name: 'icon6',
-        badgeUrl: images.icon6
+        badgeUrl: badgeIcons.icon6
     }
 ]
 
