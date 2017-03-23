@@ -165,7 +165,7 @@
             },
             playCard(card, index){
                 if (this.activeTurn == this.user._id) {
-                    if (this.phase == 2) {
+                    if (this.phase === 2) {
                         this.$root.$data.store.actions.playCard(card, index)
                     } else {
                         console.log('you can\'t play cards yet.')
@@ -185,9 +185,6 @@
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.user, this.game.name, this.returnHome)
             },  
-            playCard(card){
-                this.$root.$data.store.actions.playCard()
-            },
             returnHome() {
                 this.$router.push({
                     path: '/'
