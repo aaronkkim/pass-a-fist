@@ -122,9 +122,11 @@
             hand() {
                 let hand = this.$root.$data.store.state.hand
                 if (this.user && this.activeTurn && this.phase) {
-                    if(this.user._id == this.activeTurn && this.phase === 2)
+                    if(this.user._id == this.activeTurn)
                     for(let card of hand) {
-                        if(card.type == 'Attack') {
+                        if(card.type == 'Attack' && this.phase === 2) {
+                            card.valid = true
+                        } else if (card.type == 'Counter' && this.phase === 3) {
                             card.valid = true
                         }
                     }
@@ -344,7 +346,7 @@
     
     .flex-hand {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         align-items: flex-end;
         bottom: 0;
         position: fixed;
