@@ -6,7 +6,7 @@
         <div class="players-in-game">
             <ul v-for="player in players" v-if="player._id !== user._id" @click="targetPlayer(player)">
                 <div class="countFights">{{player.cards.length}}</div>
-                <li class="card-panel cardStyles" :class = "{'players-in-game-valid': player.valid}" v-show="otherPlayer"> {{player.name}} <img :src="player.badgeUrl" alt="" class="img-opp"></li>
+                <li class="card-panel cardStyles" :class="{'players-in-game-valid': player.valid}" v-show="otherPlayer"> {{player.name}} <img :src="player.badgeUrl" alt="" class="img-opp"></li>
                 <div class="countInjuries">{{player.injuries.length}}</div>
             </ul>
         </div>
@@ -58,7 +58,7 @@
         </div>
         <div class="flex-hand" @mouseover="handleCardHover">
             <div class="hand" :style="cardPosition" v-for="(card, index) in hand" @click="activateCard(card, index)">
-                <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
+                <img class="card" :class="{'card-valid': card.valid}"v-if="card.imgUrl" :src="card.imgUrl">
             </div>
 
         </div>
@@ -372,6 +372,11 @@
         margin-left: -50px;
         transition: transform 500ms ease-out;
         transform: scale(1) translateY(0);
+    }
+
+    .card-valid {
+        -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.8));
+        box-shadow: 0px 0px 20px 10px #ff8
     }
     
     .injury {

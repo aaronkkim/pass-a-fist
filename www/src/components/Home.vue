@@ -21,6 +21,13 @@
                     </div>
                 </div>
             </div>
+            <!--
+            <div class="bgpicture">
+                <div class="card" v-for="(card,index) in cards" @click="displayIndex(index)">
+                    <img :title="card.index" :src="card.imgUrl" ></img>
+                </div>
+            </div>
+            -->
             <div class="wood">
                 <ul id="staggered-list">
                     <li>
@@ -44,8 +51,6 @@
                 </ul>
 
             </div>
-            
-           
         </div>
       </div>
     
@@ -97,6 +102,10 @@
                     }
                 }];
                 Materialize.scrollFire(options);
+            },
+            displayIndex(index) {
+                console.log(index)
+                Materialize.toast(index, 5000)
             }
             // goCrazy(card, index) {
             //     this.$root.$data.store.actions.goCrazy(card, index)
@@ -133,6 +142,7 @@
     
     .card {
         display: inline-flex;
+        margin: 20px;
     }
     
     img {
