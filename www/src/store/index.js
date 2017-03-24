@@ -112,12 +112,18 @@ let changePhase = (gameName, phase) => {
 let playCard = (card, index, player) => {
     if (!state.activeUser._id) return;
     if (!state.gameSession._id) return;
+
     state.phase = 0
+
     let game = state.gameSession
     let userId = state.activeUser._id
 
     let lastCard = state.hand.splice(index, 1)[0]
     let hand = state.hand
+
+    for(let player of state.players) {
+        player.valid = false
+    }
 
     api.put('game/' + game._id + '/play', {
         cards: hand,

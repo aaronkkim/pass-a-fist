@@ -154,7 +154,6 @@ let gameManager = {
 
     getCardBehavior(card) {
         let index = card.index
-
         switch(index) {
             // use index to determine target types
             // case 1, 5, 12, 14, ...
