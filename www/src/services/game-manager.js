@@ -21,6 +21,7 @@ let gameManager = {
         Store.state.activeUser.createdGame = false
         Store.state.hand = []
         Store.state.injuryHand = []
+        Store.state.chat = []
     },
 
     getPlayers(gameName) {
@@ -134,7 +135,6 @@ let gameManager = {
                 var user = turn.data.data
                 Store.state.currentTurn = user.currentTurn
                 Store.state.activeTurn = user.activeTurn
-                //client.emit("changingTurn", {user: user, game: game})
                 cb(game.name, user, nextPlayer.name)
             }).catch(handleError)
         }
@@ -144,15 +144,23 @@ let gameManager = {
     nextPhase(game, cb) {
         let phase = game.turnPhase + 1
         api.put('game/' + game._id + '/phase', { phase: phase }).then(nextPhase => {
-            //Store.state.phase = nextPhase.data.data
-            //console.log(nextPhase.data.data)
-            //client.emit("changingTurn", {user: user, game: game})
             cb(game.name, phase)
         }).catch(handleError)
     },
 
     nextActiveTurn() {
 
+    },
+
+    getCardBehavior(card) {
+        let index = card.index
+
+        switch(index) {
+            // use index to determine target types
+            // case 1, 5, 12, 14, ...
+            default:
+                return "Any"
+        }
     }
 }
 

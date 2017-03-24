@@ -11,7 +11,7 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://192.168.0.36:3000/');
+let client = io.connect('http://localhost:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
@@ -90,7 +90,8 @@ let state = {
     currentTurn: '',
     activeTurn: '',
     phase: 0,
-    lastCard: {}
+    lastCard: {},
+    activeCard: {}
 
 }
 
@@ -106,6 +107,26 @@ let changeTurn = (gameName, user, userName) => {
 
 let changePhase = (gameName, phase) => {
     client.emit('changingPhase', { gameName: gameName, phase: phase })
+}
+
+let playCard = (card, index, player) => {
+    if (!state.activeUser._id) return;
+    if (!state.gameSession._id) return;
+    state.phase = 0
+    let game = state.gameSession
+    let userId = state.activeUser._id
+
+    let lastCard = state.hand.splice(index, 1)[0]
+    let hand = state.hand
+
+    api.put('game/' + game._id + '/play', {
+        cards: hand,
+        userId: userId,
+        lastCard: lastCard
+    }).then(res => {
+        client.emit("playing", { card: lastCard, name: game.name })
+        GameManager.nextTurn(game, changeTurn)
+    }).catch(handleError)
 }
 
 let gameStore = {
@@ -180,7 +201,6 @@ let gameStore = {
                 state.currentTurn = res.data.data.currentTurn
                 state.phase = res.data.data.turnPhase
                 state.lastCard = res.data.data.lastCard || {}
-                // this.chatRefresh()
                 GameManager.getPlayers(gameName)
             }).catch(handleError)
         },
@@ -234,9 +254,9 @@ let gameStore = {
                 var p2 = GameManager.getHand(userId)
                 Promise.all([p1, p2]).then(values => {
                     setTimeout(function () { client.emit('drawing', { name: game.name }) }, 200)
-                    if(state.gameSession.turnPhase == 1)
+                    if (state.gameSession.turnPhase == 1)
                         GameManager.nextPhase(game, changePhase);
-                    else if(state.gameSession.turnPhase == 2) {
+                    else if (state.gameSession.turnPhase == 2) {
                         GameManager.nextTurn(game, changeTurn);
                     }
 
@@ -244,23 +264,33 @@ let gameStore = {
             }).catch(handleError)
 
         },
-        playCard(card, index){
-            if (!state.activeUser._id) return;
-            if (!state.gameSession._id) return;
-            state.phase = 0
-            let game = state.gameSession
-            let userId = state.activeUser._id
-
-            let lastCard = state.hand.splice(index, 1)[0]
-            let hand = state.hand
-            api.put('game/' + game._id + '/play', { 
-                cards: hand, 
-                userId: userId, 
-                lastCard: lastCard 
-            }).then(res => {
-                client.emit("playing", {card: lastCard, name: game.name})
-                GameManager.nextTurn(game, changeTurn)
-            }).catch(handleError)
+        activateCard(card, index) {
+            let cardBehavior = GameManager.getCardBehavior(card)
+            state.activeCard = {card, index}
+            switch(cardBehavior) {
+                case "Any":
+                    for(let player of state.players) {
+                        player.valid = true
+                    }
+                    // Change store to validate any player as a target
+                    break
+                case "Left":
+                    // Change store to validate player on left
+                    break
+                case "Right":
+                    // Change store to validate player on right
+                    break
+                case "Side":
+                    // Change store to validate players on left/right
+                    break
+                case "Last":
+                    // Change store to validate last player who played
+                    break
+            }
+        },
+        targetPlayer(player) {
+            let cardData = state.activeCard
+            playCard(cardData.card, cardData.index, player)
         },
         drawInjury(gameId, gameName) {
             if (!state.activeUser._id) return;

@@ -4,7 +4,7 @@
         <button class="waves-effect waves-light btn orange-btn" @click="leaveGame">leave game</button>
 
         <div class="players-in-game">
-            <ul v-for="player in players" v-if="player._id !== user._id">
+            <ul v-for="player in players" v-if="player._id !== user._id" @click="targetPlayer(player)">
                 <div class="countFights">{{player.cards.length}}</div>
                 <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img :src="player.badgeUrl" alt="" class="img-opp"></li>
                 <div class="countInjuries">{{player.injuries.length}}</div>
@@ -57,7 +57,7 @@
 
         </div>
         <div class="flex-hand" @mouseover="handleCardHover">
-            <div class="hand" :style="cardPosition" v-for="(card, index) in hand" @click="playCard(card, index)">
+            <div class="hand" :style="cardPosition" v-for="(card, index) in hand" @click="activateCard(card, index)">
                 <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
             </div>
 
@@ -154,6 +154,9 @@
             },
             lastCard() {
                 return this.$root.$data.store.state.lastCard
+            },
+            activeCard() {
+                return this.$root.$data.store.state.activeCard
             }
         },
         methods: {
@@ -177,9 +180,16 @@
                     console.log('nope')
                 }
             },
-            playCard(card, index){
+            activateCard(card, index){
                 if (card.valid) {
-                    this.$root.$data.store.actions.playCard(card, index)
+                    this.$root.$data.store.actions.activateCard(card, index)
+                } else {
+                    console.log('nope')
+                }
+            },
+            targetPlayer(player) {
+                if(player.valid) {
+                     this.$root.$data.store.actions.targetPlayer(player)
                 } else {
                     console.log('nope')
                 }
@@ -397,11 +407,12 @@
         transition: all 0.5s linear;
     }
     .deck-fight-valid {
-        border-radius: 25px;
-        height: 100px;
-        margin: 10px;
         -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
-        box-shadow: 0px 0px 25px 10px #0ff
+        box-shadow: 0px 0px 20px 10px #0ff
+    }
+    .deck-fight-valid:hover {
+        -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
+        box-shadow: 0px 0px 35px 15px #7ff
     }
     
     .deck-injury {
@@ -422,13 +433,13 @@
         box-shadow: 0px 0px 25px 10px #ffb3b3
     }
     
-    .deck-fight:hover {
-        border-radius: 25px;
-        height: 100px;
-        margin: 10px;
-        -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
-        box-shadow: 0px 0px 25px 10px #0ff
-    }
+    // .deck-fight:hover {
+    //     border-radius: 25px;
+    //     height: 100px;
+    //     margin: 10px;
+    //     -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
+    //     box-shadow: 0px 0px 25px 10px #0ff
+    // }
     
     .deck-injury:hover {
         border-radius: 25px;
