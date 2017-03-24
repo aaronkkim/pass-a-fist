@@ -6,7 +6,7 @@
         <div class="players-in-game">
             <ul v-for="player in players" v-if="player._id !== user._id" @click="targetPlayer(player)">
                 <div class="countFights">{{player.cards.length}}</div>
-                <li class="card-panel cardStyles" v-show="otherPlayer"> {{player.name}} <img :src="player.badgeUrl" alt="" class="img-opp"></li>
+                <li class="card-panel cardStyles" :class="{'player-valid': player.valid}" v-show="otherPlayer"> {{player.name}} <img :src="player.badgeUrl" alt="" class="img-opp"></li>
                 <div class="countInjuries">{{player.injuries.length}}</div>
             </ul>
         </div>
@@ -58,7 +58,7 @@
         </div>
         <div class="flex-hand" @mouseover="handleCardHover">
             <div class="hand" :style="cardPosition" v-for="(card, index) in hand" @click="activateCard(card, index)">
-                <img class="card" v-if="card.imgUrl" :src="card.imgUrl">
+                <img class="card" :class="{'card-valid': card.valid}"v-if="card.imgUrl" :src="card.imgUrl">
             </div>
 
         </div>
@@ -140,7 +140,20 @@
                 return this.$root.$data.store.state.injuryHand
             },
             players() {
-                return this.$root.$data.store.state.players
+                let players = this.$root.$data.store.state.players
+                if (players && this.validTargets) {
+                    for (let player of players) {
+                        if (player && this.validTargets[player._id]) {
+                            player.valid = true
+                        } else {
+                            player.valid = false
+                        }
+                    }
+                }
+                return players
+            },
+            validTargets() {
+                return this.$root.$data.store.state.validTargets
             },
             fightCard(){
                 return this.$root.$data.store.state.activeCard 
@@ -373,6 +386,11 @@
         transition: transform 500ms ease-out;
         transform: scale(1) translateY(0);
     }
+
+    .card-valid {
+        -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.8));
+        box-shadow: 0px 0px 20px 10px #ff8
+    }
     
     .injury {
         height: 200px;
@@ -456,5 +474,9 @@
         justify-content: space-around;
         margin-bottom: 45px;
         margin-top: -30px;
+    }
+    .player-valid {
+        -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
+        box-shadow: 0px 0px 25px 10px #ffb3b3
     }
 </style>

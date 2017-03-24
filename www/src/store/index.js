@@ -91,7 +91,8 @@ let state = {
     activeTurn: '',
     phase: 0,
     lastCard: {},
-    activeCard: {}
+    activeCard: {},
+    validTargets: {}
 
 }
 
@@ -121,9 +122,17 @@ let playCard = (card, index, player) => {
     let lastCard = state.hand.splice(index, 1)[0]
     let hand = state.hand
 
+
     for (let player of state.players) {
         player.valid = false
+
+    for (let card of hand) {
+        card.valid = false
+
     }
+
+    state.validTargets = {}
+    console.log(state.validTargets)
 
     api.put('game/' + game._id + '/play', {
         cards: hand,
@@ -134,6 +143,54 @@ let playCard = (card, index, player) => {
         //This will turn into phase 3 instead
         GameManager.nextTurn(game, changeTurn)
     }).catch(handleError)
+}
+
+let validateTargets = (targetType) => {
+    state.validTargets = {}
+
+    // let playerSelf = {}
+    // let leftTarget = {}
+    // let rightTarget = {}
+
+    switch (targetType) {
+        case "Any":
+            // Change store to validate any player as a target
+            for (let player of state.players) {
+                state.validTargets[player._id] = true
+                console.log(state.validTargets)
+            }
+            break
+        case "Left":
+            // Change store to validate player on left
+            for (let player of state.players) {
+                state.validTargets[player._id] = true
+            }
+            break
+        case "Right":
+            // Change store to validate player on right
+            for (let player of state.players) {
+                state.validTargets[player._id] = true
+            }
+            break
+        case "Side":
+            // Change store to validate players on left/right
+            for (let player of state.players) {
+                state.validTargets[player._id] = true
+            }
+            break
+        case "Last":
+            // Change store to validate last player who played
+            for (let player of state.players) {
+                state.validTargets[player._id] = true
+            }
+            break
+        case "Attacker":
+            // Change store to validate player who attacked
+            for (let player of state.players) {
+                state.validTargets[player._id] = true
+            }
+            break
+    }
 }
 
 let gameStore = {
@@ -291,6 +348,7 @@ let gameStore = {
         activateCard(card, index) {
             let targetType = GameManager.getTargetType(card)
             state.activeCard = { card, index }
+<<<<<<< HEAD
             switch (targetType) {
                 case "Any":
                     for (let player of state.players) {
@@ -311,6 +369,10 @@ let gameStore = {
                     // Change store to validate last player who played
                     break
             }
+=======
+            validateTargets(targetType)
+
+>>>>>>> 8893bc538b04a31143ff1be0b91a416b8c9cecdc
         },
         targetPlayer(player) {
             let cardData = state.activeCard

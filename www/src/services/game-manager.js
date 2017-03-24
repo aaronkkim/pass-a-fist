@@ -156,10 +156,105 @@ let gameManager = {
         let index = card.index
         switch(index) {
             // use index to determine target types
-            // case 1, 5, 12, 14, ...
+            case 4:
+            case 7:
+            case 12:
+            case 47:
+            case 63:
+            case 65:
+            case 73:
+            case 84:
+            case 92:
+            case 95:
+            case 108:
+            case 112:
+            case 129:
+            case 131:
+                return "Left"
+            case 17:
+            case 31:
+            case 33:
+            case 37:
+            case 40:
+            case 67:
+            case 85:
+            case 86:
+            case 88:
+            case 90:
+            case 91:
+            case 104:
+            case 126:
+            case 127:
+            case 130:
+                return "Right" 
+            case 23:
+            case 28:
+            case 35:
+            case 44:
+            case 52:
+            case 60:
+            case 68:
+            case 96:
+            case 101:
+                return "Side"
+            case 69: //aww yeah giggity xD
+            case 70:
+            case 71:
+            case 78:
+            case 83:
+            case 93:
+            case 110:
+            case 115:
+            case 117:
+            case 118:
+            case 120:
+            case 125:
+            case 128:
+                return "None"
+            case 72:
+                return "Attacker"
+            case 77:
+            case 80:
+            case 81:
+            case 87:
+            case 97:
+            case 98:
+            case 99:
+            case 100:
+            case 102:
+            case 103:
+            case 107:
+            case 111:
+            case 113:
+            case 119:
+            case 122:
+            case 135:
+                return "Last"
+            case 2:
+            case 10:
+            case 19:
+            case 25:
+            case 46:
+            case 49:
+            case 62:
+            case 76:
+            case 79:
+            case 89:
+            case 94:
+            case 114:
+            case 116:
+            case 121:
+            case 124:
+            case 132:
+            case 133:
+            case 134:
+                return "Other"
             default:
                 return "Any"
         }
+    },
+    getBehavior(card) {
+        
     }
 }
 
