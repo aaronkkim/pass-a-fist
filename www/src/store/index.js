@@ -123,13 +123,8 @@ let playCard = (card, index, player) => {
     let lastCard = state.hand.splice(index, 1)[0]
     let hand = state.hand
 
-
-    for (let player of state.players) {
-        player.valid = false
-
     for (let card of hand) {
         card.valid = false
-
     }
 
     state.validTargets = {}
@@ -221,24 +216,6 @@ let gameStore = {
                 this.login(email, password)
             }).catch(handleError)
         },
-        saveUser(username, password, badgeUrl) {
-            state.isLoading = true
-            let userId = state.activeUser._id
-            let user = state.activeUser
-
-            let updatedUser = {
-                name: username,
-                password: password,
-                badgeUrl: badgeUrl
-            }
-            console.log(updatedUser)
-
-            api.put('users/' + userId, updatedUser).then(res => {
-
-                state.activeUser = res.data.data
-                console.log("its changed")
-            }).catch(handleError)
-        },
         submitText(name, text, gs) {
             console.log("gamesession", gs)
             client.emit('message', {
@@ -247,6 +224,25 @@ let gameStore = {
                 gameName: gs.name
             });
         },
+        saveUser(username, password, badgeUrl) {
+            state.isLoading = true
+            let userId = state.activeUser._id
+            let user = state.activeUser
+
+            let updatedUser = {
+                name: username,
+                password: password,
+                badgeUrl: badgeUrl
+            }
+            console.log(updatedUser)
+
+            api.put('users/' + userId, updatedUser).then(res => {
+
+                state.activeUser = res.data.data
+                console.log("its changed")
+            }).catch(handleError)
+        },
+
         logout() {
             api.delete('logout').then(res => {
                 state.activeUser = {}
@@ -348,31 +344,8 @@ let gameStore = {
         activateCard(card, index) {
             let targetType = GameManager.getTargetType(card)
             state.activeCard = { card, index }
-<<<<<<< HEAD
-            switch (targetType) {
-                case "Any":
-                    for (let player of state.players) {
-                        player.valid = true
-                    }
-                    // Change store to validate any player as a target
-                    break
-                case "Left":
-                    // Change store to validate player on left
-                    break
-                case "Right":
-                    // Change store to validate player on right
-                    break
-                case "Side":
-                    // Change store to validate players on left/right
-                    break
-                case "Last":
-                    // Change store to validate last player who played
-                    break
-            }
-=======
             validateTargets(targetType)
 
->>>>>>> 8893bc538b04a31143ff1be0b91a416b8c9cecdc
         },
         targetPlayer(player) {
             let cardData = state.activeCard
