@@ -81,7 +81,10 @@
     }
     
     .flex-container1 {
-        display: flex;
-        flex-direction: column;
+        display: inline-block;
+        /*flex-direction: row;*/
+    }
+    .badgesPic{
+        height: 15vh;
     }
 </style>
