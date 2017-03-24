@@ -89,6 +89,7 @@ let state = {
     injuryHand: [],
     currentTurn: '',
     activeTurn: '',
+    lastTurn: '',
     phase: 0,
     lastCard: {},
     activeCard: {},
@@ -143,47 +144,46 @@ let playCard = (card, index, player) => {
 let validateTargets = (targetType) => {
     state.validTargets = {}
 
-    // let playerSelf = {}
-    // let leftTarget = {}
-    // let rightTarget = {}
+    let players = state.players
+    let playerIndex = players.findIndex(player => {
+        return player._id == state.activeUser._id
+    })
+
+    let leftTarget = players[playerIndex - 1] || players[players.length - 1]
+    let rightTarget = players[playerIndex + 1] || players[0]
+    let lastTarget = players.find(player => {
+        return player._id == state.lastTurn
+    })
+    let lastAttacker = state.currentTurn
 
     switch (targetType) {
         case "Any":
             // Change store to validate any player as a target
-            for (let player of state.players) {
+            for (let player of players) {
                 state.validTargets[player._id] = true
                 console.log(state.validTargets)
             }
             break
         case "Left":
             // Change store to validate player on left
-            for (let player of state.players) {
-                state.validTargets[player._id] = true
-            }
+            state.validTargets[leftTarget._id] = true
             break
         case "Right":
             // Change store to validate player on right
-            for (let player of state.players) {
-                state.validTargets[player._id] = true
-            }
+            state.validTargets[rightTarget._id] = true
             break
         case "Side":
             // Change store to validate players on left/right
-            for (let player of state.players) {
-                state.validTargets[player._id] = true
-            }
+            state.validTargets[leftTarget._id] = true
+            state.validTargets[rightTarget._id] = true
             break
         case "Last":
             // Change store to validate last player who played
-            for (let player of state.players) {
-                state.validTargets[player._id] = true
-            }
+            state.validTargets[lastTarget._id] = true
             break
         case "Attacker":
             // Change store to validate player who attacked
-            for (let player of state.players) {
-                state.validTargets[player._id] = true
-            }
+            state.validTargets[lastAttacker._id] = true
             break
     }
 }
