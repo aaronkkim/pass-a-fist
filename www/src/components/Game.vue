@@ -140,7 +140,20 @@
                 return this.$root.$data.store.state.injuryHand
             },
             players() {
-                return this.$root.$data.store.state.players
+                let players = this.$root.$data.store.state.players
+                if (players && this.validTargets) {
+                    for (let player of players) {
+                        if (player && this.validTargets[player._id]) {
+                            player.valid = true
+                        } else {
+                            player.valid = false
+                        }
+                    }
+                }
+                return players
+            },
+            validTargets() {
+                return this.$root.$data.store.state.validTargets
             },
             fightCard(){
                 return this.$root.$data.store.state.activeCard 
