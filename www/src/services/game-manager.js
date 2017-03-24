@@ -152,7 +152,7 @@ let gameManager = {
 
     },
 
-    getCardBehavior(card) {
+    getTargetType(card) {
         let index = card.index
         switch(index) {
             // use index to determine target types

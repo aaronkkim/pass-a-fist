@@ -131,6 +131,7 @@ let playCard = (card, index, player) => {
         lastCard: lastCard
     }).then(res => {
         client.emit("playing", { card: lastCard, name: game.name })
+        //This will turn into phase 3 instead
         GameManager.nextTurn(game, changeTurn)
     }).catch(handleError)
 }
@@ -265,15 +266,14 @@ let gameStore = {
                     else if (state.gameSession.turnPhase == 2) {
                         GameManager.nextTurn(game, changeTurn);
                     }
-
                 })
             }).catch(handleError)
 
         },
         activateCard(card, index) {
-            let cardBehavior = GameManager.getCardBehavior(card)
+            let targetType = GameManager.getTargetType(card)
             state.activeCard = {card, index}
-            switch(cardBehavior) {
+            switch(targetType) {
                 case "Any":
                     for(let player of state.players) {
                         player.valid = true
