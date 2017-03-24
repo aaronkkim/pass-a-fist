@@ -1,13 +1,28 @@
 <template>
-    <div>
-        <h1>Profile Page</h1>
+    <div class="profileStyle">
+        <h1>Welcome, {{user.name}}</h1>
+        <div class="row">
 
-        <div v-for="badge in badges">
-            <label :for="badge.name"><img :src="badge.badgeUrl"
-            /></label>
-            <input :id="badge.name" type="radio" name="userbadge" v-model="selectedBadge" :value="badge.badgeUrl" /> 
+        <form class="col s12" @submit.prevent="saveUser">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input v-model="username" type="text" placeholder="Change Name">
+                </div>
+                <div class="input-field col s6">
+                    <input v-model="password"  type="password" placeholder="Change Password">
+                </div>
+            </div>
+            <div class="row">
+
+            <div v-for="badge in badges" class="flex-container1">
+                    <input :id="badge.name" type="radio" name="userbadge" v-model="selectedBadge" :value="badge.badgeUrl" />
+                    <label :for="badge.name"><img :src="badge.badgeUrl" class="badgesPic"/></label>
+            </div>
+            </div>
+            <button >Set Badge</button>
+
+        </form>
         </div>
-        <button @click="saveUser">Set Badge</button>
     </div>
 </template>
 
@@ -18,7 +33,9 @@
         data() {
             return {
                 badges: badgeService.getBadges(),
-                selectedBadge: ''
+                selectedBadge: '',
+                username: '',
+                password: ''
             }
         },
         computed: {
@@ -28,8 +45,8 @@
         },
         methods: {
             saveUser() {
-                this.user.badgeUrl = this.selectedBadge
-                console.log(this.user)
+                this.$root.store.actions.saveUser(this.username, this.password, this.selectedBadge)
+                console.log(this.username)
                 // Save the current User
             }
         }
@@ -37,20 +54,34 @@
     }
 
 </script>
-<style>
-       .main {
+<style scoped>
+    .main {
         text-align: right;
         padding-right: 5%;
     }
-    nav{
+    
+    nav {
         background-color: black;
-        font-family:'Montserrat', sans-serif;
+        font-family: 'Montserrat', sans-serif;
         z-index: 2;
         overflow: hidden;
         position: fixed;
-       
     }
-    a{
-       color: #11abb0
+    
+    a {
+        color: #11abb0
+    }
+    /*.badgesPic {
+        height: 150px;
+        display: inline-block;
+    }*/
+    
+    .profileStyle {
+        padding-top: 5rem;
+    }
+    
+    .flex-container1 {
+        display: flex;
+        flex-direction: column;
     }
 </style>

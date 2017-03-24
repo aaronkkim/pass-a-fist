@@ -121,7 +121,7 @@ let playCard = (card, index, player) => {
     let lastCard = state.hand.splice(index, 1)[0]
     let hand = state.hand
 
-    for(let player of state.players) {
+    for (let player of state.players) {
         player.valid = false
     }
 
@@ -162,6 +162,24 @@ let gameStore = {
                 age: age
             }).then(res => {
                 this.login(email, password)
+            }).catch(handleError)
+        },
+        saveUser(username, password, badgeUrl) {
+            state.isLoading = true
+            let userId = state.activeUser._id
+            let user = state.activeUser
+
+            let updatedUser = {
+                name: username,
+                password: password,
+                badgeUrl: badgeUrl
+            }
+            console.log(updatedUser)
+
+            api.put('users/' + userId, updatedUser).then(res => {
+
+                state.activeUser = res.data.data
+                console.log("its changed")
             }).catch(handleError)
         },
         submitText(name, text, gs) {
@@ -272,10 +290,10 @@ let gameStore = {
         },
         activateCard(card, index) {
             let targetType = GameManager.getTargetType(card)
-            state.activeCard = {card, index}
-            switch(targetType) {
+            state.activeCard = { card, index }
+            switch (targetType) {
                 case "Any":
-                    for(let player of state.players) {
+                    for (let player of state.players) {
                         player.valid = true
                     }
                     // Change store to validate any player as a target

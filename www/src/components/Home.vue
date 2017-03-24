@@ -12,6 +12,7 @@
                         <div v-if="user.name">
                             <p>Welcome, {{user.name}} </p>
                             <router-link class="waves-effect waves-light btn-flat" :to="'games'">FIND A GAME! </router-link>
+                            
                         </div>
                         <div v-else>
                             <h5>

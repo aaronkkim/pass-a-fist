@@ -13,19 +13,21 @@
        <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><router-link to="login">Login </router-link> </li>
             <li><router-link to="register">Register </router-link> </li>
+            
       </ul>
       </div>
       <div v-else-if="game && game.name">
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
        
         <li><router-link v-show="!hideGame" :to="'games/'+game.name">Current Game</router-link></li>
-        <li> Welcome, {{user.name}}!</li>
+        <li><router-link to="profile"> Welcome, {{user.name}}!</router-link> </li>
+        <li></li>
         <li><a href='#' @click="logout">Logout</a></li>
       </ul>
       </div>
       <div v-else>
        <ul id="nav-mobile" class="right hide-on-med-and-down" >
-        <li> Welcome, {{user.name}}!</li>
+        <li><router-link to="profile"> Welcome, {{user.name}}!</router-link> </li>
         <li><img class="badger" :src="badgeUrl"/></li>
         <li><a href='#' @click="logout">Logout</a></li>
       </ul>

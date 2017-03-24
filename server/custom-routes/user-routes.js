@@ -33,6 +33,28 @@ export default {
                 })
         }
     },
+     saveUser: {
+        path: '/users/:id',
+        reqType: 'put',
+        method(req, res, next) {
+            console.log('req body   => ', req.body)
+            let action = 'Update a users info'
+            Users.findByIdAndUpdate(req.params.id, {$set:req.body}, function(err, user){
+                if(err){
+                    console.log(err)
+                }else{
+                    console.log('user was changed', user)
+                }
+            }) .then(user => {
+                    console.log("ayyyyy")
+                    res.send(handleResponse(action, {message: "you've changed your user"}))
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                
+               
+                })
+        }
+    },
     addCard: {
         path: '/users/:id/draw',
         reqType: 'put',

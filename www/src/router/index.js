@@ -37,7 +37,7 @@ export default new Router({
       component: Game
     },
     {
-      path: '/profile',
+      path: '/profile/',
       name: 'Profile',
       component: Profile
     }
