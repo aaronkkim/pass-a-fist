@@ -48,6 +48,10 @@ client.on('play', function(data) {
     console.log(data)
     gameStore.actions.getGame(data.name)
 })
+client.on('injury', function(data) {
+    console.log(data)
+    gameStore.actions.getGame(data.name)
+})
 client.on('drawn', function (data) {
     gameStore.actions.getGame(data.name)
 })
@@ -362,6 +366,7 @@ let gameStore = {
             }).catch(handleError)
 
         },
+        
         activateCard(card, index) {
             let targetType = GameManager.getTargetType(card)
             state.playableCard = { card, index }
@@ -386,7 +391,7 @@ let gameStore = {
                 //GameManager.updateInjuryDeck(gameId)
                 //GameManager.getInjuryHand(userId)
                 // Setup a client.emit to injury route
-                client.emit("playing", { name: gameName })
+                client.emit("injuring", { name: gameName })
             }).catch(handleError)
 
         },

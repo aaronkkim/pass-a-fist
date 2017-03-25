@@ -104,6 +104,9 @@ io.sockets.on('connection', function (socket) {
     socket.on('playing', function (data) {
         io.to(data.name).emit("play", data)
     })
+     socket.on('injuring', function (data) {
+        io.to(data.name).emit("injury", data)
+    })
 
     socket.on("Starting Game", function () {
         socket.emit("started")
