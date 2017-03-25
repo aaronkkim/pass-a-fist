@@ -10,7 +10,8 @@ export default {
         method(req, res, next) {
             let action = 'Get game session by custom game name'
             Games.findOne({ name: req.params.name })
-                .populate('creatorId', 'name')
+                .populate('creatorId', 'name badgeUrl')
+                .populate('playersInGameSession', 'name cards injuries badgeUrl')
                 .populate('lastCard')
                 .then(game => {
                     res.send(handleResponse(action, game))
@@ -194,32 +195,103 @@ export default {
             })
         }
     },
-    updatePlay: {
+    handleCard: {
         path: '/game/:id/play',
         reqType: 'put',
         method(req, res, next) {
-            let action = 'Update the last card played'
-            console.log(req.body.lastCard)
-            Games.findByIdAndUpdate(req.params.id, {
-                $set: {
-                    lastCard: req.body.lastCard._id
+            let action = 'Handle game logic of last card played'
+
+            Games.findById(req.params.id).then(game => {
+                console.log(req.body)
+                let card = req.body.card
+                let target = req.body.target
+
+                setLastCard(game, card)
+
+                if (card.type === 'Attack' && target) {
+                    setActiveCard(game, card)
+                    setActiveTurn(game, target)
+                    nextPhase(game)
+                } else if (card.type === 'Counter') {
+                    if (target)
+                        setActiveTurn(game, target)
+                    else
+                        nextTurn(game)
                 }
-            }, { new: true }).then(game => {
+
                 Users.findByIdAndUpdate(req.body.userId, {
-                    $set: {
-                        cards: req.body.cards
+                    $pull: {
+                        cards: card._id
                     }
-                }, { new: true }).then(user => {
-                    console.log(game.lastCard)
-                    res.send(handleResponse(action, { message: "Card played", lastCard: game.lastCard }))
-                })
+                }, { new: true })
+                    .then(user => {
+                        game.save()
+                        res.send(handleResponse(action, { message: "Card played" }))
+                    })
             }).catch(error => {
                 return next(handleResponse(action, null, error))
+            })
+        }
+    },
+    handleInjury: {
+        path: '/game/:id/takeInjury',
+        reqType: 'put',
+        method(req, res, next) {
+            let action = 'Handle game logic of taking an injury'
+
+            Games.findById(req.params.id).then(game => {
+                let userId = req.body.userId
+                nextTurn(game)
+
+                Users.findByIdAndUpdate(userId, {
+                    $push: { injuries: req.body.card },
+                }, { new: true })
+                    .then(user => {
+                        game.save()
+                        res.send(handleResponse(action, user.injuries))
+                    }).catch(error => {
+                        return next(handleResponse(action, null, error))
+                    })
             })
         }
     }
 }
 
+function nextPhase(game) {
+    game.turnPhase++
+}
+
+function nextTurn(game) {
+    let currentTurn = game.currentTurn
+    let activeTurn = game.activeTurn
+    let players = game.playersInGameSession
+
+    for (var i = 0; i < players.length; i++) {
+        var playerId = players[i];
+        if (playerId == currentTurn) {
+            currentTurn = players[i + 1] || players[0]
+            activeTurn = currentTurn
+        }
+    }
+
+    game.currentTurn = currentTurn
+    game.activeTurn = activeTurn
+    game.activeCard = ""
+    game.turnPhase = 1
+}
+
+function setLastCard(game, card) {
+    game.lastCard = card
+}
+
+function setActiveCard(game, card) {
+    game.activeCard = card
+}
+
+function setActiveTurn(game, target) {
+    game.lastActiveTurn = game.activeTurn || ""
+    game.activeTurn = target
+}
 
 
 function handleResponse(action, data, error) {

@@ -102,7 +102,7 @@ io.sockets.on('connection', function (socket) {
     })
 
     socket.on('playing', function (data) {
-        io.to(data.name).emit("playCard", data)
+        io.to(data.name).emit("play", data)
     })
 
     socket.on("Starting Game", function () {

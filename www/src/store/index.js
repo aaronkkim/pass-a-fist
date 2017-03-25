@@ -11,23 +11,19 @@ let api = axios.create({
 })
 
 
-let client = io.connect('http://192.168.0.36:3000/');
+let client = io.connect('http://localhost:3000/');
 
 client.on('CONNECTED', function (data) {
     console.log(data);
 });
 
 client.on('message', function (data) {
-
-    console.log(data);
-
     if (data.name && data.text) {
         state.chat.push(data)
     }
 });
 
 client.on('joined', function (data) {
-    console.log(data)
     if (data.user) {
         var message = `${data.user.name} has joined the game.`
         state.chat.push({ text: message })
@@ -35,7 +31,6 @@ client.on('joined', function (data) {
     GameManager.getPlayers(state.gameSession.name)
 })
 client.on('started', function (data) {
-    console.log(data)
     if (data.user) {
         var message = `${data.user.name} has started the game.`
         state.chat.push({ text: message })
@@ -49,40 +44,44 @@ client.on('leavegame', function (data) {
     if (state.gameSession.name)
         GameManager.getPlayers(state.gameSession.name);
 })
-client.on('drawn', function (data) {
-    GameManager.getPlayers(state.gameSession.name)
-    GameManager.getDeck(state.gameSession.name)
-})
-client.on('playCard', function (data) {
+client.on('play', function(data) {
     console.log(data)
-    state.lastCard = data.card
+    gameStore.actions.getGame(data.name)
 })
-client.on('changeTurn', function (data) {
-    let playerName = data.name
-    state.activeTurn = data.user.activeTurn
-    state.currentTurn = data.user.currentTurn
-    state.phase = data.user.phase
-    state.gameSession.turnPhase = data.user.phase
-    Materialize.toast(`${playerName}\'s turn`, 9000)
+client.on('drawn', function (data) {
+    gameStore.actions.getGame(data.name)
 })
-client.on('changePhase', function (data) {
-    state.phase = data
-    state.gameSession.turnPhase = data
-})
+// client.on('playCard', function (data) {
+//     console.log(data)
+//     state.lastCard = data.card
+// })
+// client.on('changeTurn', function (data) {
+//     let playerName = data.name
+//     state.activeTurn = data.user.activeTurn
+//     state.currentTurn = data.user.currentTurn
+//     state.phase = data.user.phase
+//     state.gameSession.turnPhase = data.user.phase
+//     Materialize.toast(`${playerName}\'s turn`, 9000)
+// })
+// client.on('changePhase', function (data) {
+//     state.phase = data
+//     state.gameSession.turnPhase = data
+// })
 client.on('started', function (id) {
     console.log("starting Game")
     gameStore.actions.activateGame()
 })
 
 let state = {
+    isLoading: false,
+    error: {},
     activeUser: {},
     games: [],
+    chat: [],
     gameSession: {},
+    // refactor
     creator: {},
     players: [],
-    isLoading: false,
-    chat: [],
-    error: {},
     deck: {},
     hand: [],
     injuryDeck: {},
@@ -93,6 +92,8 @@ let state = {
     phase: 0,
     lastCard: {},
     activeCard: {},
+    //
+    playableCard: {},
     validTargets: {}
 
 }
@@ -117,8 +118,15 @@ let playCard = (card, index, player) => {
 
     state.phase = 0
 
+    let data = {}
+
+    data.card = card
+    data.target = player || null;
+
     let game = state.gameSession
     let userId = state.activeUser._id
+
+    data.userId = userId
 
     let lastCard = state.hand.splice(index, 1)[0]
     let hand = state.hand
@@ -126,18 +134,12 @@ let playCard = (card, index, player) => {
     for (let card of hand) {
         card.valid = false
     }
-
+    
     state.validTargets = {}
-    console.log(state.validTargets)
 
-    api.put('game/' + game._id + '/play', {
-        cards: hand,
-        userId: userId,
-        lastCard: lastCard
-    }).then(res => {
-        client.emit("playing", { card: lastCard, name: game.name })
-        //This will turn into phase 3 instead
-        GameManager.nextTurn(game, changeTurn)
+    api.put('game/' + game._id + '/play', data).then(res => {
+        client.emit("playing", { name: game.name })
+        // GameManager.nextTurn(game, changeTurn)
     }).catch(handleError)
 }
 
@@ -157,6 +159,8 @@ let validateTargets = (targetType) => {
     let lastAttacker = state.currentTurn
 
     switch (targetType) {
+        case "None":
+            return false
         case "Any":
             // Change store to validate any player as a target
             for (let player of players) {
@@ -185,6 +189,8 @@ let validateTargets = (targetType) => {
             // Change store to validate player who attacked
             state.validTargets[lastAttacker._id] = true
             break
+        
+        return true
     }
 }
 
@@ -272,6 +278,7 @@ let gameStore = {
         getGame(gameName) {
             api('game/' + gameName).then(res => {
                 state.gameSession = res.data.data
+                state.players = res.data.data.playersInGameSession
                 state.creator = res.data.data.creatorId
                 state.deck.cards = res.data.data.deck
                 state.injuryDeck.cards = res.data.data.injuryDeck
@@ -279,7 +286,17 @@ let gameStore = {
                 state.currentTurn = res.data.data.currentTurn
                 state.phase = res.data.data.turnPhase
                 state.lastCard = res.data.data.lastCard || {}
-                GameManager.getPlayers(gameName)
+                state.activeCard = res.data.data.activeCard || {}
+
+                if (state.activeUser) {
+                    for (var i = 0; i < state.players.length; i++) {
+                        var player = state.players[i];
+                        if (player._id === state.activeUser._id) {
+                            GameManager.getHand(player._id)
+                            GameManager.getInjuryHand(player._id)
+                        }
+                    }
+                }
             }).catch(handleError)
         },
         initiateDeck() {
@@ -343,12 +360,15 @@ let gameStore = {
         },
         activateCard(card, index) {
             let targetType = GameManager.getTargetType(card)
-            state.activeCard = { card, index }
-            validateTargets(targetType)
-
+            state.playableCard = { card, index }
+            let needsTarget = validateTargets(targetType)
+            console.log(needsTarget)
+            if (needsTarget == false) {
+                playCard(card, index)
+            }
         },
         targetPlayer(player) {
-            let cardData = state.activeCard
+            let cardData = state.playableCard
             playCard(cardData.card, cardData.index, player)
         },
         drawInjury(gameId, gameName) {
@@ -357,10 +377,11 @@ let gameStore = {
             let card = state.injuryDeck.draw()
             let userId = state.activeUser._id
 
-            api.put('users/' + userId + '/drawinjury', { card: card }).then(res => {
-                client.emit('drawing', { name: gameName })
+            api.put('game/' + gameId + '/takeInjury', { card: card, userId: userId }).then(res => {
                 GameManager.updateInjuryDeck(gameId)
                 GameManager.getInjuryHand(userId)
+                // Setup a client.emit to injury route
+                client.emit("playing", { name: gameName })
             }).catch(handleError)
 
         },

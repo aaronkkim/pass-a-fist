@@ -25,12 +25,24 @@ let schema = new Schema({
   injuryDeck: [{ type: ObjectId, ref: models.injury.name }],
   creatorId: { type: ObjectId, ref: models.user.name },
   currentTurn: { type: ObjectId, ref: models.user.name },
-  lastTurn: { type: ObjectId, ref: models.user.name },
   activeTurn: { type: ObjectId, ref: models.user.name },
+  lastTurn: { type: ObjectId, ref: models.user.name },
   lastActiveTurn: { type: ObjectId, ref: models.user.name },
+  activeCard: { type: ObjectId, ref: models.fight.name },
   lastCard: { type: ObjectId, ref: models.fight.name }
 })
 
+// handleCard(card, ?target)
+// if(card.type == 'Attack')
+//  setActiveTurn(target)
+//  setActiveCard(card)
+// else if(card.type == 'Counter')
+//  if(target)
+//    setActiveTurn(target)
+//  else
+//    nextTurn()
+// 
+//  ...res.send(game)
 
 
 module.exports = mongoose.model('Game', schema)
