@@ -92,6 +92,7 @@ let state = {
     phase: 0,
     lastCard: {},
     activeCard: {},
+    discard: {},
     //
     playableCard: {},
     validTargets: {}
@@ -128,7 +129,9 @@ let playCard = (card, index, player) => {
 
     data.userId = userId
 
+
     let lastCard = state.hand.splice(index, 1)[0]
+    let discard = state.hand.splice(index, 1)[0]
     let hand = state.hand
 
     for (let card of hand) {
@@ -287,6 +290,7 @@ let gameStore = {
                 state.phase = res.data.data.turnPhase
                 state.lastCard = res.data.data.lastCard || {}
                 state.activeCard = res.data.data.activeCard || {}
+                state.discard = res.data.data.discard || {}
 
                 if (state.activeUser) {
                     for (var i = 0; i < state.players.length; i++) {
