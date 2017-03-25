@@ -211,13 +211,14 @@ let gameStore = {
                 state.isLoading = false
             }).catch(handleError)
         },
-        register(username, email, password, age) {
+        register(username, email, password, age, badgeUrl) {
             state.isLoading = true
             api.post('register', {
                 name: username,
                 email: email,
                 password: password,
-                age: age
+                age: age,
+                badgeUrl: badgeUrl
             }).then(res => {
                 this.login(email, password)
             }).catch(handleError)
