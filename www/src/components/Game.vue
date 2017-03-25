@@ -285,7 +285,7 @@
         flex-wrap: wrap;
         background-color: rgba(100, 100, 100, .7);
         padding: 20px;
-        width: 77%;
+        width: 8vw;
         height: 16vh;
         border-radius: 25px;
     }
