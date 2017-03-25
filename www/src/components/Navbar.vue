@@ -21,7 +21,7 @@
        
         <li><router-link v-show="!hideGame" :to="'games/'+game.name">Current Game</router-link></li>
         <li><router-link to="profile"> Welcome, {{user.name}}!</router-link> </li>
-        <li></li>
+        <li><img class="badger" :src="badgeUrl"/></li>
         <li><a href='#' @click="logout">Logout</a></li>
       </ul>
       </div>
