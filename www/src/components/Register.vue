@@ -10,18 +10,6 @@
                 <input :id="badge.name" type="radio" name="userbadge" v-model="selectedBadge" :value="badge.badgeUrl" />
                 <label :for="badge.name"><img :src="badge.badgeUrl" class="badgesPic"/></label>
             </div>
-            <!--<input name="group1" type="radio" id="icon1" :value="badges[0].badgeUrl"v-model="badge"/>
-      <label for="icon1"> <img :src="badges[0].badgeUrl" alt="" @click="displayBadgeUrl(badges)"></label>
-      <input name="group1" type="radio" id="icon2" :value="badges[1].badgeUrl" v-model="badge"/>
-      <label for="icon2"> <img :src="badges[1].badgeUrl" alt=""></label>
-      <input name="group1" type="radio" id="icon3" :value="badges[2].badgeUrl" v-model="badge"/>
-      <label for="icon3"> <img :src="badges[2].badgeUrl" alt=""></label>
-      <input name="group1" type="radio" id="icon4" :value="badges[3].badgeUrl" v-model="badge"/>
-      <label for="icon4"> <img :src="badges[3].badgeUrl" alt=""></label>
-      <input name="group1" type="radio" id="icon5" :value="badges[4].badgeUrl" v-model="badge"/>
-      <label for="icon5"> <img :src="badges[4].badgeUrl" alt=""></label>
-      <input name="group1" type="radio" id="icon6" :value="badges[5].badgeUrl" v-model="badge"/>
-      <label for="icon6"> <img :src="badges[5].badgeUrl" alt=""></label>-->
             <br>
             <button class="waves-effect waves-light btn">Register</button>
 
