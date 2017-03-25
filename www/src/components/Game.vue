@@ -20,7 +20,7 @@
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
             <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl"></img>
-            <img v-if="game.active && discard.imgUrl" :src="discard.imgUrl" >
+            <img v-if="game.active && discard.imgUrl" :src="discard.imgUrl">
 
             <img src="../assets/cards/main-injury.png" v-if="game.active" class="deck-injury rotate90" :class="{'deck-injury-valid': injuryDeck.valid}"
                 @click="drawInjury(injuryDeck)">
@@ -148,9 +148,7 @@
                 }
                 return hand
             },
-            injuryDeck() {
-                return this.$root.$data.store.state.injuryDeck
-            },
+          
             injuryHand() {
                 return this.$root.$data.store.state.injuryHand
             },
@@ -188,7 +186,7 @@
             activeCard() {
                 return this.$root.$data.store.state.activeCard
             },
-            discard(){
+            discard() {
                 return this.$root.$data.store.state.discard
             }
         },
@@ -227,8 +225,13 @@
                     console.log('nope')
                 }
             },
-            drawInjury() {
-                this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)
+            drawInjury(injuryDeck) {
+                if (injuryDeck.valid) {
+                    this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)
+                } else {
+                    console.log('no!')
+                }
+
             },
             startGame() {
                 this.show = !this.show
