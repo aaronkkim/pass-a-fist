@@ -379,8 +379,8 @@ let gameStore = {
 
             api.put('game/' + gameId + '/takeInjury', { card: card, userId: userId }).then(res => {
                 console.log(res.data.data)
-                GameManager.updateInjuryDeck(gameId)
-                GameManager.getInjuryHand(userId)
+                //GameManager.updateInjuryDeck(gameId)
+                //GameManager.getInjuryHand(userId)
                 // Setup a client.emit to injury route
                 client.emit("playing", { name: gameName })
             }).catch(handleError)

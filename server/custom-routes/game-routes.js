@@ -239,17 +239,23 @@ export default {
 
             Games.findById(req.params.id).then(game => {
                 let userId = req.body.userId
-                nextTurn(game)
 
+                game = nextTurn(game)
+                console.log(game)
                 Users.findByIdAndUpdate(userId, {
                     $push: { injuries: req.body.card },
                 }, { new: true })
                     .then(user => {
-                        game.save()
-                        res.send(handleResponse(action, game))
-                    }).catch(error => {
-                        return next(handleResponse(action, null, error))
+                        game.save().then((err) => {
+                            if (err) console.log(err);
+                            res.send(handleResponse(action, game))
+                            // console.log("jnbuhbuhnuhnhn", game)
+                            //socket.emit("nextTurn", game)
+                            //     })
+                        })
                     })
+            }).catch(error => {
+                return next(handleResponse(action, null, error))
             })
         }
     }
@@ -273,10 +279,10 @@ function nextTurn(game) {
 
     game.currentTurn = currentTurn
     game.activeTurn = currentTurn
-    game.activeCard = ""
+    game.activeCard = null
     game.turnPhase = 1
     console.log(game.currentTurn)
-    game.save()
+    return game
 }
 
 function setLastCard(game, card) {
