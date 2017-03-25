@@ -126,7 +126,7 @@
                     }
                 }
                 return injuryDeck
-            }
+            },
             creator() {
                 return this.$root.$data.store.state.creator
             },
