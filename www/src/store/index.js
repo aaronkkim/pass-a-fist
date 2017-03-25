@@ -55,18 +55,18 @@ client.on('drawn', function (data) {
 //     console.log(data)
 //     state.lastCard = data.card
 // })
-// client.on('changeTurn', function (data) {
-//     let playerName = data.name
-//     state.activeTurn = data.user.activeTurn
-//     state.currentTurn = data.user.currentTurn
-//     state.phase = data.user.phase
-//     state.gameSession.turnPhase = data.user.phase
-//     Materialize.toast(`${playerName}\'s turn`, 9000)
-// })
-// client.on('changePhase', function (data) {
-//     state.phase = data
-//     state.gameSession.turnPhase = data
-// })
+client.on('changeTurn', function (data) {
+    let playerName = data.name
+    state.activeTurn = data.user.activeTurn
+    state.currentTurn = data.user.currentTurn
+    state.phase = data.user.phase
+    state.gameSession.turnPhase = data.user.phase
+    Materialize.toast(`${playerName}\'s turn`, 9000)
+})
+client.on('changePhase', function (data) {
+    state.phase = data
+    state.gameSession.turnPhase = data
+})
 client.on('started', function (id) {
     console.log("starting Game")
     gameStore.actions.activateGame()
@@ -183,11 +183,11 @@ let validateTargets = (targetType) => {
             break
         case "Last":
             // Change store to validate last player who played
-            state.validTargets[lastTarget._id] = true
+            state.validTargets[lastTarget] = true
             break
         case "Attacker":
             // Change store to validate player who attacked
-            state.validTargets[lastAttacker._id] = true
+            state.validTargets[lastAttacker] = true
             break
         
         return true

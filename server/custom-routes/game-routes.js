@@ -183,7 +183,6 @@ export default {
         reqType: 'put',
         method(req, res, next) {
             let action = 'Update to next phase'
-            console.log(typeof req.body.phase)
             Games.findByIdAndUpdate(req.params.id, {
                 $set: {
                     turnPhase: req.body.phase
@@ -202,7 +201,6 @@ export default {
             let action = 'Handle game logic of last card played'
 
             Games.findById(req.params.id).then(game => {
-                console.log(req.body)
                 let card = req.body.card
                 let target = req.body.target
 
@@ -265,10 +263,10 @@ function nextTurn(game) {
     let currentTurn = game.currentTurn
     let activeTurn = game.activeTurn
     let players = game.playersInGameSession
-
+    console.log(currentTurn)
     for (var i = 0; i < players.length; i++) {
         var playerId = players[i];
-        if (playerId == currentTurn) {
+        if (playerId.toString() == currentTurn.toString()) {
             currentTurn = players[i + 1] || players[0]
             activeTurn = currentTurn
         }
@@ -278,6 +276,8 @@ function nextTurn(game) {
     game.activeTurn = activeTurn
     game.activeCard = ""
     game.turnPhase = 1
+    console.log(game.currentTurn)
+    game.save()
 }
 
 function setLastCard(game, card) {
