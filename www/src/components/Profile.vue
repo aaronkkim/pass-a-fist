@@ -19,7 +19,7 @@
                     <label :for="badge.name"><img :src="badge.badgeUrl" class="badgesPic"/></label>
             </div>
             </div>
-            <button >Set Badge</button>
+            <button class="waves-effect waves-light btn orange-btn">Update Player</button>
 
         </form>
         </div>

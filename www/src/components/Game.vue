@@ -285,8 +285,8 @@
         flex-wrap: wrap;
         background-color: rgba(100, 100, 100, .7);
         padding: 20px;
-        width: 120px;
-        height: 155px;
+        width: 8vw;
+        height: 16vh;
         border-radius: 25px;
     }
     
@@ -299,7 +299,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 28vh;
+        height: 11vh;
         width: 100%
     }
     
@@ -380,7 +380,7 @@
     }
     
     .card {
-        height: 200px;
+        height: 19vh;
         z-index: 0;
         margin-left: -50px;
         transition: transform 500ms ease-out;
@@ -393,7 +393,7 @@
     }
     
     .injury {
-        height: 200px;
+        height: 19vh;
         z-index: 0;
         /*margin-bottom: -50px;*/
         transition: transform 500ms ease-out;
@@ -419,7 +419,7 @@
     
     .deck-fight {
         border-radius: 25px;
-        height: 100px;
+        height: 11vh;
         margin: 10px;
         -webkit-filter: drop-shadow(0px 0px 0px rgba(255, 255, 255, 0.80));
         -webkit-transition: all 0.5s linear;
@@ -437,7 +437,7 @@
     
     .deck-injury {
         border-radius: 25px;
-        height: 100px;
+        height: 11vh;
         margin: 10px;
         -webkit-filter: drop-shadow(0px 0px 0px rgba(255, 255, 255, 0.80));
         -webkit-transition: all 0.5s linear;
@@ -474,6 +474,7 @@
         justify-content: space-around;
         margin-bottom: 45px;
         margin-top: -30px;
+        height: 27vh;
     }
     .player-valid {
         -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
