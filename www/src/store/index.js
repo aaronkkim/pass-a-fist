@@ -231,14 +231,13 @@ let gameStore = {
                 gameName: gs.name
             });
         },
-        saveUser(username, password, badgeUrl) {
+        saveUser(username, badgeUrl) {
             state.isLoading = true
             let userId = state.activeUser._id
             let user = state.activeUser
 
             let updatedUser = {
                 name: username,
-                password: password,
                 badgeUrl: badgeUrl
             }
             console.log(updatedUser)

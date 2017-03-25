@@ -72,8 +72,12 @@
         padding-top: 5rem;
     }
     
-    img {
-        height: 100px;
-        width: 100px;
+   
+     .flex-container1 {
+        display: inline-block;
+        /*flex-direction: row;*/
+    }
+    .badgesPic{
+        height: 12vh;
     }
 </style>
