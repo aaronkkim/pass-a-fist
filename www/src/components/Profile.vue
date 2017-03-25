@@ -8,9 +8,7 @@
                 <div class="input-field col s6">
                     <input v-model="username" type="text" placeholder="Change Name">
                 </div>
-                <div class="input-field col s6">
-                    <input v-model="password"  type="password" placeholder="Change Password">
-                </div>
+              
             </div>
             <div class="row">
 
@@ -34,8 +32,8 @@
             return {
                 badges: badgeService.getBadges(),
                 selectedBadge: '',
-                username: '',
-                password: ''
+                username: ''
+
             }
         },
         computed: {
@@ -45,9 +43,10 @@
         },
         methods: {
             saveUser() {
-                this.$root.store.actions.saveUser(this.username, this.password, this.selectedBadge)
+                this.$root.store.actions.saveUser(this.username, this.selectedBadge)
                 console.log(this.username)
                 // Save the current User
+                return this.user
             }
         }
 

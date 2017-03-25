@@ -19,7 +19,7 @@
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
             <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl"></img>
-            <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" @click="drawInjury">
+            <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" :class="{'deck-injury-valid': injuryDeck.valid}"@click="drawInjury(injuryDeck)">
         </div>
 
         <div class="fixed-action-btn click-to-toggle">
@@ -115,6 +115,17 @@
                     }
                 }
                 return deck
+            },
+            injuryDeck(){
+                let injuryDeck ={}
+                  if(this.user && this.activeTurn && this.phase) {
+                    if(this.user._id == this.activeTurn) {
+                        if(this.phase == 3) {
+                            injuryDeck.valid = true
+                        }
+                    }
+                }
+                return injuryDeck
             },
             creator() {
                 return this.$root.$data.store.state.creator
@@ -474,7 +485,8 @@
         justify-content: space-around;
         margin-bottom: 45px;
         margin-top: -30px;
-        height: 27vh;
+                height: 27vh;
+
     }
     .player-valid {
         -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
