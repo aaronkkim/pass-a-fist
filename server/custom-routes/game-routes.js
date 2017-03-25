@@ -241,14 +241,19 @@ export default {
                 let userId = req.body.userId
 
                 game = nextTurn(game)
-                console.log(game)
+
                 Users.findByIdAndUpdate(userId, {
                     $push: { injuries: req.body.card },
-                }, { new: true })
+                }, { new: true }).populate("injuries")
                     .then(user => {
+                        let alive = checkDeath(user)
+                        if(!alive){
+                            game.playersInGameSession.pull(user)
+                        }
                         game.save().then((err) => {
                             if (err) console.log(err);
                             res.send(handleResponse(action, game))
+
                             // console.log("jnbuhbuhnuhnhn", game)
                             //socket.emit("nextTurn", game)
                             //     })
@@ -283,6 +288,21 @@ function nextTurn(game) {
     game.turnPhase = 1
     console.log(game.currentTurn)
     return game
+}
+function checkDeath(user) {
+    let damage = 0
+    let alive = true
+    console.log(user.injuries)
+    for (var i = 0; i < user.injuries.length; i++) {
+        var injury = user.injuries[i]
+        damage += injury.damage
+    }
+    if (damage >= 3) {
+       alive = false
+        // user.save()
+    }
+    console.log('herererererererrerererere', damage)
+    return alive
 }
 
 function setLastCard(game, card) {
