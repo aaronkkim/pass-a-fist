@@ -246,7 +246,7 @@ export default {
                 }, { new: true })
                     .then(user => {
                         game.save()
-                        res.send(handleResponse(action, user.injuries))
+                        res.send(handleResponse(action, game))
                     }).catch(error => {
                         return next(handleResponse(action, null, error))
                     })
@@ -268,12 +268,11 @@ function nextTurn(game) {
         var playerId = players[i];
         if (playerId.toString() == currentTurn.toString()) {
             currentTurn = players[i + 1] || players[0]
-            activeTurn = currentTurn
         }
     }
 
     game.currentTurn = currentTurn
-    game.activeTurn = activeTurn
+    game.activeTurn = currentTurn
     game.activeCard = ""
     game.turnPhase = 1
     console.log(game.currentTurn)
