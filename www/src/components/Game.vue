@@ -126,6 +126,8 @@
                     if (this.user._id == this.activeTurn) {
                         if (this.phase == 3) {
                             injuryDeck.valid = true
+                        } else {
+                            injuryDeck.valid = false
                         }
                     }
                 }
@@ -481,12 +483,12 @@
     //     -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
     //     box-shadow: 0px 0px 25px 10px #0ff
     // }
-    .deck-injury:hover {
+    .deck-injury-valid:hover {
         border-radius: 25px;
         height: 100px;
         margin: 10px;
         -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
-        box-shadow: 0px 0px 25px 10px #ffb3b3
+        box-shadow: 0px 0px 35px 15px #ffb7b7
     }
     
     .players-in-game {

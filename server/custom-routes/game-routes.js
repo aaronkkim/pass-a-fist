@@ -236,27 +236,28 @@ export default {
         reqType: 'put',
         method(req, res, next) {
             let action = 'Handle game logic of taking an injury'
-
-            Games.findById(req.params.id).then(game => {
+            let message = []
+            Games.findById(req.params.id)
+            .populate("playersInGameSession","name")
+            .then(game => {
                 let userId = req.body.userId
-
-                game = nextTurn(game)
-
+                let injury = req.body.card
                 Users.findByIdAndUpdate(userId, {
-                    $push: { injuries: req.body.card },
+                    $push: { injuries: injury },
                 }, { new: true }).populate("injuries")
                     .then(user => {
                         let alive = checkDeath(user)
-                        if(!alive){
+                        message.push(`${user.name} took an injury, and is now suffering. `)
+                        if (!alive) {
                             game.playersInGameSession.pull(user)
+                            message.push(`${user.name} is knocked out!!! `)
                         }
-                        game.save().then((err) => {
-                            if (err) console.log(err);
-                            res.send(handleResponse(action, game))
-
-                            // console.log("jnbuhbuhnuhnhn", game)
-                            //socket.emit("nextTurn", game)
-                            //     })
+                        if(game.playersInGameSession < 2) {
+                             message.push(`The game is over!`)
+                        }
+                        game = nextTurn(game, message)
+                        game.save().then(() => {
+                            res.send(handleResponse(action, message))
                         })
                     })
             }).catch(error => {
@@ -270,21 +271,24 @@ function nextPhase(game) {
     game.turnPhase++
 }
 
-function nextTurn(game) {
+function nextTurn(game, message) {
     let currentTurn = game.currentTurn
     let activeTurn = game.activeTurn
     let players = game.playersInGameSession
-    console.log(currentTurn)
+    
+    game.lastActiveTurn = activeTurn
+    game.lastTurn = currentTurn
+
     for (var i = 0; i < players.length; i++) {
         var playerId = players[i];
-        if (playerId.toString() == currentTurn.toString()) {
+        if (playerId._id == currentTurn.toString()) {
             currentTurn = players[i + 1] || players[0]
         }
     }
-
     game.currentTurn = currentTurn
     game.activeTurn = currentTurn
     game.activeCard = null
+    message.push(game.currentTurn.name + "\'s turn")
     game.turnPhase = 1
     console.log(game.currentTurn)
     return game
@@ -292,16 +296,14 @@ function nextTurn(game) {
 function checkDeath(user) {
     let damage = 0
     let alive = true
-    console.log(user.injuries)
     for (var i = 0; i < user.injuries.length; i++) {
         var injury = user.injuries[i]
         damage += injury.damage
     }
     if (damage >= 3) {
-       alive = false
+        alive = false
         // user.save()
     }
-    console.log('herererererererrerererere', damage)
     return alive
 }
 
@@ -314,7 +316,7 @@ function setActiveCard(game, card) {
 }
 
 function setActiveTurn(game, target) {
-    game.lastActiveTurn = game.activeTurn || ""
+    game.lastActiveTurn = game.activeTurn || null
     game.activeTurn = target
 }
 
@@ -326,6 +328,7 @@ function handleResponse(action, data, error) {
     }
     if (error) {
         response.error = error
+        console.error(error)
     }
     return response
 }
