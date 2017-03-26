@@ -125,6 +125,7 @@ export default {
                 if (!game.active) {
                     // Activate the game (when ready)
                     game.active = true
+                    game.winner = ''
                     game.save()
                     return res.send(handleResponse(action, { game: game }))
 
