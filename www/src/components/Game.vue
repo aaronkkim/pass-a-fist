@@ -16,8 +16,14 @@
             <img src="../assets/cards/main-fight.png" v-if="game.active" class="deck-fight rotate90" :class="{'deck-fight-valid': deck.valid}"
                 @click="drawCard(deck)">
 
-            <div v-if="user._id == creator._id && !game.active">
+            <div v-if="user._id == creator._id && players.length > 1 && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
+            </div>
+            <div v-if="players.length == 1 && !game.winner">
+                <h3 class="white-text">Waiting for players...</h3>
+            </div>
+            <div v-if="game.winner">
+                <h3 class="white-text">{{game.winner}} wins!!!</h3>
             </div>
             <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl"></img>
             <img v-if="game.active && discard.imgUrl" :src="discard.imgUrl">

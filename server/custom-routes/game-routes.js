@@ -271,6 +271,7 @@ export default {
                             if (game.playersInGameSession.length < 2) {
                                 message.push(`The game is over! ${lastPlayer.name} wins!!!`)
                                 game.active = false
+                                game.winner = lastPlayer.name
                                 // This function should update and end the game. 
                                 //  |
                                 //  |
