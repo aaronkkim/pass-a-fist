@@ -46,6 +46,7 @@ client.on('leavegame', function (data) {
 })
 client.on('play', function (data) {
     console.log(data)
+    toastMessages(data.message)
     gameStore.actions.getGame(data.name)
 })
 client.on('injury', function (data) {
@@ -140,8 +141,10 @@ let playCard = (card, index, player) => {
 
     let game = state.gameSession
     let userId = state.activeUser._id
+    let userName = state.activeUser.name
 
     data.userId = userId
+    data.userName = userName
 
 
     let lastCard = state.hand.splice(index, 1)[0]
@@ -155,7 +158,8 @@ let playCard = (card, index, player) => {
     state.validTargets = {}
 
     api.put('game/' + game._id + '/play', data).then(res => {
-        client.emit("playing", { name: game.name })
+        let message = res.data.data
+        client.emit("playing", { name: game.name, message })
         // GameManager.nextTurn(game, changeTurn)
     }).catch(handleError)
 }

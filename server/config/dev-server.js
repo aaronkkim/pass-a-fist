@@ -94,9 +94,6 @@ io.sockets.on('connection', function (socket) {
             console.log("attempting to draw")
             io.to(data.name).emit("drawn", data)
             // io.in(data.name)
-
-            console.log("you have drawn a card")
-
         })
     })
 
