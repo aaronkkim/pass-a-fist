@@ -18,7 +18,7 @@
             <div v-if="user._id == creator._id && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
-            <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl"></img>
+            <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl" class="lastCard"></img>
             <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" :class="{'deck-injury-valid': injuryDeck.valid}"@click="drawInjury(injuryDeck)">
         </div>
 
@@ -126,7 +126,7 @@
                     }
                 }
                 return injuryDeck
-            }
+            },
             creator() {
                 return this.$root.$data.store.state.creator
             },
@@ -287,6 +287,9 @@
     
     .rotate90 {
         transform: rotate(270deg);
+    }
+    .lastCard{
+        height: 23vh;
     }
     
     .cardStyles {
