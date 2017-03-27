@@ -44,8 +44,14 @@ client.on('leavegame', function (data) {
     if (state.gameSession.name)
         GameManager.getPlayers(state.gameSession.name);
 })
-client.on('play', function(data) {
+client.on('play', function (data) {
     console.log(data)
+    toastMessages(data.message)
+    gameStore.actions.getGame(data.name)
+})
+client.on('injury', function (data) {
+    console.log(data)
+    toastMessages(data.message)
     gameStore.actions.getGame(data.name)
 })
 client.on('drawn', function (data) {
@@ -92,10 +98,10 @@ let state = {
     phase: 0,
     lastCard: {},
     activeCard: {},
+    discard: {},
     //
     playableCard: {},
     validTargets: {}
-
 }
 
 let handleError = (err) => {
@@ -104,10 +110,20 @@ let handleError = (err) => {
     console.warn(err)
 }
 
+let toastMessages = (messages) => {
+    let timer = 0
+    for (let message of messages) {
+        setTimeout(function () { Materialize.toast(message, 9000) }, timer)
+        timer += 500
+    }
+}
+
+// Refactor
 let changeTurn = (gameName, user, userName) => {
     client.emit('changingTurn', { gameName: gameName, name: userName, user: user })
 }
 
+// Refactor
 let changePhase = (gameName, phase) => {
     client.emit('changingPhase', { gameName: gameName, phase: phase })
 }
@@ -125,20 +141,25 @@ let playCard = (card, index, player) => {
 
     let game = state.gameSession
     let userId = state.activeUser._id
+    let userName = state.activeUser.name
 
     data.userId = userId
+    data.userName = userName
+
 
     let lastCard = state.hand.splice(index, 1)[0]
+    let discard = state.hand.splice(index, 1)[0]
     let hand = state.hand
 
     for (let card of hand) {
         card.valid = false
     }
-    
+
     state.validTargets = {}
 
     api.put('game/' + game._id + '/play', data).then(res => {
-        client.emit("playing", { name: game.name })
+        let message = res.data.data
+        client.emit("playing", { name: game.name, message })
         // GameManager.nextTurn(game, changeTurn)
     }).catch(handleError)
 }
@@ -153,15 +174,20 @@ let validateTargets = (targetType) => {
 
     let leftTarget = players[playerIndex - 1] || players[players.length - 1]
     let rightTarget = players[playerIndex + 1] || players[0]
+
     let lastTarget = players.find(player => {
+        return player._id == state.lastActiveTurn
+    })
+
+    let lastAttacker = players.find(player => {
         return player._id == state.lastTurn
     })
-    let lastAttacker = state.currentTurn
 
     switch (targetType) {
         case "None":
             return false
         case "Any":
+        case "Other":
             // Change store to validate any player as a target
             for (let player of players) {
                 state.validTargets[player._id] = true
@@ -183,13 +209,18 @@ let validateTargets = (targetType) => {
             break
         case "Last":
             // Change store to validate last player who played
-            state.validTargets[lastTarget] = true
+            if(lastTarget)
+            state.validTargets[lastTarget._id] = true
             break
         case "Attacker":
             // Change store to validate player who attacked
-            state.validTargets[lastAttacker] = true
+            if(lastAttacker)
+            state.validTargets[lastAttacker._id] = true
             break
-        
+        default:
+            for (let player of players) {
+                state.validTargets[player._id] = true
+            }
         return true
     }
 }
@@ -211,13 +242,14 @@ let gameStore = {
                 state.isLoading = false
             }).catch(handleError)
         },
-        register(username, email, password, age) {
+        register(username, email, password, age, badgeUrl) {
             state.isLoading = true
             api.post('register', {
                 name: username,
                 email: email,
                 password: password,
-                age: age
+                age: age,
+                badgeUrl: badgeUrl
             }).then(res => {
                 this.login(email, password)
             }).catch(handleError)
@@ -230,24 +262,23 @@ let gameStore = {
                 gameName: gs.name
             });
         },
-        saveUser(username, password, badgeUrl) {
-            state.isLoading = true
-            let userId = state.activeUser._id
-            let user = state.activeUser
+        saveUser(username, badgeUrl) {
+            state.isLoading = true
+            let  userId = state.activeUser._id
+            let  user = state.activeUser
 
-            let updatedUser = {
-                name: username,
-                password: password,
-                badgeUrl: badgeUrl
-            }
-            console.log(updatedUser)
+            let  updatedUser = {
+                name: username,
+                badgeUrl: badgeUrl
+            }
+            console.log(updatedUser)
 
-            api.put('users/' + userId, updatedUser).then(res => {
+            api.put('users/' + userId, updatedUser).then(res => {
 
-                state.activeUser = res.data.data
-                console.log("its changed")
-            }).catch(handleError)
-        },
+                state.activeUser = res.data.data
+                console.log("its changed")
+            }).catch(handleError)
+        },
 
         logout() {
             api.delete('logout').then(res => {
@@ -283,10 +314,13 @@ let gameStore = {
                 state.deck.cards = res.data.data.deck
                 state.injuryDeck.cards = res.data.data.injuryDeck
                 state.activeTurn = res.data.data.activeTurn
+                state.lastTurn = res.data.data.lastTurn
+                state.lastActiveTurn = res.data.data.lastActiveTurn
                 state.currentTurn = res.data.data.currentTurn
                 state.phase = res.data.data.turnPhase
                 state.lastCard = res.data.data.lastCard || {}
                 state.activeCard = res.data.data.activeCard || {}
+                state.discard = res.data.data.discard || {}
 
                 if (state.activeUser) {
                     for (var i = 0; i < state.players.length; i++) {
@@ -358,11 +392,11 @@ let gameStore = {
             }).catch(handleError)
 
         },
+
         activateCard(card, index) {
             let targetType = GameManager.getTargetType(card)
             state.playableCard = { card, index }
             let needsTarget = validateTargets(targetType)
-            console.log(needsTarget)
             if (needsTarget == false) {
                 playCard(card, index)
             }
@@ -373,15 +407,16 @@ let gameStore = {
         },
         drawInjury(gameId, gameName) {
             if (!state.activeUser._id) return;
-
+            state.phase = 0
             let card = state.injuryDeck.draw()
             let userId = state.activeUser._id
 
             api.put('game/' + gameId + '/takeInjury', { card: card, userId: userId }).then(res => {
+                let message = res.data.data
                 GameManager.updateInjuryDeck(gameId)
-                GameManager.getInjuryHand(userId)
+                //GameManager.getInjuryHand(userId)
                 // Setup a client.emit to injury route
-                client.emit("playing", { name: gameName })
+                client.emit("injuring", { name: gameName, message })
             }).catch(handleError)
 
         },

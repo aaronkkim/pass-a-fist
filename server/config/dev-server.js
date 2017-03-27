@@ -71,12 +71,12 @@ io.sockets.on('connection', function (socket) {
         })
     })
     socket.on("changingTurn", function (data) {
-        console.log("data: ", data)
+        //console.log("data: ", data)
         io.to(data.gameName).emit("changeTurn", data)
     })
 
     socket.on("changingPhase", function (data) {
-        console.log("data: ", data)
+        //console.log("data: ", data)
         io.to(data.gameName).emit("changePhase", data.phase)
     })
 
@@ -90,19 +90,18 @@ io.sockets.on('connection', function (socket) {
     })
 
     socket.on('drawing', function (data) {
-        console.log("data: ", data)
         socket.join(data.name, function () {
             console.log("attempting to draw")
             io.to(data.name).emit("drawn", data)
             // io.in(data.name)
-
-            console.log("you have drawn a card")
-
         })
     })
 
     socket.on('playing', function (data) {
         io.to(data.name).emit("play", data)
+    })
+     socket.on('injuring', function (data) {
+        io.to(data.name).emit("injury", data)
     })
 
     socket.on("Starting Game", function () {

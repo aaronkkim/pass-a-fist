@@ -125,6 +125,7 @@ export default {
                 if (!game.active) {
                     // Activate the game (when ready)
                     game.active = true
+                    game.winner = ''
                     game.save()
                     return res.send(handleResponse(action, { game: game }))
 
@@ -199,36 +200,50 @@ export default {
         reqType: 'put',
         method(req, res, next) {
             let action = 'Handle game logic of last card played'
+            let message = []
 
-            Games.findById(req.params.id).then(game => {
-                let card = req.body.card
-                let target = req.body.target
+            Games.findById(req.params.id)
+                .populate("activeCard")
+                .populate("lastTurn", "name")
+                .then(game => {
+                    let card = req.body.card
+                    let playerName = req.body.userName
+                    let target = req.body.target || null
 
-                setLastCard(game, card)
+                    let lastAttack = game.activeCard
+                    let lastAttacker = game.lastTurn
 
-                if (card.type === 'Attack' && target) {
-                    setActiveCard(game, card)
-                    setActiveTurn(game, target)
-                    nextPhase(game)
-                } else if (card.type === 'Counter') {
-                    if (target)
+
+                    setLastCard(game, card)
+
+                    if (card.type === 'Attack' && target) {
+                        message.push(`${playerName} attacked ${target.name} with ${card.name}!!!`)
+                        setActiveCard(game, card)
                         setActiveTurn(game, target)
-                    else
-                        nextTurn(game)
-                }
-
-                Users.findByIdAndUpdate(req.body.userId, {
-                    $pull: {
-                        cards: card._id
+                        nextPhase(game)
+                    } else if (card.type === 'Counter') {
+                        if (target) {
+                            message.push(`${playerName} redirected ${lastAttacker.name}'s ${lastAttack.name} to ${target.name} with ${card.name}!`)
+                            setActiveTurn(game, target)
+                        }
+                        else {
+                            message.push(`${playerName} stopped ${lastAttack.name}'s ${lastAttack.name} with ${card.name}!`)
+                            nextTurn(game, message)
+                        }
                     }
-                }, { new: true })
-                    .then(user => {
-                        game.save()
-                        res.send(handleResponse(action, { message: "Card played" }))
-                    })
-            }).catch(error => {
-                return next(handleResponse(action, null, error))
-            })
+
+                    Users.findByIdAndUpdate(req.body.userId, {
+                        $pull: {
+                            cards: card._id
+                        }
+                    }, { new: true })
+                        .then(user => {
+                            game.save()
+                            res.send(handleResponse(action, message))
+                        })
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
         }
     },
     handleInjury: {
@@ -236,21 +251,43 @@ export default {
         reqType: 'put',
         method(req, res, next) {
             let action = 'Handle game logic of taking an injury'
-
-            Games.findById(req.params.id).then(game => {
-                let userId = req.body.userId
-                nextTurn(game)
-
-                Users.findByIdAndUpdate(userId, {
-                    $push: { injuries: req.body.card },
-                }, { new: true })
-                    .then(user => {
-                        game.save()
-                        res.send(handleResponse(action, user.injuries))
-                    }).catch(error => {
-                        return next(handleResponse(action, null, error))
-                    })
-            })
+            let message = []
+            Games.findById(req.params.id)
+                .populate("playersInGameSession", "name")
+                .populate("lastActiveTurn", "name")
+                .then(game => {
+                    let userId = req.body.userId
+                    let injury = req.body.card
+                    let lastPlayer = game.lastActiveTurn
+                    Users.findByIdAndUpdate(userId, {
+                        $push: { injuries: injury },
+                    }, { new: true }).populate("injuries")
+                        .then(user => {
+                            let alive = checkDeath(user)
+                            message.push(`${user.name} took an injury, and is now suffering. `)
+                            if (!alive) {
+                                game.playersInGameSession.pull(user)
+                                message.push(`${user.name} is knocked out!!! `)
+                            }
+                            if (game.playersInGameSession.length < 2) {
+                                message.push(`The game is over! ${lastPlayer.name} wins!!!`)
+                                game.active = false
+                                game.winner = lastPlayer.name
+                                // This function should update and end the game. 
+                                //  |
+                                //  |
+                                //  V
+                                // setWinner()
+                            } else {
+                                game = nextTurn(game, message)
+                            }
+                            game.save().then(() => {
+                                res.send(handleResponse(action, message))
+                            })
+                        })
+                }).catch(error => {
+                    return next(handleResponse(action, null, error))
+                })
         }
     }
 }
@@ -259,25 +296,40 @@ function nextPhase(game) {
     game.turnPhase++
 }
 
-function nextTurn(game) {
+function nextTurn(game, message) {
     let currentTurn = game.currentTurn
     let activeTurn = game.activeTurn
     let players = game.playersInGameSession
-    console.log(currentTurn)
+
+    game.lastActiveTurn = activeTurn
+    game.lastTurn = currentTurn
+
     for (var i = 0; i < players.length; i++) {
         var playerId = players[i];
-        if (playerId.toString() == currentTurn.toString()) {
+        if (playerId._id == currentTurn.toString()) {
             currentTurn = players[i + 1] || players[0]
-            activeTurn = currentTurn
         }
     }
-
     game.currentTurn = currentTurn
-    game.activeTurn = activeTurn
-    game.activeCard = ""
+    game.activeTurn = currentTurn
+    game.activeCard = null
+    message.push(game.currentTurn.name + "\'s turn")
     game.turnPhase = 1
     console.log(game.currentTurn)
-    game.save()
+    return game
+}
+function checkDeath(user) {
+    let damage = 0
+    let alive = true
+    for (var i = 0; i < user.injuries.length; i++) {
+        var injury = user.injuries[i]
+        damage += injury.damage
+    }
+    if (damage >= 3) {
+        alive = false
+        // user.save()
+    }
+    return alive
 }
 
 function setLastCard(game, card) {
@@ -289,7 +341,7 @@ function setActiveCard(game, card) {
 }
 
 function setActiveTurn(game, target) {
-    game.lastActiveTurn = game.activeTurn || ""
+    game.lastActiveTurn = game.activeTurn || null
     game.activeTurn = target
 }
 
@@ -301,6 +353,7 @@ function handleResponse(action, data, error) {
     }
     if (error) {
         response.error = error
+        console.error(error)
     }
     return response
 }

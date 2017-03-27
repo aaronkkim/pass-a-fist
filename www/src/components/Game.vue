@@ -10,16 +10,28 @@
                 <div class="countInjuries">{{player.injuries.length}}</div>
             </ul>
         </div>
-        
+
 
         <div class="flex-container">
-            <img src="../assets/cards/main-fight.png" v-if="game.active" class="deck-fight rotate90" :class="{'deck-fight-valid': deck.valid}" @click="drawCard(deck)">
+            <img src="../assets/cards/main-fight.png" v-if="game.active" class="deck-fight rotate90" :class="{'deck-fight-valid': deck.valid}"
+                @click="drawCard(deck)">
 
-            <div v-if="user._id == creator._id && !game.active">
+            <div v-if="user._id == creator._id && players.length > 1 && !game.active">
                 <button class="btn" @click="startGame" v-show="show">Start</button>
             </div>
-            <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl" class="lastCard"></img>
-            <img src="../assets/cards/main-injury.png" v-if= "game.active" class="deck-injury rotate90" :class="{'deck-injury-valid': injuryDeck.valid}"@click="drawInjury(injuryDeck)">
+
+            <div v-if="players.length == 1 && !game.winner">
+                <h3 class="white-text">Waiting for players...</h3>
+            </div>
+            <div v-if="game.winner">
+                <h3 class="white-text">{{game.winner}} wins!!!</h3>
+            </div>
+            <img v-if="game.active && lastCard.imgUrl" :src="lastCard.imgUrl"></img>
+            <img v-if="game.active && discard.imgUrl" :src="discard.imgUrl">
+
+            <img src="../assets/cards/main-injury.png" v-if="game.active" class="deck-injury rotate90" :class="{'deck-injury-valid': injuryDeck.valid}"
+                @click="drawInjury(injuryDeck)">
+
         </div>
 
         <div class="fixed-action-btn click-to-toggle">
@@ -31,22 +43,22 @@
                 <div class="textbox">
                     <div class="content">
 
-                    <div class="messages">
-                    <ul>
-                        <li v-for="message in chat">
-                            <span>{{message.name}}<a v-show="message.name">: </a>{{message.text}}</span>
-                        </li>
-                    </ul>
+                        <div class="messages">
+                            <ul>
+                                <li v-for="message in chat">
+                                    <span>{{message.name}}<a v-show="message.name">: </a>{{message.text}}</span>
+                                </li>
+                            </ul>
 
 
-                    </div>
-                    <form @submit.prevent="submitText" class="typing">
-                        <input type="text" v-model="text" >
-                        <button type="submit" class="waves-effect waves-light btn">Chat</button>
-                    </form>
+                        </div>
+                        <form @submit.prevent="submitText" class="typing">
+                            <input type="text" v-model="text">
+                            <button type="submit" class="waves-effect waves-light btn">Chat</button>
+                        </form>
                     </div>
                 </div>
-                </ul> 
+            </ul>
         </div>
 
 
@@ -58,12 +70,12 @@
         </div>
         <div class="flex-hand" @mouseover="handleCardHover">
             <div class="hand" :style="cardPosition" v-for="(card, index) in hand" @click="activateCard(card, index)">
-                <img class="card" :class="{'card-valid': card.valid}"v-if="card.imgUrl" :src="card.imgUrl">
+                <img class="card" :class="{'card-valid': card.valid}" v-if="card.imgUrl" :src="card.imgUrl">
             </div>
 
         </div>
 
-</div>
+    </div>
 
 
 
@@ -107,21 +119,23 @@
             },
             deck() {
                 let deck = {}
-                if(this.user && this.activeTurn && this.phase) {
-                    if(this.user._id == this.activeTurn) {
-                        if(this.phase == 1 || this.phase == 2) {
+                if (this.user && this.activeTurn && this.phase) {
+                    if (this.user._id == this.activeTurn) {
+                        if (this.phase == 1 || this.phase == 2) {
                             deck.valid = true
                         }
                     }
                 }
                 return deck
             },
-            injuryDeck(){
-                let injuryDeck ={}
-                  if(this.user && this.activeTurn && this.phase) {
-                    if(this.user._id == this.activeTurn) {
-                        if(this.phase == 3) {
+            injuryDeck() {
+                let injuryDeck = {}
+                if (this.user && this.activeTurn && this.phase) {
+                    if (this.user._id == this.activeTurn) {
+                        if (this.phase == 3) {
                             injuryDeck.valid = true
+                        } else {
+                            injuryDeck.valid = false
                         }
                     }
                 }
@@ -133,20 +147,18 @@
             hand() {
                 let hand = this.$root.$data.store.state.hand
                 if (this.user && this.activeTurn && this.phase) {
-                    if(this.user._id == this.activeTurn)
-                    for(let card of hand) {
-                        if(card.type == 'Attack' && this.phase === 2) {
-                            card.valid = true
-                        } else if (card.type == 'Counter' && this.phase === 3) {
-                            card.valid = true
+                    if (this.user._id == this.activeTurn)
+                        for (let card of hand) {
+                            if (card.type == 'Attack' && this.phase === 2) {
+                                card.valid = true
+                            } else if (card.type == 'Counter' && this.phase === 3) {
+                                card.valid = true
+                            }
                         }
-                    }
                 }
                 return hand
             },
-            injuryDeck() {
-                return this.$root.$data.store.state.injuryDeck
-            },
+          
             injuryHand() {
                 return this.$root.$data.store.state.injuryHand
             },
@@ -166,8 +178,8 @@
             validTargets() {
                 return this.$root.$data.store.state.validTargets
             },
-            fightCard(){
-                return this.$root.$data.store.state.activeCard 
+            fightCard() {
+                return this.$root.$data.store.state.activeCard
             },
             currentTurn() {
                 return this.$root.$data.store.state.currentTurn
@@ -183,6 +195,9 @@
             },
             activeCard() {
                 return this.$root.$data.store.state.activeCard
+            },
+            discard() {
+                return this.$root.$data.store.state.discard
             }
         },
         methods: {
@@ -195,18 +210,18 @@
                 if (this.user.name) {
                     this.$root.$data.store.actions.submitText(this.user.name, this.text, this.game)
                     this.text = ''
-                   $(".messages ul").animate({ scrollTop: $(document).height() }, "slow");
+                    $(".messages ul").animate({ scrollTop: $(document).height() }, "slow");
                 }
 
             },
             drawCard(deck) {
                 if (deck.valid) {
-                     this.$root.$data.store.actions.drawCard(this.game)
+                    this.$root.$data.store.actions.drawCard(this.game)
                 } else {
                     console.log('nope')
                 }
             },
-            activateCard(card, index){
+            activateCard(card, index) {
                 if (card.valid) {
                     this.$root.$data.store.actions.activateCard(card, index)
                 } else {
@@ -214,14 +229,19 @@
                 }
             },
             targetPlayer(player) {
-                if(player.valid) {
-                     this.$root.$data.store.actions.targetPlayer(player)
+                if (player.valid) {
+                    this.$root.$data.store.actions.targetPlayer(player)
                 } else {
                     console.log('nope')
                 }
             },
-            drawInjury() {
-                this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)
+            drawInjury(injuryDeck) {
+                if (injuryDeck.valid) {
+                    this.$root.$data.store.actions.drawInjury(this.game._id, this.game.name)
+                } else {
+                    console.log('no!')
+                }
+
             },
             startGame() {
                 this.show = !this.show
@@ -229,7 +249,7 @@
             },
             leaveGame() {
                 this.$root.$data.store.actions.leaveGame(this.user, this.game.name, this.returnHome)
-            },  
+            },
             returnHome() {
                 this.$router.push({
                     path: '/'
@@ -237,6 +257,7 @@
             }
         }
     }
+
 </script>
 
 <style lang="scss">
@@ -244,18 +265,17 @@
         width: 100%;
         height: 100%;
         position: relative;
-        overflow:hidden;
+        overflow: hidden;
         ul {
             position: relative;
             bottom: auto;
             overflow: auto;
             height: 100%;
-            text-align:left;
+            text-align: left;
             margin-left: 10px;
         }
         .messages {
             overflow: hidden;
-            
         }
     }
     
@@ -337,14 +357,14 @@
         z-index: 1;
     }
     
-  .typing{
-      position:absolute;
-      bottom: 0;
-      width:75%;
-      height: 25%;
-      text-align: left;
-      margin-left: 10px;
-  }
+    .typing {
+        position: absolute;
+        bottom: 0;
+        width: 75%;
+        height: 25%;
+        text-align: left;
+        margin-left: 10px;
+    }
     
     .textbox {
         background-color: white;
@@ -355,8 +375,6 @@
         right: 0;
         /*margin-bottom: 81px;*/
     }
-    
-    
     /*.hand {
     /*display: inline-flex;*/
     /*transition: transform 500ms ease-out;*/
@@ -400,7 +418,7 @@
         transition: transform 500ms ease-out;
         transform: scale(1) translateY(0);
     }
-
+    
     .card-valid {
         -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.8));
         box-shadow: 0px 0px 20px 10px #ff8
@@ -440,10 +458,12 @@
         -o-transition: all 0.5s linear;
         transition: all 0.5s linear;
     }
+    
     .deck-fight-valid {
         -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
         box-shadow: 0px 0px 20px 10px #0ff
     }
+    
     .deck-fight-valid:hover {
         -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
         box-shadow: 0px 0px 35px 15px #7ff
@@ -458,8 +478,8 @@
         -o-transition: all 0.5s linear;
         transition: all 0.5s linear;
     }
-
-     .deck-injury-valid {
+    
+    .deck-injury-valid {
         border-radius: 25px;
         height: 100px;
         margin: 10px;
@@ -474,13 +494,12 @@
     //     -webkit-filter: drop-shadow(0px 0px 8px rgba(0, 231, 255, 0.8));
     //     box-shadow: 0px 0px 25px 10px #0ff
     // }
-    
-    .deck-injury:hover {
+    .deck-injury-valid:hover {
         border-radius: 25px;
         height: 100px;
         margin: 10px;
         -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
-        box-shadow: 0px 0px 25px 10px #ffb3b3
+        box-shadow: 0px 0px 35px 15px #ffb7b7
     }
     
     .players-in-game {
@@ -488,9 +507,9 @@
         justify-content: space-around;
         margin-bottom: 45px;
         margin-top: -30px;
-                height: 27vh;
-
+        height: 27vh;
     }
+    
     .player-valid {
         -webkit-filter: drop-shadow(0px 0px 8px #eb0606);
         box-shadow: 0px 0px 25px 10px #ffb3b3

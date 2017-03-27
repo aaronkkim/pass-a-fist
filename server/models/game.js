@@ -10,6 +10,7 @@ let schema = new Schema({
   created: { type: Number, required: true, default: Date.now() },
   playersInGameSession: [{ type: ObjectId, ref: models.user.name }],
   active: { type: Boolean, required: true, default: false },
+  winner: { type: String, default: ''},
   maxPlayers: { type: Number, required: true },
   // Phase 0: No turn
   // Phase 1: Draw a card
